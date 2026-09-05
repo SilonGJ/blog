@@ -149,7 +149,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 		<style define:vars={{
 			configHue,
 			'page-width': `${PAGE_WIDTH}rem`,
-		}}></style>  <!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
+			bannerOffset,
+			'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
+			'banner-height': `${BANNER_HEIGHT}vh`,
+		}}></style>
 
 
 		<slot name="head"></slot>
@@ -168,42 +171,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
 	</body>
 </html>
-
-<style is:global define:vars={{
-	bannerOffset,
-	'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
-	'banner-height': `${BANNER_HEIGHT}vh`,
-}}>
-@reference "tailwindcss";
-@reference "../styles/main.css";
-@layer components {
-	.enable-banner.is-home #banner-wrapper {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--banner-height-extend)]
-	}
-	.enable-banner #banner-wrapper {
-		@apply h-[var(--banner-height-home)]
-	}
-
-	.enable-banner.is-home #banner {
-		@apply h-[var(--banner-height-home)] translate-y-0
-	}
-	.enable-banner #banner {
-		@apply h-[var(--banner-height-home)] translate-y-[var(--bannerOffset)]
-	}
-	.enable-banner.is-home #main-grid {
-		@apply translate-y-[var(--banner-height-extend)];
-	}
-	.enable-banner #top-row {
-		@apply h-[calc(var(--banner-height-home)_-_4.5rem)] transition-all duration-300
-	}
-	.enable-banner.is-home #sidebar-sticky {
-		@apply top-[calc(1rem_-_var(--banner-height-extend))]
-	}
-	.navbar-hidden {
-		@apply opacity-0 -translate-y-16
-	}
-}
-</style>
 
 <script>
 import 'overlayscrollbars/overlayscrollbars.css';
