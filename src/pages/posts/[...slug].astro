@@ -2,6 +2,7 @@
 import { render } from "astro:content";
 import path from "node:path";
 import License from "@components/misc/License.astro";
+import Giscus from "@components/Giscus.astro";
 import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
@@ -146,6 +147,10 @@ const jsonLd = {
                 <Icon name="material-symbols:chevron-right-rounded" class="text-[2rem] text-[var(--primary)]" />
             </div>}
         </a>
+    </div>
+
+    <div class="max-w-4xl mx-auto mt-6 max-md:mt-4">
+        <Giscus />
     </div>
 
 </MainGridLayout>

@@ -1,0 +1,64 @@
+---
+export interface Props {
+  repo?: string;
+  repoId?: string;
+  category?: string;
+  categoryId?: string;
+  mapping?: string;
+  strict?: string;
+  reactionsEnabled?: string;
+  emitMetadata?: string;
+  inputPosition?: string;
+  lang?: string;
+}
+
+const {
+  repo = "SilonGJ/blog",
+  repoId = "R_kgDOTlEalA",
+  category = "giscus",
+  categoryId = "DIC_kwDOTlEalM4DC8DC",
+  mapping = "pathname",
+  strict = "1",
+  reactionsEnabled = "0",
+  emitMetadata = "0",
+  inputPosition = "top",
+  lang = "zh-CN",
+} = Astro.props;
+---
+
+<div id="giscus-slot" class="px-6 md:px-9 py-5 md:py-6 max-md:px-6 max-md:py-4 onload-animation"></div>
+
+<script set:html={`(function () {
+  var container = document.getElementById('giscus-slot');
+  if (!container) return;
+
+  var isDark = document.documentElement.classList.contains('dark');
+  var themeUrl = isDark
+    ? window.location.origin + '/giscus/theme-dark.css'
+    : window.location.origin + '/giscus/theme-light.css';
+
+  var script = document.createElement('script');
+  script.src = 'https://giscus.app/client.js';
+  script.setAttribute('data-repo', ${JSON.stringify(repo)});
+  script.setAttribute('data-repo-id', ${JSON.stringify(repoId)});
+  script.setAttribute('data-category', ${JSON.stringify(category)});
+  script.setAttribute('data-category-id', ${JSON.stringify(categoryId)});
+  script.setAttribute('data-mapping', ${JSON.stringify(mapping)});
+  script.setAttribute('data-strict', ${JSON.stringify(strict)});
+  script.setAttribute('data-reactions-enabled', ${JSON.stringify(reactionsEnabled)});
+  script.setAttribute('data-emit-metadata', ${JSON.stringify(emitMetadata)});
+  script.setAttribute('data-input-position', ${JSON.stringify(inputPosition)});
+  script.setAttribute('data-theme', themeUrl);
+  script.setAttribute('data-lang', ${JSON.stringify(lang)});
+  script.setAttribute('data-loading', 'lazy');
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+
+  container.appendChild(script);
+})();`}></script>
+
+<style>
+  #giscus-slot > iframe {
+    border-radius: var(--radius-large);
+  }
+</style>
