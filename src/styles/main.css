@@ -416,7 +416,6 @@ html.is-animating .transition-swup-fade {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    margin-right: 0 !important;
     width: 3rem !important;
     height: 3rem !important;
 }
@@ -424,15 +423,12 @@ html.is-animating .transition-swup-fade {
     display: none !important;
 }
 .pswp__button--close {
-    margin-top: 0 !important;
+    margin-top: 1rem !important;
+    margin-right: 1rem !important;
     border-radius: 0.75rem !important;
     &:active {
         transform: scale(0.9) !important;
     }
-}
-.pswp__button--close {
-    margin-top: 1rem !important;
-    margin-right: 1rem !important;
 }
 
 /* expressive-code */
