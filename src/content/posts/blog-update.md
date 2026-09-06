@@ -1,6 +1,7 @@
 ---
 title: 迁移
 published: 2026-08-04
+updated: 2026-09-06
 description: "博客正式脱离 Fuwari 了"
 tags:
   - 关于
@@ -9,6 +10,12 @@ tags:
   - 技术
 category: "博客相关"
 ---
+# 告示
+:::warning
+现 2026-09-06 由于一些原因重新迁移回 **Fuwari**，故以下内容看看就好
+:::
+
+<br><br>
 
 # 引言
 本博客最近将原先的 **Fuwari** 框架推倒重来，写了一个基于 **Astro** 的博客 (感谢 `Deepseek` 的付出hhh)

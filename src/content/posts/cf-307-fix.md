@@ -9,7 +9,6 @@ tags:
   - 技术
   - 博客
 category: 技术
-image: /images/archive/cover.png
 ---
 
 # 起因
