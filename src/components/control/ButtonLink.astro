@@ -9,17 +9,14 @@ const { badge, url, label } = Astro.props;
 <a href={url} aria-label={label}>
     <button
         class:list={`
+            expand-animation
             w-full
             h-10
             rounded-lg
             bg-none
             cursor-pointer
-            hover:bg-[var(--btn-plain-bg-hover)]
-            active:bg-[var(--btn-plain-bg-active)]
             transition-all
             pl-2
-            hover:pl-3
-            
             text-neutral-700
             hover:text-[var(--primary)]
             dark:text-neutral-300

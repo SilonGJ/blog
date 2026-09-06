@@ -34,7 +34,7 @@ export function FriendLinksComponent(properties, children) {
 					href: link.url,
 					target: "_blank",
 					rel: "noopener noreferrer",
-					class: "btn-card no-styling !no-underline rounded-2xl p-4 flex items-start gap-4 group",
+					class: "btn-plain scale-animation no-styling !no-underline rounded-2xl p-4 flex items-start gap-4 group",
 				},
 				[
 					h(

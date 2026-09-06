@@ -420,17 +420,18 @@ html.is-animating .transition-swup-fade {
     width: 3rem !important;
     height: 3rem !important;
 }
-.pswp__button--zoom, .pswp__button--close {
+.pswp__button--zoom {
+    display: none !important;
+}
+.pswp__button--close {
     margin-top: 0 !important;
     border-radius: 0.75rem !important;
     &:active {
         transform: scale(0.9) !important;
     }
 }
-.pswp__button--zoom {
-    margin-right: 0.625rem !important;
-}
 .pswp__button--close {
+    margin-top: 1rem !important;
     margin-right: 1rem !important;
 }
 
