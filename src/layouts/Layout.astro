@@ -160,6 +160,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 		<link rel="manifest" href="/site.webmanifest" />
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 
+		<noscript><style>.img-fade { opacity: 1 !important; animation: none !important; }</style></noscript>
+
 	</head>
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
 		  data-overlayscrollbars-initialize
@@ -317,11 +319,24 @@ function showBanner() {
 	banner.classList.remove('opacity-0', 'scale-105');
 }
 
+function setupImageReveal() {
+	document.querySelectorAll(".img-fade").forEach((img) => {
+		if (img.classList.contains("img-loaded")) return;
+		if (img.complete) {
+			img.classList.add("img-loaded");
+			return;
+		}
+		img.addEventListener("load", () => img.classList.add("img-loaded"), { once: true });
+		img.addEventListener("error", () => img.classList.add("img-loaded"), { once: true });
+	});
+}
+
 function init() {
 	loadTheme();
 	loadHue();
 	initCustomScrollbar();
 	showBanner();
+	setupImageReveal();
 }
 
 /* Load settings when entering the site */
@@ -382,6 +397,7 @@ const setup = () => {
 		if (heightExtend) {
 			heightExtend.classList.remove('hidden')
 		}
+		setupImageReveal();
 	});
 	window.swup.hooks.on('visit:end', (_visit: {to: {url: string}}) => {
 		setTimeout(() => {

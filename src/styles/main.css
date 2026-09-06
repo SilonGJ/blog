@@ -137,6 +137,32 @@
     @apply cursor-zoom-in
 }
 
+/* ===== image fade-in on load ===== */
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.img-fade {
+    opacity: 0;
+}
+
+.img-fade.img-loaded {
+    animation: 600ms fade-in ease forwards;
+}
+
+#banner img {
+    opacity: 1 !important;
+    animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .img-fade {
+        opacity: 1;
+        animation: none;
+    }
+}
+
 ::selection {
     background-color: var(--selection-bg)
 }
