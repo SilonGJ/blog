@@ -1,5 +1,4 @@
 import sitemap from "@astrojs/sitemap";
-import svelte from "@astrojs/svelte";
 import tailwindcss from "@tailwindcss/vite";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
@@ -100,7 +99,6 @@ export default defineConfig({
 				showCopyToClipboardButton: false,
 			}
 		}),
-        svelte(),
 		sitemap(),
 	],
 	markdown: {

@@ -1,0 +1,150 @@
+---
+import { Icon } from "astro-icon/components";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+---
+
+<!-- z-50 make the panel higher than other float panels -->
+<div class="relative z-50" role="menu" tabindex="-1" id="light-dark-switch-container">
+    <button aria-label="Light/Dark Mode" role="menuitem" class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="scheme-switch">
+        <div class="absolute opacity-0" id="light-icon">
+            <Icon name="material-symbols:wb-sunny-outline-rounded" class="text-[1.25rem]"></Icon>
+        </div>
+        <div class="absolute opacity-0" id="dark-icon">
+            <Icon name="material-symbols:dark-mode-outline-rounded" class="text-[1.25rem]"></Icon>
+        </div>
+        <div class="absolute" id="auto-icon">
+            <Icon name="material-symbols:radio-button-partial-outline" class="text-[1.25rem]"></Icon>
+        </div>
+    </button>
+    <script is:inline>
+    (function() {
+        var theme = localStorage.getItem("theme") || "auto";
+        var lightIcon = document.getElementById("light-icon");
+        var darkIcon = document.getElementById("dark-icon");
+        var autoIcon = document.getElementById("auto-icon");
+        if (theme === "light") {
+            if (lightIcon) lightIcon.classList.remove("opacity-0");
+            if (darkIcon) darkIcon.classList.add("opacity-0");
+            if (autoIcon) autoIcon.classList.add("opacity-0");
+        } else if (theme === "dark") {
+            if (lightIcon) lightIcon.classList.add("opacity-0");
+            if (darkIcon) darkIcon.classList.remove("opacity-0");
+            if (autoIcon) autoIcon.classList.add("opacity-0");
+        } else {
+            if (lightIcon) lightIcon.classList.add("opacity-0");
+            if (darkIcon) darkIcon.classList.add("opacity-0");
+            if (autoIcon) autoIcon.classList.remove("opacity-0");
+        }
+    })();
+    </script>
+
+    <div id="light-dark-panel" class="hidden lg:block absolute transition float-panel-closed top-11 -right-2 pt-5" >
+        <div class="card-base float-panel p-2">
+            <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95 mb-0.5"
+                    id="light-mode-btn"
+            >
+                <Icon name="material-symbols:wb-sunny-outline-rounded" class="text-[1.25rem] mr-3"></Icon>
+                {i18n(I18nKey.lightMode)}
+            </button>
+            <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95 mb-0.5"
+                    id="dark-mode-btn"
+            >
+                <Icon name="material-symbols:dark-mode-outline-rounded" class="text-[1.25rem] mr-3"></Icon>
+                {i18n(I18nKey.darkMode)}
+            </button>
+            <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95"
+                    id="auto-mode-btn"
+            >
+                <Icon name="material-symbols:radio-button-partial-outline" class="text-[1.25rem] mr-3"></Icon>
+                {i18n(I18nKey.systemMode)}
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+import {
+	applyThemeToDocument,
+	getStoredTheme,
+	setTheme,
+} from "@utils/setting-utils.ts";
+import type { LIGHT_DARK_MODE } from "@/types/config.ts";
+import { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants.ts";
+
+const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE, AUTO_MODE];
+let mode: LIGHT_DARK_MODE = AUTO_MODE;
+
+const schemeSwitch = document.getElementById("scheme-switch");
+const lightDarkPanel = document.getElementById("light-dark-panel");
+const lightModeBtn = document.getElementById("light-mode-btn");
+const darkModeBtn = document.getElementById("dark-mode-btn");
+const autoModeBtn = document.getElementById("auto-mode-btn");
+const lightIcon = document.getElementById("light-icon");
+const darkIcon = document.getElementById("dark-icon");
+const autoIcon = document.getElementById("auto-icon");
+const container = document.getElementById("light-dark-switch-container");
+
+function updateIcons() {
+	if (lightIcon) lightIcon.classList.toggle("opacity-0", mode !== LIGHT_MODE);
+	if (darkIcon) darkIcon.classList.toggle("opacity-0", mode !== DARK_MODE);
+	if (autoIcon) autoIcon.classList.toggle("opacity-0", mode !== AUTO_MODE);
+}
+
+function updateButtonStyles() {
+	if (lightModeBtn) lightModeBtn.classList.toggle("current-theme-btn", mode === LIGHT_MODE);
+	if (darkModeBtn) darkModeBtn.classList.toggle("current-theme-btn", mode === DARK_MODE);
+	if (autoModeBtn) autoModeBtn.classList.toggle("current-theme-btn", mode === AUTO_MODE);
+}
+
+function switchScheme(newMode: LIGHT_DARK_MODE) {
+	mode = newMode;
+	setTheme(newMode);
+	updateIcons();
+	updateButtonStyles();
+}
+
+function toggleScheme() {
+	let i = 0;
+	for (; i < seq.length; i++) {
+		if (seq[i] === mode) {
+			break;
+		}
+	}
+	switchScheme(seq[(i + 1) % seq.length]);
+}
+
+function showPanel() {
+	lightDarkPanel?.classList.remove("float-panel-closed");
+}
+
+function hidePanel() {
+	lightDarkPanel?.classList.add("float-panel-closed");
+}
+
+// Initialize
+mode = getStoredTheme();
+updateIcons();
+updateButtonStyles();
+
+const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
+const changeThemeWhenSchemeChanged = (_e: MediaQueryListEvent) => {
+	applyThemeToDocument(mode);
+};
+darkModePreference.addEventListener("change", changeThemeWhenSchemeChanged);
+
+// Event listeners
+schemeSwitch?.addEventListener("click", toggleScheme);
+schemeSwitch?.addEventListener("mouseenter", showPanel);
+container?.addEventListener("mouseleave", hidePanel);
+
+lightModeBtn?.addEventListener("click", () => switchScheme(LIGHT_MODE));
+darkModeBtn?.addEventListener("click", () => switchScheme(DARK_MODE));
+autoModeBtn?.addEventListener("click", () => switchScheme(AUTO_MODE));
+</script>
+
+<style>
+	.current-theme-btn {
+		background: var(--btn-plain-bg-hover);
+	}
+</style>

@@ -1,18 +1,7 @@
-<script lang="ts">
-import { onMount } from "svelte";
-
+---
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import { getPostUrlBySlug } from "../utils/url-utils";
-
-export let tags: string[];
-export let categories: string[];
-export let sortedPosts: Post[] = [];
-
-const params = new URLSearchParams(window.location.search);
-tags = params.has("tag") ? params.getAll("tag") : [];
-categories = params.has("category") ? params.getAll("category") : [];
-const uncategorized = params.get("uncategorized");
 
 interface Post {
 	slug: string;
@@ -29,7 +18,60 @@ interface Group {
 	posts: Post[];
 }
 
-let groups: Group[] = [];
+interface Props {
+	sortedPosts?: Post[];
+}
+
+const { sortedPosts = [] } = Astro.props;
+
+// Parse URL parameters for filtering
+const params = Astro.url.searchParams;
+const tags = params.has("tag") ? params.getAll("tag") : [];
+const categories = params.has("category") ? params.getAll("category") : [];
+const uncategorized = params.get("uncategorized");
+
+// Filter posts
+let filteredPosts: Post[] = sortedPosts;
+
+if (tags.length > 0) {
+	filteredPosts = filteredPosts.filter(
+		(post) =>
+			Array.isArray(post.data.tags) &&
+			post.data.tags.some((tag) => tags.includes(tag)),
+	);
+}
+
+if (categories.length > 0) {
+	filteredPosts = filteredPosts.filter(
+		(post) => post.data.category && categories.includes(post.data.category),
+	);
+}
+
+if (uncategorized) {
+	filteredPosts = filteredPosts.filter((post) => !post.data.category);
+}
+
+// Group by year
+const grouped = filteredPosts.reduce(
+	(acc, post) => {
+		const year = post.data.published.getFullYear();
+		if (!acc[year]) {
+			acc[year] = [];
+		}
+		acc[year].push(post);
+		return acc;
+	},
+	{} as Record<number, Post[]>,
+);
+
+const groupedPostsArray = Object.keys(grouped).map((yearStr) => ({
+	year: Number.parseInt(yearStr, 10),
+	posts: grouped[Number.parseInt(yearStr, 10)],
+}));
+
+groupedPostsArray.sort((a, b) => b.year - a.year);
+
+const groups: Group[] = groupedPostsArray;
 
 function formatDate(date: Date) {
 	const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -40,53 +82,10 @@ function formatDate(date: Date) {
 function formatTag(tagList: string[]) {
 	return tagList.map((t) => `#${t}`).join(" ");
 }
-
-onMount(async () => {
-	let filteredPosts: Post[] = sortedPosts;
-
-	if (tags.length > 0) {
-		filteredPosts = filteredPosts.filter(
-			(post) =>
-				Array.isArray(post.data.tags) &&
-				post.data.tags.some((tag) => tags.includes(tag)),
-		);
-	}
-
-	if (categories.length > 0) {
-		filteredPosts = filteredPosts.filter(
-			(post) => post.data.category && categories.includes(post.data.category),
-		);
-	}
-
-	if (uncategorized) {
-		filteredPosts = filteredPosts.filter((post) => !post.data.category);
-	}
-
-	const grouped = filteredPosts.reduce(
-		(acc, post) => {
-			const year = post.data.published.getFullYear();
-			if (!acc[year]) {
-				acc[year] = [];
-			}
-			acc[year].push(post);
-			return acc;
-		},
-		{} as Record<number, Post[]>,
-	);
-
-	const groupedPostsArray = Object.keys(grouped).map((yearStr) => ({
-		year: Number.parseInt(yearStr, 10),
-		posts: grouped[Number.parseInt(yearStr, 10)],
-	}));
-
-	groupedPostsArray.sort((a, b) => b.year - a.year);
-
-	groups = groupedPostsArray;
-});
-</script>
+---
 
 <div class="card-base px-8 py-6">
-    {#each groups as group}
+    {groups.map((group) => (
         <div>
             <div class="flex flex-row w-full items-center h-[3.75rem]">
                 <div class="w-[15%] md:w-[10%] transition text-2xl font-bold text-right text-75">
@@ -103,7 +102,7 @@ onMount(async () => {
                 </div>
             </div>
 
-            {#each group.posts as post}
+            {group.posts.map((post) => (
                 <a
                         href={getPostUrlBySlug(post.slug)}
                         aria-label={post.data.title}
@@ -145,7 +144,7 @@ onMount(async () => {
                         </div>
                     </div>
                 </a>
-            {/each}
+            ))}
         </div>
-    {/each}
+    ))}
 </div>
