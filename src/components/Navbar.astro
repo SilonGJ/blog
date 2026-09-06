@@ -14,8 +14,8 @@ const className = Astro.props.class;
 const linkIcons: Record<number, string> = {
 	[LinkPreset.Home]: "material-symbols:home-outline-rounded",
 	[LinkPreset.Archive]: "material-symbols:archive-outline",
-	[LinkPreset.About]: "material-symbols:person-outline",
 	[LinkPreset.FriendLinks]: "material-symbols:link",
+	[LinkPreset.About]: "material-symbols:info-outline",
 };
 
 let links: (NavBarLink & { presetIndex?: number })[] = navBarConfig.links.map(

@@ -100,16 +100,6 @@ const friendLinks: FriendLink[] = Object.values(linkModules).map(
 	(m) => m.default,
 );
 
-export const linksConfig = {
-	title: "友链",
-	groups: [
-		{
-			name: "好朋友们",
-			links: friendLinks,
-		},
-	],
-};
-
 export const siteUrl = "https://zcx0217.qzz.io/";
 
 export const codeFontFamily =
