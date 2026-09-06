@@ -1,6 +1,6 @@
 # 友链
-
-::friend-links
+#### 想要加入友链？快来[申请友链](/links/#加入友链)吧~
+::friend-links  
 
 ## 加入友链
 
