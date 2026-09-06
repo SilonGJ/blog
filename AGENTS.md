@@ -1,5 +1,16 @@
 # AGENTS.md — blog-fuwari
 
+## 沟通 & 开发规范
+
+- 请详细遵守系统提示词约束
+- 遇到不会/没有见过等的问题，请从互联网中搜索及查询相关文档，而不是基于各种幻觉瞎编
+- 计划模式(Plan Mode)仅供规划下一步的执行框架、步骤使用，严禁在计划模式(Plan Mode)下尝试各种手段绕过限制修改文件，或间接对项目文件产生影响
+- 如需扫描项目框架、理解某个功能的具体实现，请使用子代理(Sub Agent)以获取更准确的信息并降低上下文长度
+- 若开发服务器正在运行，禁止私自杀死开发服务器进程
+- 禁止对Git进行任何诸如提交、推送、撤回、变基等操作，但可以查看历史文件等
+
+---
+
 ## 项目概述
 
 基于 [Astro](https://astro.build/) 的静态博客，使用 fuwari 主题并进行深度魔改。部署在 Cloudflare Worker。
@@ -13,9 +24,7 @@
 ```bash
 pnpm dev          # 启动开发服务器
 pnpm build        # 构建 + pagefind 搜索索引
-pnpm preview      # 预览构建结果
 pnpm check        # Astro 类型检查 + tsc
-pnpm format       # Biome 格式化（tab 缩进）
 pnpm lint         # Biome 检查并自动修复
 pnpm new-post     # 创建新文章（scripts/new-post.js）
 ```
@@ -51,35 +60,3 @@ pnpm new-post     # 创建新文章（scripts/new-post.js）
 **友链**：`src/links/1.json`, `src/links/2.json`… 按文件名顺序排列。
 
 **i18n**：多语言文件在 `src/i18n/languages/`，当前默认语言为 `zh_CN`。
-
----
-
-## 发布文章
-
-使用脚手架：
-```bash
-pnpm new-post
-```
-或手动在 `src/content/posts/` 下新建 `.md` 文件，必填 frontmatter：
-
-```yaml
----
-title: 文章标题
-published: 2026-01-01       # 必填
-description: 摘要
-tags: [标签1, 标签2]
-category: 分类名
-image: /images/cover.png     # 可选
-draft: true                  # 可选，默认 false
----
-```
-
----
-
-## 沟通 & 开发规范
-
-- 遇到不会/没有见过等的问题，请从互联网中搜索及查询相关文档，而不是基于各种幻觉瞎编
-- 计划模式(Plan Mode)仅供规划下一步的执行框架、步骤使用，严禁在计划模式(Plan Mode)下尝试各种手段绕过限制修改文件，或间接对项目文件产生影响
-- 如需扫描项目框架、理解某个功能的具体实现，请使用子代理(Sub Agent)以获取更准确的信息并降低上下文长度
-- 若开发服务器正在运行，禁止私自杀死开发服务器进程
-- 禁止对Git进行任何诸如提交、推送、撤回、变基等操作，但可以查看历史文件等
