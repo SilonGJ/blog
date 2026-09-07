@@ -170,6 +170,7 @@ const jsonLd = {
 
         const CACHE_KEY = 'views_data';
         const CACHE_TS_KEY = 'views_ts';
+        const VIEWED_KEY = 'viewed_set';
         const CACHE_TTL = 30 * 60 * 1000;
 
         function getCache() {
@@ -185,11 +186,29 @@ const jsonLd = {
             localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
         }
 
+        function getViewedSet() {
+            const ts = Number(localStorage.getItem(CACHE_TS_KEY) || 0);
+            if (Date.now() - ts > CACHE_TTL) return [];
+            try { return JSON.parse(localStorage.getItem(VIEWED_KEY) || '[]'); } catch { return []; }
+        }
+
+        function addViewed(s) {
+            const viewed = getViewedSet();
+            if (!viewed.includes(s)) {
+                viewed.push(s);
+                localStorage.setItem(VIEWED_KEY, JSON.stringify(viewed));
+            }
+        }
+
         try {
-            const cache = getCache();
-            if (cache && slug in cache) {
-                el.textContent = cache[slug].toLocaleString();
-                return;
+            const viewed = getViewedSet();
+
+            if (viewed.includes(slug)) {
+                const cache = getCache();
+                if (cache && slug in cache) {
+                    el.textContent = cache[slug].toLocaleString();
+                    return;
+                }
             }
 
             const res = await fetch('/api/views/' + encodeURIComponent(slug), { method: 'POST' });
@@ -201,6 +220,7 @@ const jsonLd = {
             const updated = getCache() ?? {};
             updated[slug] = count;
             setCache(updated);
+            addViewed(slug);
         } catch {}
     })();
     </script>
