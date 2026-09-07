@@ -34,4 +34,57 @@ const len = page.data.length;
     <h1 class="sr-only">{siteConfig.title}</h1>
     <PostPage page={page}></PostPage>
     <Pagination class="mx-auto onload-animation" page={page}></Pagination>
+
+    <script is:inline>
+    (async () => {
+        const els = document.querySelectorAll('.view-count[data-slug]');
+        if (!els.length) return;
+
+        const CACHE_KEY = 'views_data';
+        const CACHE_TS_KEY = 'views_ts';
+        const CACHE_TTL = 30 * 60 * 1000;
+
+        function getCache() {
+            const ts = Number(localStorage.getItem(CACHE_TS_KEY) || 0);
+            if (Date.now() - ts > CACHE_TTL) return null;
+            const raw = localStorage.getItem(CACHE_KEY);
+            if (!raw) return null;
+            try { return JSON.parse(raw); } catch { return null; }
+        }
+
+        function setCache(data) {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+        }
+
+        try {
+            const cache = getCache();
+            const allSlugs = [...els].map(el => el.dataset.slug);
+
+            els.forEach(el => {
+                const cached = cache?.[el.dataset.slug];
+                if (cached !== undefined) el.textContent = cached.toLocaleString();
+            });
+
+            const uncached = allSlugs.filter(s => cache === null || !(s in cache));
+            if (uncached.length === 0) return;
+
+            const res = await fetch('/api/views/batch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slugs: uncached })
+            });
+            if (!res.ok) return;
+            const { data } = await res.json();
+
+            const merged = { ...(cache ?? {}), ...data };
+            setCache(merged);
+
+            els.forEach(el => {
+                const slug = el.dataset.slug;
+                el.textContent = (merged[slug] ?? 0).toLocaleString();
+            });
+        } catch {}
+    })();
+    </script>
 </MainGridLayout>

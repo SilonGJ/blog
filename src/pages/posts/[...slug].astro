@@ -167,20 +167,34 @@ const jsonLd = {
         const el = document.querySelector('.view-count[data-slug]');
         if (!el) return;
         const slug = el.dataset.slug;
+
+        const CACHE_KEY = 'views_data';
+        const CACHE_TS_KEY = 'views_ts';
+        const CACHE_TTL = 30 * 60 * 1000;
+
+        function getCache() {
+            const ts = Number(localStorage.getItem(CACHE_TS_KEY) || 0);
+            if (Date.now() - ts > CACHE_TTL) return null;
+            const raw = localStorage.getItem(CACHE_KEY);
+            if (!raw) return null;
+            try { return JSON.parse(raw); } catch { return null; }
+        }
+
+        function setCache(data) {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+        }
+
         try {
-            const key = 'viewed_' + slug;
-            let count;
-            if (!sessionStorage.getItem(key)) {
-                const res = await fetch('/api/views/' + encodeURIComponent(slug), { method: 'POST' });
-                if (!res.ok) return;
-                ({ count } = await res.json());
-                sessionStorage.setItem(key, '1');
-            } else {
-                const res = await fetch('/api/views/' + encodeURIComponent(slug));
-                if (!res.ok) return;
-                ({ count } = await res.json());
-            }
+            const res = await fetch('/api/views/' + encodeURIComponent(slug), { method: 'POST' });
+            if (!res.ok) return;
+            const { count } = await res.json();
+
             el.textContent = count.toLocaleString();
+
+            const cache = getCache() ?? {};
+            cache[slug] = count;
+            setCache(cache);
         } catch {}
     })();
     </script>

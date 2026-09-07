@@ -113,24 +113,3 @@ const { remarkPluginFrontmatter } = await render(entry);
 
 <style define:vars={{coverWidth}}>
 </style>
-
-<script is:inline>
-(async () => {
-    const els = document.querySelectorAll('.view-count[data-slug]');
-    const slugs = [...els].map(el => el.dataset.slug);
-    if (!slugs.length) return;
-    try {
-        const res = await fetch('/api/views/batch', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slugs })
-        });
-        if (!res.ok) return;
-        const { data } = await res.json();
-        els.forEach(el => {
-            const count = data[el.dataset.slug] ?? 0;
-            el.textContent = count.toLocaleString();
-        });
-    } catch {}
-})();
-</script>
