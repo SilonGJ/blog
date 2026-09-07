@@ -186,15 +186,21 @@ const jsonLd = {
         }
 
         try {
+            const cache = getCache();
+            if (cache && slug in cache) {
+                el.textContent = cache[slug].toLocaleString();
+                return;
+            }
+
             const res = await fetch('/api/views/' + encodeURIComponent(slug), { method: 'POST' });
             if (!res.ok) return;
             const { count } = await res.json();
 
             el.textContent = count.toLocaleString();
 
-            const cache = getCache() ?? {};
-            cache[slug] = count;
-            setCache(cache);
+            const updated = getCache() ?? {};
+            updated[slug] = count;
+            setCache(updated);
         } catch {}
     })();
     </script>
