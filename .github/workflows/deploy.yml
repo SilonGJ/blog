@@ -26,7 +26,7 @@ jobs:
       - name: 配置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
 
       - name: 配置 pnpm
         uses: pnpm/action-setup@v4
