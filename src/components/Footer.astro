@@ -1,6 +1,7 @@
 ---
 
 import { profileConfig } from "../config";
+import { Icon } from "astro-icon/components";
 import { url } from "../utils/url-utils";
 
 const currentYear = new Date().getFullYear();
@@ -10,8 +11,18 @@ const currentYear = new Date().getFullYear();
 <div class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6">
     <div class="transition text-50 text-sm text-center">
         &copy; <span id="copyright-year">{currentYear}</span> {profileConfig.name}. All Rights Reserved. /
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('rss.xml')}>RSS</a> /
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('sitemap-index.xml')}>Sitemap</a><br>
+        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('rss.xml')}>
+            <Icon name="material-symbols:rss-feed" class="w-3.5 h-3.5 inline mb-0.5" />RSS
+        </a> /
+        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('sitemap-index.xml')}>
+            <Icon name="material-symbols:language" class="w-3.5 h-3.5 inline mb-0.5" />Sitemap
+        </a><br>
+        本博客在
+        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/SilonGJ/Blog">
+            <Icon name="material-symbols:code" class="w-3.5 h-3.5 inline mb-0.5" />Github
+        </a>
+        上开源<br>
+        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://icp.gov.moe/?keyword=20260865">萌ICP备20260865号</a><br>
         Powered by
         <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://astro.build">Astro</a> &
         <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/saicaca/fuwari">Fuwari</a>
