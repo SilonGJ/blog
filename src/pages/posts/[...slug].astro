@@ -1,8 +1,8 @@
 ---
 import { render } from "astro:content";
 import path from "node:path";
-import License from "@components/misc/License.astro";
 import Giscus from "@components/Giscus.astro";
+import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
@@ -83,6 +83,15 @@ const jsonLd = {
                         {remarkPluginFrontmatter.minutes} {" " + i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
                     </div>
                 </div>
+                <div class="flex flex-row items-center">
+                    <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
+                        <Icon name="material-symbols:visibility-outline-rounded"></Icon>
+                    </div>
+                    <div class="text-sm">
+                        <span class="view-count" data-slug={entry.id}>--</span>
+                        {" " + i18n(I18nKey.viewCount)}
+                    </div>
+                </div>
             </div>
 
             <!-- title -->
@@ -152,5 +161,28 @@ const jsonLd = {
     <div class="max-w-4xl mx-auto mt-6 max-md:mt-4">
         <Giscus />
     </div>
+
+    <script is:inline>
+    (async () => {
+        const el = document.querySelector('.view-count[data-slug]');
+        if (!el) return;
+        const slug = el.dataset.slug;
+        try {
+            const key = 'viewed_' + slug;
+            let count;
+            if (!sessionStorage.getItem(key)) {
+                const res = await fetch('/api/views/' + encodeURIComponent(slug), { method: 'POST' });
+                if (!res.ok) return;
+                ({ count } = await res.json());
+                sessionStorage.setItem(key, '1');
+            } else {
+                const res = await fetch('/api/views/' + encodeURIComponent(slug));
+                if (!res.ok) return;
+                ({ count } = await res.json());
+            }
+            el.textContent = count.toLocaleString();
+        } catch {}
+    })();
+    </script>
 
 </MainGridLayout>

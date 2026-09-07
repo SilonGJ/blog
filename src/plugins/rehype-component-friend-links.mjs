@@ -1,8 +1,9 @@
 /// <reference types="mdast" />
-import { h } from "hastscript";
+
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { h } from "hastscript";
 
 /**
  * Creates a Friend Links component.
@@ -34,19 +35,22 @@ export function FriendLinksComponent(properties, children) {
 					href: link.url,
 					target: "_blank",
 					rel: "noopener noreferrer",
-					class: "btn-plain scale-animation no-styling !no-underline rounded-2xl p-4 flex items-start gap-4 group",
+					class:
+						"btn-plain scale-animation no-styling !no-underline rounded-2xl p-4 flex items-start gap-4 group",
 				},
 				[
 					h(
 						"div",
 						{
-							class: "w-12 h-12 flex-shrink-0 relative rounded-lg overflow-hidden border border-[var(--line-divider)]",
+							class:
+								"w-12 h-12 flex-shrink-0 relative rounded-lg overflow-hidden border border-[var(--line-divider)]",
 						},
 						[
 							h(
 								"div",
 								{
-									class: "absolute inset-0 flex items-center justify-center text-xl font-bold text-50 bg-[var(--btn-regular-bg)]",
+									class:
+										"absolute inset-0 flex items-center justify-center text-xl font-bold text-50 bg-[var(--btn-regular-bg)]",
 								},
 								initial,
 							),
@@ -57,7 +61,8 @@ export function FriendLinksComponent(properties, children) {
 											alt: "",
 											loading: "lazy",
 											referrerpolicy: "no-referrer",
-											class: "absolute inset-0 w-full h-full object-cover !m-0 img-fade",
+											class:
+												"absolute inset-0 w-full h-full object-cover !m-0 img-fade",
 										}),
 									]
 								: []),
@@ -68,7 +73,8 @@ export function FriendLinksComponent(properties, children) {
 							h(
 								"span",
 								{
-									class: "font-bold text-90 truncate group-hover:text-[var(--primary)] transition-colors",
+									class:
+										"font-bold text-90 truncate group-hover:text-[var(--primary)] transition-colors",
 								},
 								link.name,
 							),

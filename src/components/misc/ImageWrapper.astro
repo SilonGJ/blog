@@ -44,7 +44,10 @@ if (isLocal) {
 	img = await file();
 }
 
-const imageClass = id !== 'banner' ? "w-full h-full object-cover img-fade" : "w-full h-full object-cover";
+const imageClass =
+	id !== "banner"
+		? "w-full h-full object-cover img-fade"
+		: "w-full h-full object-cover";
 const imageStyle = `object-position: ${position}`;
 ---
 <div id={id} class:list={[className, 'overflow-hidden relative']}>
