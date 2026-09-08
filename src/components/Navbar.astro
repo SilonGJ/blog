@@ -21,7 +21,7 @@ const linkIcons: Record<number, string> = {
 let links: (NavBarLink & { presetIndex?: number })[] = navBarConfig.links.map(
 	(
 		item: NavBarLink | LinkPreset,
-		index: number,
+		_index: number,
 	): NavBarLink & { presetIndex?: number } => {
 		if (typeof item === "number") {
 			return { ...LinkPresets[item], presetIndex: item };

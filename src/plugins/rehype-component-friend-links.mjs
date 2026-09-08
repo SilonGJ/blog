@@ -12,7 +12,7 @@ import { h } from "hastscript";
  * @param {import('mdast').RootContent[]} children - The children elements of the component.
  * @returns {import('mdast').Parent} The created Friend Links component.
  */
-export function FriendLinksComponent(properties, children) {
+export function FriendLinksComponent(_properties, _children) {
 	try {
 		const __dirname = path.dirname(fileURLToPath(import.meta.url));
 		const linksDir = path.join(__dirname, "..", "links");
@@ -27,7 +27,7 @@ export function FriendLinksComponent(properties, children) {
 
 		const items = links.map((link) => {
 			const initial = link.name ? link.name.charAt(0) : "?";
-			const hasIcon = link.icon && link.icon.trim();
+			const hasIcon = link.icon?.trim();
 
 			return h(
 				"a",
@@ -102,6 +102,6 @@ export function FriendLinksComponent(properties, children) {
 		);
 	} catch (e) {
 		console.error("[FriendLinks] Error:", e);
-		return h("div", { class: "text-red-500" }, ["友链加载失败: " + e.message]);
+		return h("div", { class: "text-red-500" }, [`友链加载失败: ${e.message}`]);
 	}
 }

@@ -1,6 +1,5 @@
 import type {
 	ExpressiveCodeConfig,
-	FriendLink,
 	LicenseConfig,
 	NavBarConfig,
 	ProfileConfig,
@@ -91,14 +90,6 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	// Please select a dark theme, as this blog theme currently only supports dark background color
 	theme: "github-dark",
 };
-
-const linkModules = import.meta.glob("./links/*.json", {
-	eager: true,
-}) as Record<string, { default: FriendLink }>;
-
-const friendLinks: FriendLink[] = Object.values(linkModules).map(
-	(m) => m.default,
-);
 
 export const siteUrl = "https://zcx0217.qzz.io/";
 

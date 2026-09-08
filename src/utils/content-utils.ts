@@ -48,7 +48,7 @@ export async function getSortedPostsList(): Promise<PostForList[]> {
 		slug: post.id,
 		data: {
 			...post.data,
-			category: post.data.category ?? undefined,
+			category: post.data.category,
 		},
 	}));
 

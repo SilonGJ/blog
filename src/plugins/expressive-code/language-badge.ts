@@ -7,8 +7,7 @@ import { codeFontFamily } from "../../config";
 export function pluginLanguageBadge() {
 	return definePlugin({
 		name: "Language Badge",
-		// @ts-expect-error
-		baseStyles: ({ _cssVar }) => `
+		baseStyles: () => `
       [data-language]::before {
         position: absolute;
         z-index: 2;

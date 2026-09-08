@@ -44,8 +44,6 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 
 // defines global css variables
 const configHue = siteConfig.themeColor.hue;
-const bannerForDisplay = siteConfig.banner.src;
-
 const enableBanner = siteConfig.banner.enable;
 
 let pageTitle: string;
@@ -324,7 +322,7 @@ function showBanner() {
 function setupImageReveal() {
 	document.querySelectorAll(".img-fade").forEach((img) => {
 		if (img.classList.contains("img-loaded")) return;
-		if (img.complete) {
+		if ((img as HTMLImageElement).complete) {
 			img.classList.add("img-loaded");
 			return;
 		}
