@@ -24,35 +24,8 @@ interface Props {
 
 const { sortedPosts = [] } = Astro.props;
 
-// Parse URL parameters for filtering
-const params = Astro.url.searchParams;
-const tags = params.has("tag") ? params.getAll("tag") : [];
-const categories = params.has("category") ? params.getAll("category") : [];
-const uncategorized = params.get("uncategorized");
-
-// Filter posts
-let filteredPosts: Post[] = sortedPosts;
-
-if (tags.length > 0) {
-	filteredPosts = filteredPosts.filter(
-		(post) =>
-			Array.isArray(post.data.tags) &&
-			post.data.tags.some((tag) => tags.includes(tag)),
-	);
-}
-
-if (categories.length > 0) {
-	filteredPosts = filteredPosts.filter(
-		(post) => post.data.category && categories.includes(post.data.category),
-	);
-}
-
-if (uncategorized) {
-	filteredPosts = filteredPosts.filter((post) => !post.data.category);
-}
-
 // Group by year
-const grouped = filteredPosts.reduce(
+const grouped = sortedPosts.reduce(
 	(acc, post) => {
 		const year = post.data.published.getFullYear();
 		if (!acc[year]) {
@@ -84,11 +57,14 @@ function formatTag(tagList: string[]) {
 }
 ---
 
-<div class="card-base px-8 py-6">
+<div class="card-base px-8 py-6" id="archive-panel"
+     data-i18n-singular={i18n(I18nKey.postCount)}
+     data-i18n-plural={i18n(I18nKey.postsCount)}
+>
     {groups.map((group) => (
-        <div>
+        <div class="archive-group" data-year={group.year}>
             <div class="flex flex-row w-full items-center h-[3.75rem]">
-                <div class="w-[15%] md:w-[10%] transition text-2xl font-bold text-right text-75">
+                <div class="w-[15%] md:w-[10%] transition text-2xl font-bold text-right text-75 archive-year-count">
                     {group.year}
                 </div>
                 <div class="w-[15%] md:w-[10%]">
@@ -97,7 +73,7 @@ function formatTag(tagList: string[]) {
                   -outline-offset-[2px] z-50 outline-3"
                     ></div>
                 </div>
-                <div class="w-[70%] md:w-[80%] transition text-left text-50">
+                <div class="w-[70%] md:w-[80%] transition text-left text-50 archive-year-posts-count">
                     {group.posts.length} {i18n(group.posts.length === 1 ? I18nKey.postCount : I18nKey.postsCount)}
                 </div>
             </div>
@@ -106,7 +82,9 @@ function formatTag(tagList: string[]) {
                 <a
                         href={getPostUrlBySlug(post.slug)}
                         aria-label={post.data.title}
-                        class="group btn-plain scale-animation !block h-10 w-full rounded-lg hover:text-[initial]"
+                        class="group btn-plain scale-animation block h-10 w-full rounded-lg hover:text-[initial] archive-item"
+                        data-tags={(post.data.tags || []).join(",")}
+                        data-category={post.data.category || ""}
                 >
                     <div class="flex flex-row justify-start items-center h-full">
                         <!-- date -->
@@ -148,3 +126,40 @@ function formatTag(tagList: string[]) {
         </div>
     ))}
 </div>
+
+<script is:inline data-astro-rerun>
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var tagFilter = params.has("tag") ? params.getAll("tag") : [];
+    var categoryFilter = params.has("category") ? params.getAll("category") : [];
+    var uncategorized = params.get("uncategorized");
+    var hasFilter = tagFilter.length > 0 || categoryFilter.length > 0 || uncategorized;
+
+    if (!hasFilter) return;
+
+    var panel = document.getElementById("archive-panel");
+    if (!panel) return;
+
+    panel.querySelectorAll(".archive-item").forEach(function(item) {
+        var tags = (item.dataset.tags || "").split(",").filter(Boolean);
+        var cat = item.dataset.category;
+        var show = true;
+        if (tagFilter.length > 0) show = tagFilter.some(function(t) { return tags.indexOf(t) !== -1; });
+        if (categoryFilter.length > 0) show = show && categoryFilter.indexOf(cat) !== -1;
+        if (uncategorized) show = show && !cat;
+        item.style.display = show ? "" : "none";
+    });
+
+    panel.querySelectorAll(".archive-group").forEach(function(group) {
+        var vis = group.querySelectorAll('.archive-item:not([style*="display: none"])');
+        var countEl = group.querySelector(".archive-year-posts-count");
+        if (countEl) {
+            var count = vis.length;
+            var singular = panel.dataset.i18nSingular;
+            var plural = panel.dataset.i18nPlural;
+            countEl.textContent = count + " " + (count === 1 ? singular : plural);
+        }
+        group.style.display = vis.length > 0 ? "" : "none";
+    });
+})();
+</script>
