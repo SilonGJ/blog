@@ -7,7 +7,7 @@ content:
       template: "{primary}.md"
       field: create
     view:
-      fields: [title, category, tags, published, updated, draft]
+      fields: [image, title, category, tags, published, updated, draft]
       default:
         sort: published
         order: desc
