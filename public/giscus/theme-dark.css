@@ -1,4 +1,7 @@
 main {
+  /* 博客深色主题 - OKLCH hue=240 蓝色系 */
+
+  /* 语法高亮颜色 */
   --color-prettylights-syntax-comment: #8b949e;
   --color-prettylights-syntax-constant: #79c0ff;
   --color-prettylights-syntax-entity: #d2a8ff;
@@ -29,58 +32,80 @@ main {
   --color-prettylights-syntax-brackethighlighter-angle: #8b949e;
   --color-prettylights-syntax-sublimelinter-gutter-mark: #484f58;
   --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
-  --color-btn-text: #c9d1d9;
-  --color-btn-bg: #2d333bcc;
-  --color-btn-border: rgb(240 246 252 / 10%);
+
+  /* 按钮颜色 - 使用博客深色模式的 btn-regular 系列 */
+  --color-btn-text: #6ba6f0;
+  --color-btn-bg: #414868;
+  --color-btn-border: rgba(255, 255, 255, 0.08);
   --color-btn-shadow: 0 0 #0000;
   --color-btn-inset-shadow: 0 0 #0000;
-  --color-btn-hover-bg: #2d333b80;
-  --color-btn-hover-border: #8b949e;
-  --color-btn-active-bg: #282e3380;
-  --color-btn-active-border: #6e7681;
-  --color-btn-selected-bg: #2d333b80;
-  --color-btn-primary-text: #fff;
-  --color-btn-primary-bg: #4a72d2;
-  --color-btn-primary-border: rgb(240 246 252 / 10%);
+  --color-btn-hover-bg: #4d5578;
+  --color-btn-hover-border: rgba(255, 255, 255, 0.12);
+  --color-btn-active-bg: #596188;
+  --color-btn-active-border: rgba(255, 255, 255, 0.15);
+  --color-btn-selected-bg: #4d5578;
+
+  /* 主按钮颜色 - 使用博客深色模式的 primary 色 */
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-bg: #5b82e3;
+  --color-btn-primary-border: rgba(255, 255, 255, 0.1);
   --color-btn-primary-shadow: 0 0 #0000;
   --color-btn-primary-inset-shadow: 0 0 #0000;
-  --color-btn-primary-hover-bg: #5b82e3;
-  --color-btn-primary-hover-border: rgb(240 246 252 / 10%);
+  --color-btn-primary-hover-bg: #6b91f0;
+  --color-btn-primary-hover-border: rgba(255, 255, 255, 0.1);
   --color-btn-primary-selected-bg: #4a72d2;
   --color-btn-primary-selected-shadow: 0 0 #0000;
-  --color-btn-primary-disabled-text: rgb(255 255 255 / 50%);
-  --color-btn-primary-disabled-bg: rgb(74 114 210 / 60%);
-  --color-btn-primary-disabled-border: rgb(240 246 252 / 10%);
-  --color-action-list-item-default-hover-bg: rgb(177 186 196 / 12%);
-  --color-segmented-control-bg: rgb(110 118 129 / 10%);
-  --color-segmented-control-button-bg: #0d1117;
+  --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.5);
+  --color-btn-primary-disabled-bg: rgba(91, 130, 227, 0.6);
+  --color-btn-primary-disabled-border: rgba(255, 255, 255, 0.1);
+
+  /* 操作列表 */
+  --color-action-list-item-default-hover-bg: rgba(107, 166, 240, 0.12);
+
+  /* 分段控件 */
+  --color-segmented-control-bg: rgba(255, 255, 255, 0.08);
+  --color-segmented-control-button-bg: #202438;
   --color-segmented-control-button-selected-border: #6e7681;
+
+  /* 文字颜色 - 使用博客深色模式的文字颜色 */
   --color-fg-default: #e6edf3;
   --color-fg-muted: #7d8590;
   --color-fg-subtle: #6e7681;
-  --color-canvas-default: #1c1f2b;
-  --color-canvas-overlay: #161b22e6;
-  --color-canvas-inset: #010409;
-  --color-canvas-subtle: #282c40;
-  --color-border-default: #363a4a;
-  --color-border-muted: #25293a;
-  --color-neutral-muted: rgb(110 118 129 / 40%);
-  --color-accent-fg: #7ba2f5;
+
+  /* 画布/背景颜色 - 使用博客深色模式的背景色 */
+  --color-canvas-default: #202438;
+  --color-canvas-overlay: #2a2e45;
+  --color-canvas-inset: #1a1d30;
+  --color-canvas-subtle: #30364e;
+
+  /* 边框颜色 - 使用博客深色模式的 line 颜色 */
+  --color-border-default: rgba(255, 255, 255, 0.1);
+  --color-border-muted: rgba(255, 255, 255, 0.08);
+  --color-neutral-muted: rgba(255, 255, 255, 0.08);
+
+  /* 强调色 - 使用博客深色模式的 primary 色 */
+  --color-accent-fg: #6ba6f0;
   --color-accent-emphasis: #5b82e3;
-  --color-accent-muted: rgb(91 130 227 / 40%);
-  --color-accent-subtle: rgb(91 130 227 / 10%);
+  --color-accent-muted: rgba(107, 166, 240, 0.4);
+  --color-accent-subtle: rgba(107, 166, 240, 0.1);
+
+  /* 状态颜色 */
   --color-success-fg: #3fb950;
   --color-attention-fg: #d29922;
-  --color-attention-muted: rgb(187 128 9 / 40%);
-  --color-attention-subtle: rgb(187 128 9 / 15%);
+  --color-attention-muted: rgba(187, 128, 9, 0.4);
+  --color-attention-subtle: rgba(187, 128, 9, 0.15);
   --color-danger-fg: #f85149;
-  --color-danger-muted: rgb(248 81 73 / 40%);
-  --color-danger-subtle: rgb(248 81 73 / 10%);
-  --color-primer-shadow-inset: 0 0 #0000;
-  --color-scale-gray-7: #21262d;
-  --color-scale-blue-8: #0c2d6b;
+  --color-danger-muted: rgba(248, 81, 73, 0.4);
+  --color-danger-subtle: rgba(248, 81, 73, 0.1);
 
-  /*! Extensions from @primer/css/alerts/flash.scss */
+  /* 阴影 */
+  --color-primer-shadow-inset: 0 0 #0000;
+
+  /* 缩放颜色 */
+  --color-scale-gray-7: #30364e;
+  --color-scale-blue-8: #1a2a5a;
+
+  /* 社交反应 */
   --color-social-reaction-bg-hover: var(--color-scale-gray-7);
   --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
 }
