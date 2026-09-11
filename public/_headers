@@ -1,4 +1,2 @@
 /giscus/*
   Access-Control-Allow-Origin: *
-/cdn/giscus/*
-  Access-Control-Allow-Origin: *
