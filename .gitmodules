@@ -2,3 +2,7 @@
 	path = public/blog-cdn
 	url = git@github.com:SilonGJ/blog-cdn.git
 	branch = main
+[submodule "blog-backend"]
+	path = blog-backend
+	url = git@github.com:SilonGJ/blog-backend.git
+	branch = main
