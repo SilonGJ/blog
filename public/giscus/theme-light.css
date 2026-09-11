@@ -1,7 +1,9 @@
-main {
-  /* 博客浅色主题 - OKLCH hue=240 蓝色系 */
+:host, html {
+  --font-family-sans: "Roboto", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-family-monospace: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
 
-  /* 语法高亮颜色 */
+main {
   --color-prettylights-syntax-comment: #6e7781;
   --color-prettylights-syntax-constant: #0550ae;
   --color-prettylights-syntax-entity: #8250df;
@@ -33,22 +35,19 @@ main {
   --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
   --color-prettylights-syntax-constant-other-reference-link: #0a3069;
 
-  /* 按钮颜色 - 使用博客的 btn-regular 系列 */
-  --color-btn-text: #3a3d52;
-  --color-btn-bg: #eef2fc;
-  --color-btn-border: rgba(0, 0, 0, 0.1);
+  --color-btn-text: #383954;
+  --color-btn-bg: #e8ecfa;
+  --color-btn-border: rgba(0, 0, 0, 0.08);
   --color-btn-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
   --color-btn-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  --color-btn-hover-bg: #dde6fc;
+  --color-btn-hover-bg: #d0d8f4;
   --color-btn-hover-border: rgba(0, 0, 0, 0.1);
-  --color-btn-active-bg: #ccd9fc;
-  --color-btn-active-border: rgba(0, 0, 0, 0.1);
-  --color-btn-selected-bg: #c5d4fc;
-
-  /* 主按钮颜色 - 使用博客的 primary 色 */
-  --color-btn-primary-text: #ffffff;
+  --color-btn-active-bg: #b8c4ee;
+  --color-btn-active-border: rgba(0, 0, 0, 0.12);
+  --color-btn-selected-bg: #b0bce8;
+  --color-btn-primary-text: #fff;
   --color-btn-primary-bg: #4a6dd4;
-  --color-btn-primary-border: rgba(0, 0, 0, 0.1);
+  --color-btn-primary-border: rgba(0, 0, 0, 0.08);
   --color-btn-primary-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
   --color-btn-primary-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
   --color-btn-primary-hover-bg: #3d60c4;
@@ -56,40 +55,26 @@ main {
   --color-btn-primary-selected-bg: #3a5cb8;
   --color-btn-primary-selected-shadow: inset 0 1px 0 rgba(0, 45, 17, 0.2);
   --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.8);
-  --color-btn-primary-disabled-bg: #94d3a2;
-  --color-btn-primary-disabled-border: rgba(0, 0, 0, 0.1);
-
-  /* 操作列表 */
+  --color-btn-primary-disabled-bg: #4a6dd499;
+  --color-btn-primary-disabled-border: rgba(0, 0, 0, 0.08);
   --color-action-list-item-default-hover-bg: rgba(74, 109, 212, 0.08);
-
-  /* 分段控件 */
-  --color-segmented-control-bg: #eef2fc;
+  --color-segmented-control-bg: #e8ecfa;
   --color-segmented-control-button-bg: #ffffff;
   --color-segmented-control-button-selected-border: #8c959f;
-
-  /* 文字颜色 - 使用博客的 text 颜色 */
-  --color-fg-default: #3a3d52;
-  --color-fg-muted: #656d76;
-  --color-fg-subtle: #6e7781;
-
-  /* 画布/背景颜色 - 使用博客的背景色 */
+  --color-fg-default: #383954;
+  --color-fg-muted: #6e7781;
+  --color-fg-subtle: #8c959f;
   --color-canvas-default: #ffffff;
   --color-canvas-overlay: #ffffff;
   --color-canvas-inset: #f3f5fc;
-  --color-canvas-subtle: #eef2fc;
-
-  /* 边框颜色 - 使用博客的 line 颜色 */
+  --color-canvas-subtle: #f0f2fa;
   --color-border-default: rgba(0, 0, 0, 0.1);
   --color-border-muted: rgba(0, 0, 0, 0.08);
-  --color-neutral-muted: rgba(0, 0, 0, 0.08);
-
-  /* 强调色 - 使用博客的 primary 色 */
+  --color-neutral-muted: rgba(0, 0, 0, 0.06);
   --color-accent-fg: #4a6dd4;
   --color-accent-emphasis: #4a6dd4;
   --color-accent-muted: rgba(74, 109, 212, 0.4);
-  --color-accent-subtle: rgba(74, 109, 212, 0.1);
-
-  /* 状态颜色 */
+  --color-accent-subtle: rgba(74, 109, 212, 0.08);
   --color-success-fg: #1a7f37;
   --color-attention-fg: #9a6700;
   --color-attention-muted: rgba(212, 167, 44, 0.4);
@@ -97,15 +82,9 @@ main {
   --color-danger-fg: #d1242f;
   --color-danger-muted: rgba(255, 129, 130, 0.4);
   --color-danger-subtle: #ffebe9;
-
-  /* 阴影 */
   --color-primer-shadow-inset: inset 0 1px 0 rgba(208, 215, 222, 0.2);
-
-  /* 缩放颜色 */
-  --color-scale-gray-1: #eef2fc;
+  --color-scale-gray-1: #f0f2fa;
   --color-scale-blue-1: rgba(74, 109, 212, 0.15);
-
-  /* 社交反应 */
   --color-social-reaction-bg-hover: var(--color-scale-gray-1);
   --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-1);
 }
