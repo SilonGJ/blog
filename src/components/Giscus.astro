@@ -3,29 +3,29 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 
 export interface Props {
-	repo?: string;
-	repoId?: string;
-	category?: string;
-	categoryId?: string;
-	mapping?: string;
-	strict?: string;
-	reactionsEnabled?: string;
-	emitMetadata?: string;
-	inputPosition?: string;
-	lang?: string;
+    repo?: string;
+    repoId?: string;
+    category?: string;
+    categoryId?: string;
+    mapping?: string;
+    strict?: string;
+    reactionsEnabled?: string;
+    emitMetadata?: string;
+    inputPosition?: string;
+    lang?: string;
 }
 
 const {
-	repo = "SilonGJ/blog",
-	repoId = "R_kgDOTlEalA",
-	category = "giscus",
-	categoryId = "DIC_kwDOTlEalM4DC8DC",
-	mapping = "pathname",
-	strict = "1",
-	reactionsEnabled = "0",
-	emitMetadata = "0",
-	inputPosition = "top",
-	lang = "zh-CN",
+    repo = "SilonGJ/blog",
+    repoId = "R_kgDOTlEalA",
+    category = "giscus",
+    categoryId = "DIC_kwDOTlEalM4DC8DC",
+    mapping = "pathname",
+    strict = "1",
+    reactionsEnabled = "0",
+    emitMetadata = "0",
+    inputPosition = "top",
+    lang = "zh-CN",
 } = Astro.props;
 ---
 
@@ -36,22 +36,24 @@ const {
             text-xl md:text-2xl
             text-black/90 dark:text-white/90
             md:before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
-            before:absolute before:top-[0.5rem] before:left-[-1.125rem]
-        ">
+            before:absolute before:top-[0.5rem] before:left-[-1.125rem]"
+        >
             {i18n(I18nKey.comments)}
         </div>
     </h2>
     <div id="giscus-slot"></div>
 </div>
 
-<script is:inline set:html={`(function () {
+<script
+    is:inline
+    set:html={`(function () {
   var container = document.getElementById('giscus-slot');
   if (!container) return;
 
   var isDark = document.documentElement.classList.contains('dark');
   var themeUrl = isDark
-    ? 'https://zcx0217.qzz.io/giscus/theme-dark.css'
-    : 'https://zcx0217.qzz.io/giscus/theme-light.css';
+    ? '/themes/dark_tritanopia.css'
+    : '/themes/light_tritanopia.css';
 
   var script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
@@ -71,12 +73,11 @@ const {
   script.async = true;
 
   container.appendChild(script);
-})();`}></script>
+})();`}
+></script>
 
 <style>
-  #giscus-slot > iframe {
-    border-radius: var(--radius-large);
-  }
+    #giscus-slot > iframe {
+        border-radius: var(--radius-large);
+    }
 </style>
-
-
