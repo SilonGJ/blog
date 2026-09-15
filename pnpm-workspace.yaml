@@ -1,6 +1,6 @@
 allowBuilds:
   esbuild: true
-  sharp: set this to true or false
+  sharp: true
   workerd: true
 minimumReleaseAgeExclude:
   - '@biomejs/biome@2.5.13'
