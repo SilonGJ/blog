@@ -71,6 +71,28 @@
         text-[var(--btn-content)] dark:text-white/75
     }
 
+    /* checkbox, styled with the project's design tokens */
+    .checkbox-custom {
+        appearance: none;
+        -webkit-appearance: none;
+        @apply relative w-[1.125rem] h-[1.125rem] shrink-0 rounded-md border-2
+        border-[var(--line-color)] bg-transparent cursor-pointer
+        transition-colors duration-150;
+        &:hover {
+            @apply border-[var(--primary)];
+        }
+        &:checked {
+            @apply border-[var(--primary)] bg-[var(--primary)];
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100% 100%;
+        }
+        &:focus-visible {
+            @apply outline-2 outline-offset-2 outline-[var(--primary)];
+        }
+    }
+
     .toc-hide,
     .toc-not-ready {
         @apply opacity-0 pointer-events-none
@@ -161,6 +183,31 @@
         opacity: 1;
         animation: none;
     }
+}
+
+/* ===== Disable animations (user preference) =====
+ * Applied via <html class="no-animations">, see setting-utils.ts.
+ * Durations are collapsed instead of using `animation: none` so that
+ * fill-mode still lands on the final state (.onload-animation and
+ * .img-fade would otherwise stay invisible) and animationend still fires. */
+html.no-animations,
+html.no-animations *,
+html.no-animations *::before,
+html.no-animations *::after {
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    /* avoid looping keyframes at a near-zero duration (e.g. the skeleton pulsate) */
+    animation-iteration-count: 1 !important;
+}
+
+/* Swup content must never flash away while swapping containers */
+html.no-animations.is-changing .transition-swup-fade,
+html.no-animations.is-animating .transition-swup-fade {
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
 }
 
 ::selection {

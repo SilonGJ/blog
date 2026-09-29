@@ -142,6 +142,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 			const hue = localStorage.getItem('hue') || configHue;
 			document.documentElement.style.setProperty('--hue', hue);
 
+			// Apply the animation preference before the first paint to avoid flashing
+			if (localStorage.getItem('animations') === 'off') {
+				document.documentElement.classList.add('no-animations');
+			}
+
 			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
 			let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
 			offset = offset - offset % 4;
@@ -179,7 +184,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 import {
 	OverlayScrollbars,
 } from 'overlayscrollbars';
-import {getHue, getStoredTheme, setHue, setTheme} from "../utils/setting-utils";
+import {applyAnimationPreference, getHue, getStoredTheme, isAnimationsEnabled, setHue, setTheme} from "../utils/setting-utils";
 import {pathsEqual, url} from "../utils/url-utils";
 import {
 	BANNER_HEIGHT,
@@ -209,6 +214,7 @@ function setClickOutsideToClose(panel: string, ignores: string[]) {
 setClickOutsideToClose("display-setting", ["display-setting", "display-settings-switch"])
 setClickOutsideToClose("nav-menu-panel", ["nav-menu-panel", "nav-menu-switch"])
 setClickOutsideToClose("search-panel", ["search-panel", "search-bar", "search-switch"])
+setClickOutsideToClose("settings-panel", ["settings-panel", "settings-switch"])
 
 function initButtonToggles() {
 	let settingBtn = document.getElementById("display-settings-switch");
@@ -334,6 +340,7 @@ function setupImageReveal() {
 function init() {
 	loadTheme();
 	loadHue();
+	applyAnimationPreference();
 	initCustomScrollbar();
 	showBanner();
 	setupImageReveal();
@@ -367,7 +374,13 @@ const setup = () => {
 		}
 	})
 	window.swup.hooks.on('content:replace', initCustomScrollbar)
-	window.swup.hooks.on('visit:start', (visit: {to: {url: string}}) => {
+	window.swup.hooks.on('visit:start', (visit: {to: {url: string}, animation: {animate: boolean}}) => {
+		// Keep swup fully functional but skip the page transition when the
+		// user turned animations off (containers/head/scroll still update)
+		if (!isAnimationsEnabled()) {
+			visit.animation.animate = false;
+		}
+
 		// change banner height immediately when a link is clicked
 		const bodyElement = document.querySelector('body')
 		if (pathsEqual(visit.to.url, url('/'))) {
@@ -462,9 +475,23 @@ window.onresize = () => {
 
 <script>
 import PhotoSwipeLightbox from "photoswipe/lightbox"
+import { ANIMATION_CHANGE_EVENT, isAnimationsEnabled } from "../utils/setting-utils"
 
 let lightbox: PhotoSwipeLightbox
 let pswp = import("photoswipe")
+
+const DEFAULT_PSWP_ANIMATION_DURATION = 333
+
+// PhotoSwipe reads its options by reference when the viewer is opened,
+// so they can be updated at runtime
+function applyPhotoSwipeAnimationDuration() {
+	if (!lightbox) return
+	const duration = isAnimationsEnabled() ? DEFAULT_PSWP_ANIMATION_DURATION : 0
+	lightbox.options.showAnimationDuration = duration
+	lightbox.options.hideAnimationDuration = duration
+}
+
+document.addEventListener(ANIMATION_CHANGE_EVENT, applyPhotoSwipeAnimationDuration)
 
 function createPhotoSwipe() {
 	lightbox = new PhotoSwipeLightbox({
@@ -495,6 +522,7 @@ function createPhotoSwipe() {
 	})
 
 	lightbox.init()
+	applyPhotoSwipeAnimationDuration()
 }
 
 const setup = () => {

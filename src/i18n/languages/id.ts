@@ -30,6 +30,7 @@ export const id: Translation = {
 	[Key.lightMode]: "Terang",
 	[Key.darkMode]: "Gelap",
 	[Key.systemMode]: "Sistem",
+	[Key.enableAnimation]: "Aktifkan animasi",
 
 	[Key.more]: "Lainnya",
 

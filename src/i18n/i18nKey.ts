@@ -27,6 +27,7 @@ enum I18nKey {
 	lightMode = "lightMode",
 	darkMode = "darkMode",
 	systemMode = "systemMode",
+	enableAnimation = "enableAnimation",
 
 	more = "more",
 

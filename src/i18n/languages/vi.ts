@@ -30,6 +30,7 @@ export const vi: Translation = {
 	[Key.lightMode]: "Sáng",
 	[Key.darkMode]: "Tối",
 	[Key.systemMode]: "Hệ thống",
+	[Key.enableAnimation]: "Bật hiệu ứng động",
 
 	[Key.more]: "Thêm",
 

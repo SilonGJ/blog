@@ -59,3 +59,33 @@ export function setTheme(theme: LIGHT_DARK_MODE): void {
 export function getStoredTheme(): LIGHT_DARK_MODE {
 	return (localStorage.getItem("theme") as LIGHT_DARK_MODE) || DEFAULT_THEME;
 }
+
+/* ===== Animation preference =====
+ * Default: animations enabled (no entry in localStorage at all).
+ * The key is only written when the user disables animations, and removed
+ * when they enable them again, so nothing is stored needlessly. */
+const ANIMATION_KEY = "animations";
+const ANIMATION_OFF_VALUE = "off";
+export const ANIMATION_CHANGE_EVENT = "animation-preference-changed";
+
+export function isAnimationsEnabled(): boolean {
+	return localStorage.getItem(ANIMATION_KEY) !== ANIMATION_OFF_VALUE;
+}
+
+export function applyAnimationPreference(): void {
+	document.documentElement.classList.toggle(
+		"no-animations",
+		!isAnimationsEnabled(),
+	);
+}
+
+export function setAnimationsEnabled(enabled: boolean): void {
+	if (enabled) {
+		// Release the local storage slot instead of storing "on"
+		localStorage.removeItem(ANIMATION_KEY);
+	} else {
+		localStorage.setItem(ANIMATION_KEY, ANIMATION_OFF_VALUE);
+	}
+	applyAnimationPreference();
+	document.dispatchEvent(new CustomEvent(ANIMATION_CHANGE_EVENT));
+}

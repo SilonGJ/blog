@@ -60,6 +60,8 @@ const maxLevel = siteConfig.toc.depth;
 </table-of-contents>}
 
 <script>
+import { isAnimationsEnabled } from "@utils/setting-utils.ts";
+
 class TableOfContents extends HTMLElement {
     tocEl: HTMLElement | null = null;
     visibleClass = "visible";
@@ -203,6 +205,12 @@ class TableOfContents extends HTMLElement {
     connectedCallback() {
         // wait for the onload animation to finish, which makes the `getBoundingClientRect` return correct values
         const element = document.querySelector('.prose');
+        if (!isAnimationsEnabled()) {
+            // with animations disabled the onload animation ends before this
+            // script runs, so animationend would never fire here
+            requestAnimationFrame(() => this.init());
+            return;
+        }
         if (element) {
             element.addEventListener('animationend', () => {
                 this.init();

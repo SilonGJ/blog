@@ -1,0 +1,57 @@
+---
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import { Icon } from "astro-icon/components";
+---
+
+<!-- Same behavior as LightDarkSwitch: hover opens, leaving the container closes -->
+<div class="relative z-50" id="settings-switch-container">
+    <button aria-label="Settings" aria-haspopup="true" class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="settings-switch">
+        <Icon name="material-symbols:settings-outline-rounded" class="text-[1.25rem]"></Icon>
+    </button>
+
+    <div id="settings-panel" class="absolute transition float-panel-closed top-11 -right-2 pt-5">
+        <div class="card-base float-panel p-2">
+            <label class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95"
+                   id="animation-toggle-label" for="animation-checkbox"
+            >
+                <input type="checkbox" class="checkbox-custom mr-3" id="animation-checkbox" />
+                {i18n(I18nKey.enableAnimation)}
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+import { isAnimationsEnabled, setAnimationsEnabled } from "@utils/setting-utils.ts";
+
+const settingsSwitch = document.getElementById("settings-switch");
+const settingsPanel = document.getElementById("settings-panel");
+const container = document.getElementById("settings-switch-container");
+const animationCheckbox = document.getElementById("animation-checkbox") as HTMLInputElement | null;
+
+function showPanel() {
+	settingsPanel?.classList.remove("float-panel-closed");
+}
+
+function hidePanel() {
+	settingsPanel?.classList.add("float-panel-closed");
+}
+
+// Initialize the checkbox from the stored preference (checked by default)
+if (animationCheckbox) {
+	animationCheckbox.checked = isAnimationsEnabled();
+}
+
+// Hover to open, leave the container to close, exactly like the light/dark menu
+settingsSwitch?.addEventListener("mouseenter", showPanel);
+container?.addEventListener("mouseleave", hidePanel);
+// Click also opens it (touch devices don't hover). It never closes via the
+// button: a tap fires mouseenter before click and would toggle it right shut.
+settingsSwitch?.addEventListener("click", showPanel);
+
+animationCheckbox?.addEventListener("change", () => {
+	// The panel stays open so the user can switch back right away
+	setAnimationsEnabled(animationCheckbox.checked);
+});
+</script>
