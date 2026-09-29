@@ -142,9 +142,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 			const hue = localStorage.getItem('hue') || configHue;
 			document.documentElement.style.setProperty('--hue', hue);
 
-			// Apply the animation preference before the first paint to avoid flashing
+			// Apply stored preferences before the first paint to avoid flashing
+			// (keys must match the ones in setting-utils.ts)
 			if (localStorage.getItem('animations') === 'off') {
 				document.documentElement.classList.add('no-animations');
+			}
+			if (localStorage.getItem('rounded') === 'off') {
+				document.documentElement.classList.add('no-rounded');
 			}
 
 			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
@@ -184,7 +188,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 import {
 	OverlayScrollbars,
 } from 'overlayscrollbars';
-import {applyAnimationPreference, getHue, getStoredTheme, isAnimationsEnabled, setHue, setTheme} from "../utils/setting-utils";
+import {applyAnimationPreference, applyRoundedPreference, getHue, getStoredTheme, isAnimationsEnabled, setHue, setTheme} from "../utils/setting-utils";
 import {pathsEqual, url} from "../utils/url-utils";
 import {
 	BANNER_HEIGHT,
@@ -341,6 +345,7 @@ function init() {
 	loadTheme();
 	loadHue();
 	applyAnimationPreference();
+	applyRoundedPreference();
 	initCustomScrollbar();
 	showBanner();
 	setupImageReveal();

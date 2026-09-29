@@ -210,6 +210,50 @@ html.no-animations.is-animating .transition-swup-fade {
     translate: none !important;
 }
 
+/* ===== Disable rounded corners (user preference) =====
+ * Applied via <html class="no-rounded">, see setting-utils.ts.
+ * Only rectangular corners are removed: true circles/pills and the Giscus
+ * comment area are re-declared below and stay exactly as they are. */
+html.no-rounded,
+html.no-rounded *,
+html.no-rounded *::before,
+html.no-rounded *::after {
+    border-radius: 0 !important;
+}
+
+/* keep true circles & pills (they are not rounded rectangles) */
+html.no-rounded .rounded-full, /* timeline dots / banner pill / profile bar */
+html.no-rounded .os-scrollbar-handle, /* scrollbar handles (@apply rounded-full) */
+html.no-rounded .custom-md blockquote::before {
+    /* quote bar (@apply rounded-full) */
+    border-radius: 9999px !important;
+}
+html.no-rounded .gc-avatar {
+    /* GitHub card repo avatar */
+    border-radius: 50% !important;
+}
+
+/* native pseudo-elements that `*::before`/`*::after` cannot reach:
+ * the hue slider thumb (a rounded rectangle, so it gets straightened).
+ * NOTE: kept as two separate rules — Blink drops a whole rule if any
+ * selector in the list carries a `::-moz-*` pseudo-element. */
+html.no-rounded #display-setting input[type="range"]::-webkit-slider-thumb {
+    border-radius: 0 !important;
+}
+html.no-rounded #display-setting input[type="range"]::-moz-range-thumb {
+    border-radius: 0 !important;
+}
+
+/* Giscus: leave the comment area untouched.
+ * NOTE: #giscus-slot > iframe renders 0px today (its scoped rule never
+ * matches the JS-created iframe) - do NOT give it a radius here. */
+html.no-rounded .card-base:has(#giscus-slot) {
+    border-radius: var(--radius-large) !important;
+}
+html.no-rounded .card-base:has(#giscus-slot) h2 div::before {
+    border-radius: 0.375rem !important; /* mirrors before:rounded-md */
+}
+
 ::selection {
     background-color: var(--selection-bg)
 }

@@ -31,6 +31,7 @@ export const ko: Translation = {
 	[Key.darkMode]: "어두운 모드",
 	[Key.systemMode]: "시스템 모드",
 	[Key.enableAnimation]: "애니메이션 사용",
+	[Key.enableRoundedCorners]: "둥근 모서리 사용",
 
 	[Key.more]: "더 보기",
 

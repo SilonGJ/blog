@@ -31,6 +31,7 @@ export const vi: Translation = {
 	[Key.darkMode]: "Tối",
 	[Key.systemMode]: "Hệ thống",
 	[Key.enableAnimation]: "Bật hiệu ứng động",
+	[Key.enableRoundedCorners]: "Bật bo góc",
 
 	[Key.more]: "Thêm",
 

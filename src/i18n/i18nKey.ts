@@ -28,6 +28,7 @@ enum I18nKey {
 	darkMode = "darkMode",
 	systemMode = "systemMode",
 	enableAnimation = "enableAnimation",
+	enableRoundedCorners = "enableRoundedCorners",
 
 	more = "more",
 

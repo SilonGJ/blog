@@ -31,6 +31,7 @@ export const tr: Translation = {
 	[Key.darkMode]: "Koyu",
 	[Key.systemMode]: "Sistem",
 	[Key.enableAnimation]: "Animasyonları etkinleştir",
+	[Key.enableRoundedCorners]: "Yuvarlak köşeleri etkinleştir",
 
 	[Key.more]: "Daha Fazla",
 

@@ -31,6 +31,7 @@ export const ja: Translation = {
 	[Key.darkMode]: "ダーク",
 	[Key.systemMode]: "システム",
 	[Key.enableAnimation]: "アニメーションを有効にする",
+	[Key.enableRoundedCorners]: "角丸を有効にする",
 
 	[Key.more]: "もっと",
 

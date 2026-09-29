@@ -12,23 +12,42 @@ import { Icon } from "astro-icon/components";
 
     <div id="settings-panel" class="absolute transition float-panel-closed top-11 -right-2 pt-5">
         <div class="card-base float-panel p-2">
-            <label class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95"
+            <label class="mb-0.5 flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95"
                    id="animation-toggle-label" for="animation-checkbox"
             >
                 <input type="checkbox" class="checkbox-custom mr-3" id="animation-checkbox" />
                 {i18n(I18nKey.enableAnimation)}
+            </label>
+            <label class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95"
+                   id="rounded-toggle-label" for="rounded-checkbox"
+            >
+                <input type="checkbox" class="checkbox-custom mr-3" id="rounded-checkbox" />
+                {i18n(I18nKey.enableRoundedCorners)}
             </label>
         </div>
     </div>
 </div>
 
 <script>
-import { isAnimationsEnabled, setAnimationsEnabled } from "@utils/setting-utils.ts";
+import {
+	isAnimationsEnabled,
+	isRoundedEnabled,
+	setAnimationsEnabled,
+	setRoundedEnabled,
+} from "@utils/setting-utils.ts";
 
 const settingsSwitch = document.getElementById("settings-switch");
 const settingsPanel = document.getElementById("settings-panel");
 const container = document.getElementById("settings-switch-container");
-const animationCheckbox = document.getElementById("animation-checkbox") as HTMLInputElement | null;
+
+const toggles = [
+	{
+		id: "animation-checkbox",
+		read: isAnimationsEnabled,
+		write: setAnimationsEnabled,
+	},
+	{ id: "rounded-checkbox", read: isRoundedEnabled, write: setRoundedEnabled },
+] as const;
 
 function showPanel() {
 	settingsPanel?.classList.remove("float-panel-closed");
@@ -38,9 +57,15 @@ function hidePanel() {
 	settingsPanel?.classList.add("float-panel-closed");
 }
 
-// Initialize the checkbox from the stored preference (checked by default)
-if (animationCheckbox) {
-	animationCheckbox.checked = isAnimationsEnabled();
+// Initialize every checkbox from the stored preference (checked by default)
+for (const { id, read, write } of toggles) {
+	const checkbox = document.getElementById(id) as HTMLInputElement | null;
+	if (!checkbox) continue;
+	checkbox.checked = read();
+	checkbox.addEventListener("change", () => {
+		// The panel stays open so the user can switch back right away
+		write(checkbox.checked);
+	});
 }
 
 // Hover to open, leave the container to close, exactly like the light/dark menu
@@ -49,9 +74,4 @@ container?.addEventListener("mouseleave", hidePanel);
 // Click also opens it (touch devices don't hover). It never closes via the
 // button: a tap fires mouseenter before click and would toggle it right shut.
 settingsSwitch?.addEventListener("click", showPanel);
-
-animationCheckbox?.addEventListener("change", () => {
-	// The panel stays open so the user can switch back right away
-	setAnimationsEnabled(animationCheckbox.checked);
-});
 </script>

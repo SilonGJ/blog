@@ -31,6 +31,7 @@ export const zh_CN: Translation = {
 	[Key.darkMode]: "暗色",
 	[Key.systemMode]: "跟随系统",
 	[Key.enableAnimation]: "启用动画",
+	[Key.enableRoundedCorners]: "启用圆角",
 
 	[Key.more]: "更多",
 

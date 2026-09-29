@@ -60,16 +60,31 @@ export function getStoredTheme(): LIGHT_DARK_MODE {
 	return (localStorage.getItem("theme") as LIGHT_DARK_MODE) || DEFAULT_THEME;
 }
 
-/* ===== Animation preference =====
- * Default: animations enabled (no entry in localStorage at all).
- * The key is only written when the user disables animations, and removed
- * when they enable them again, so nothing is stored needlessly. */
+/* ===== Boolean UI preferences (animations / rounded corners) =====
+ * Default: the feature is enabled, i.e. there is no entry in localStorage
+ * at all. The key is only written when the user turns the feature off, and
+ * removed when they turn it back on, so nothing is stored needlessly. */
+const PREFERENCE_OFF_VALUE = "off";
+
+function isPreferenceEnabled(key: string): boolean {
+	return localStorage.getItem(key) !== PREFERENCE_OFF_VALUE;
+}
+
+function storePreference(key: string, enabled: boolean): void {
+	if (enabled) {
+		// Release the local storage slot instead of storing "on"
+		localStorage.removeItem(key);
+	} else {
+		localStorage.setItem(key, PREFERENCE_OFF_VALUE);
+	}
+}
+
+/* ===== Animation preference ===== */
 const ANIMATION_KEY = "animations";
-const ANIMATION_OFF_VALUE = "off";
 export const ANIMATION_CHANGE_EVENT = "animation-preference-changed";
 
 export function isAnimationsEnabled(): boolean {
-	return localStorage.getItem(ANIMATION_KEY) !== ANIMATION_OFF_VALUE;
+	return isPreferenceEnabled(ANIMATION_KEY);
 }
 
 export function applyAnimationPreference(): void {
@@ -80,12 +95,23 @@ export function applyAnimationPreference(): void {
 }
 
 export function setAnimationsEnabled(enabled: boolean): void {
-	if (enabled) {
-		// Release the local storage slot instead of storing "on"
-		localStorage.removeItem(ANIMATION_KEY);
-	} else {
-		localStorage.setItem(ANIMATION_KEY, ANIMATION_OFF_VALUE);
-	}
+	storePreference(ANIMATION_KEY, enabled);
 	applyAnimationPreference();
 	document.dispatchEvent(new CustomEvent(ANIMATION_CHANGE_EVENT));
+}
+
+/* ===== Rounded corners preference (pure CSS, no change event needed) ===== */
+const ROUNDED_KEY = "rounded";
+
+export function isRoundedEnabled(): boolean {
+	return isPreferenceEnabled(ROUNDED_KEY);
+}
+
+export function applyRoundedPreference(): void {
+	document.documentElement.classList.toggle("no-rounded", !isRoundedEnabled());
+}
+
+export function setRoundedEnabled(enabled: boolean): void {
+	storePreference(ROUNDED_KEY, enabled);
+	applyRoundedPreference();
 }

@@ -31,6 +31,7 @@ export const en: Translation = {
 	[Key.darkMode]: "Dark",
 	[Key.systemMode]: "System",
 	[Key.enableAnimation]: "Enable Animations",
+	[Key.enableRoundedCorners]: "Enable Rounded Corners",
 
 	[Key.more]: "More",
 

@@ -31,6 +31,7 @@ export const th: Translation = {
 	[Key.darkMode]: "มืด",
 	[Key.systemMode]: "ตามระบบ",
 	[Key.enableAnimation]: "เปิดใช้แอนิเมชัน",
+	[Key.enableRoundedCorners]: "เปิดมุมโค้งมน",
 
 	[Key.more]: "ดูเพิ่ม",
 

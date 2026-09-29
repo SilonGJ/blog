@@ -31,6 +31,7 @@ export const id: Translation = {
 	[Key.darkMode]: "Gelap",
 	[Key.systemMode]: "Sistem",
 	[Key.enableAnimation]: "Aktifkan animasi",
+	[Key.enableRoundedCorners]: "Aktifkan sudut membulat",
 
 	[Key.more]: "Lainnya",
 
