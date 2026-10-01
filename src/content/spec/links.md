@@ -17,6 +17,7 @@
 ## 本站信息
 
 - 名称：SilonGJ
-- 地址：https://zcx0217.qzz.io/
+- 地址：https://www.zcx0217.qzz.io/
 - 描述：主站
-- 头像：https://zcx0217.qzz.io/images/favicon.png
+- 头像：https://www.zcx0217.qzz.io/images/favicon.png
+- (由于 Cloudflare CNAME Flattening 限制，请尽量使用带 www 的子域名访问，在中国的速度会提升)
