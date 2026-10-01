@@ -8,6 +8,11 @@ export const ja: Translation = {
 	[Key.friendLinks]: "友達",
 	[Key.search]: "検索",
 
+	[Key.notFoundTitle]: "ページが見つかりません",
+	[Key.notFoundDesc]:
+		"お探しのページは存在しないか、移動された可能性があります。",
+	[Key.backToHome]: "ホームに戻る",
+
 	[Key.tags]: "タグ",
 	[Key.categories]: "カテゴリ",
 	[Key.recentPosts]: "最近の投稿",

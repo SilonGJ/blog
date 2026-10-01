@@ -8,6 +8,10 @@ export const th: Translation = {
 	[Key.friendLinks]: "เพื่อน",
 	[Key.search]: "ค้นหา",
 
+	[Key.notFoundTitle]: "ไม่พบหน้าที่ต้องการ",
+	[Key.notFoundDesc]: "หน้าที่คุณค้นหาไม่มีอยู่หรือถูกย้ายไปแล้ว",
+	[Key.backToHome]: "กลับหน้าแรก",
+
 	[Key.tags]: "ป้ายกำกับ",
 	[Key.categories]: "หมวดหมู่",
 	[Key.recentPosts]: "โพสต์ล่าสุด",

@@ -8,6 +8,10 @@ export const es: Translation = {
 	[Key.friendLinks]: "Amigos",
 	[Key.search]: "Buscar",
 
+	[Key.notFoundTitle]: "Página no encontrada",
+	[Key.notFoundDesc]: "La página que buscas no existe o ha sido movida.",
+	[Key.backToHome]: "Volver al inicio",
+
 	[Key.tags]: "Etiquetas",
 	[Key.categories]: "Categorías",
 	[Key.recentPosts]: "Publicaciones recientes",

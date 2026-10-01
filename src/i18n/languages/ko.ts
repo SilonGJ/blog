@@ -8,6 +8,10 @@ export const ko: Translation = {
 	[Key.friendLinks]: "친구",
 	[Key.search]: "검색",
 
+	[Key.notFoundTitle]: "페이지를 찾을 수 없습니다",
+	[Key.notFoundDesc]: "찾으시는 페이지가 존재하지 않거나 이동되었습니다.",
+	[Key.backToHome]: "홈으로 돌아가기",
+
 	[Key.tags]: "태그",
 	[Key.categories]: "카테고리",
 	[Key.recentPosts]: "최근 게시물",

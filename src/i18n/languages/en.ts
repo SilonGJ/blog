@@ -8,6 +8,11 @@ export const en: Translation = {
 	[Key.friendLinks]: "Friends",
 	[Key.search]: "Search",
 
+	[Key.notFoundTitle]: "Page Not Found",
+	[Key.notFoundDesc]:
+		"The page you are looking for does not exist or has been moved.",
+	[Key.backToHome]: "Back to Home",
+
 	[Key.tags]: "Tags",
 	[Key.categories]: "Categories",
 	[Key.recentPosts]: "Recent Posts",

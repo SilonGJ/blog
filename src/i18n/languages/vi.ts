@@ -8,6 +8,11 @@ export const vi: Translation = {
 	[Key.friendLinks]: "Bạn bè",
 	[Key.search]: "Tìm kiếm",
 
+	[Key.notFoundTitle]: "Không tìm thấy trang",
+	[Key.notFoundDesc]:
+		"Trang bạn tìm kiếm không tồn tại hoặc đã được di chuyển.",
+	[Key.backToHome]: "Về trang chủ",
+
 	[Key.tags]: "Thẻ",
 	[Key.categories]: "Danh mục",
 	[Key.recentPosts]: "Bài viết mới nhất",

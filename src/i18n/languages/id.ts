@@ -8,6 +8,11 @@ export const id: Translation = {
 	[Key.friendLinks]: "Teman",
 	[Key.search]: "Cari",
 
+	[Key.notFoundTitle]: "Halaman Tidak Ditemukan",
+	[Key.notFoundDesc]:
+		"Halaman yang kamu cari tidak ada atau sudah dipindahkan.",
+	[Key.backToHome]: "Kembali ke Beranda",
+
 	[Key.tags]: "Tag",
 	[Key.categories]: "Kategori",
 	[Key.recentPosts]: "Postingan Terbaru",

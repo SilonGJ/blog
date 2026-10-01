@@ -5,6 +5,10 @@ enum I18nKey {
 	friendLinks = "friendLinks",
 	search = "search",
 
+	notFoundTitle = "notFoundTitle",
+	notFoundDesc = "notFoundDesc",
+	backToHome = "backToHome",
+
 	tags = "tags",
 	categories = "categories",
 	recentPosts = "recentPosts",

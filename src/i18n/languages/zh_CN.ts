@@ -8,6 +8,10 @@ export const zh_CN: Translation = {
 	[Key.friendLinks]: "友链",
 	[Key.search]: "搜索",
 
+	[Key.notFoundTitle]: "页面未找到",
+	[Key.notFoundDesc]: "你访问的页面不存在或已被移动。",
+	[Key.backToHome]: "返回首页",
+
 	[Key.tags]: "标签",
 	[Key.categories]: "分类",
 	[Key.recentPosts]: "最新文章",

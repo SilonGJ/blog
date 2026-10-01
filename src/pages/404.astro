@@ -1,0 +1,26 @@
+---
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { url } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
+
+const notFoundTitle = i18n(I18nKey.notFoundTitle);
+const notFoundDesc = i18n(I18nKey.notFoundDesc);
+---
+
+<MainGridLayout title={notFoundTitle} description={notFoundDesc} noindex={true}>
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
+            <div class="onload-animation flex flex-col items-center justify-center py-10 text-center">
+                <div class="text-7xl font-bold select-none text-90">404</div>
+                <h1 class="mt-4 text-xl font-bold text-90">{notFoundTitle}</h1>
+                <p class="mt-2 text-sm text-black/60 dark:text-white/60">{notFoundDesc}</p>
+                <a href={url("/")} class="btn-regular rounded-lg h-10 gap-2 px-3 font-bold active:scale-95 mt-6">
+                    <Icon name="material-symbols:home-outline-rounded" class="text-[1.5rem]" />
+                    {i18n(I18nKey.backToHome)}
+                </a>
+            </div>
+        </div>
+    </div>
+</MainGridLayout>

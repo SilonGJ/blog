@@ -8,6 +8,10 @@ export const tr: Translation = {
 	[Key.friendLinks]: "Arkadaşlar",
 	[Key.search]: "Ara",
 
+	[Key.notFoundTitle]: "Sayfa Bulunamadı",
+	[Key.notFoundDesc]: "Aradığınız sayfa bulunamadı veya taşındı.",
+	[Key.backToHome]: "Ana Sayfaya Dön",
+
 	[Key.tags]: "Taglar",
 	[Key.categories]: "Katagoriler",
 	[Key.recentPosts]: "Son Paylaşımlar",
