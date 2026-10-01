@@ -91,7 +91,7 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	theme: "github-dark",
 };
 
-export const siteUrl = "https://zcx0217.qzz.io/";
+export const siteUrl = "https://www.zcx0217.qzz.io/";
 
 export const codeFontFamily =
 	"'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
