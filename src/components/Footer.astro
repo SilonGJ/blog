@@ -10,21 +10,38 @@ const currentYear = new Date().getFullYear();
 <div class="transition border-t border-black/10 dark:border-white/15 my-10 border-dashed mx-32"></div>
 <div class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6">
     <div class="transition text-50 text-sm text-center">
-        &copy; <span id="copyright-year">{currentYear}</span> {profileConfig.name}. All Rights Reserved. /
+        &copy; <span id="copyright-year">{currentYear}</span> {profileConfig.name}.<br>
         <a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('rss.xml')}>
             <Icon name="material-symbols:rss-feed" class="w-3.5 h-3.5 inline mb-0.5" />RSS
         </a> /
         <a class="transition link text-[var(--primary)] font-medium" target="_blank" href={url('sitemap-index.xml')}>
-            <Icon name="material-symbols:language" class="w-3.5 h-3.5 inline mb-0.5" />Sitemap
+            <Icon name="material-symbols:language" class="w-3.5 h-3.5 inline mb-0.5" />站点地图
         </a><br>
+        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://icp.gov.moe/?keyword=20260865">萌ICP备20260865号</a><br>
         本博客在
         <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/SilonGJ/Blog">
             <Icon name="material-symbols:code" class="w-3.5 h-3.5 inline mb-0.5" />Github
         </a>
         上开源<br>
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://icp.gov.moe/?keyword=20260865">萌ICP备20260865号</a><br>
-        Powered by
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://astro.build">Astro</a> &
-        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/saicaca/fuwari">Fuwari</a>
+        由
+        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://astro.build">Astro</a> 和
+        <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/saicaca/fuwari">Fuwari</a> 强力驱动
+        <div id="cdn-status" hidden></div>
     </div>
 </div>
+
+<script>
+    const el = document.getElementById('cdn-status');
+    if (el) {
+        fetch('/cdn-cgi/trace', { cache: 'no-store' })
+            .then((r) => (r.ok ? r.text() : Promise.reject()))
+            .then((text) => {
+                const sliver = text.match(/^sliver=(.*)$/m)?.[1];
+                el.textContent = `你当前正在使用 ${sliver === 'axisnow' ? 'Axisnow' : 'Cloudflare'} CDN 访问`;
+                el.hidden = false;
+            })
+            .catch(() => {
+                // 检测失败，保持隐藏
+            });
+    }
+</script>

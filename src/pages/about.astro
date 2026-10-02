@@ -28,4 +28,13 @@ const { Content } = await render(aboutPost);
     <div class="max-w-4xl mx-auto mt-6 max-md:mt-4">
         <Giscus />
     </div>
+
+    <script is:inline>
+        (function () {
+            var el = document.getElementById('site-age');
+            if (!el || !el.dataset.founded) return;
+            var p = el.dataset.founded.split('-').map(Number);
+            el.textContent = String(Math.floor((Date.now() - new Date(p[0], p[1] - 1, p[2]).getTime()) / 86400000));
+        })();
+    </script>
 </MainGridLayout>
