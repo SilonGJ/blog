@@ -212,8 +212,8 @@ html.no-animations.is-animating .transition-swup-fade {
 
 /* ===== Disable rounded corners (user preference) =====
  * Applied via <html class="no-rounded">, see setting-utils.ts.
- * Only rectangular corners are removed: true circles/pills and the Giscus
- * comment area are re-declared below and stay exactly as they are. */
+ * Only rectangular corners are removed: true circles/pills are re-declared
+ * below and stay exactly as they are. */
 html.no-rounded,
 html.no-rounded *,
 html.no-rounded *::before,
@@ -242,16 +242,6 @@ html.no-rounded #display-setting input[type="range"]::-webkit-slider-thumb {
 }
 html.no-rounded #display-setting input[type="range"]::-moz-range-thumb {
     border-radius: 0 !important;
-}
-
-/* Giscus: leave the comment area untouched.
- * NOTE: #giscus-slot > iframe renders 0px today (its scoped rule never
- * matches the JS-created iframe) - do NOT give it a radius here. */
-html.no-rounded .card-base:has(#giscus-slot) {
-    border-radius: var(--radius-large) !important;
-}
-html.no-rounded .card-base:has(#giscus-slot) h2 div::before {
-    border-radius: 0.375rem !important; /* mirrors before:rounded-md */
 }
 
 ::selection {

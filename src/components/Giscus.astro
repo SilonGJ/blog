@@ -3,34 +3,34 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 
 export interface Props {
-	repo?: string;
-	repoId?: string;
-	category?: string;
-	categoryId?: string;
-	mapping?: string;
-	strict?: string;
-	reactionsEnabled?: string;
-	emitMetadata?: string;
-	inputPosition?: string;
-	lang?: string;
+    repo?: string;
+    repoId?: string;
+    category?: string;
+    categoryId?: string;
+    mapping?: string;
+    strict?: string;
+    reactionsEnabled?: string;
+    emitMetadata?: string;
+    inputPosition?: string;
+    lang?: string;
 }
 
 const {
-	repo = "SilonGJ/blog",
-	repoId = "R_kgDOTlEalA",
-	category = "giscus",
-	categoryId = "DIC_kwDOTlEalM4DC8DC",
-	mapping = "pathname",
-	strict = "1",
-	reactionsEnabled = "0",
-	emitMetadata = "0",
-	inputPosition = "top",
-	lang = "zh-CN",
+    repo = "SilonGJ/blog",
+    repoId = "R_kgDOTlEalA",
+    category = "giscus",
+    categoryId = "DIC_kwDOTlEalM4DC8DC",
+    mapping = "pathname",
+    strict = "1",
+    reactionsEnabled = "0",
+    emitMetadata = "0",
+    inputPosition = "top",
+    lang = "zh-CN",
 } = Astro.props;
 ---
 
 <div class="card-base px-6 md:px-9 py-5 md:py-6 max-md:px-6 max-md:py-4 onload-animation">
-    <h2 class="relative mb-4 onload-animation">
+    <h2 class="relative mb-4">
         <div
             class="transition w-full block font-bold
             text-xl md:text-2xl
@@ -68,16 +68,9 @@ const {
   script.setAttribute('data-input-position', ${JSON.stringify(inputPosition)});
   script.setAttribute('data-theme', themeUrl);
   script.setAttribute('data-lang', ${JSON.stringify(lang)});
-  script.setAttribute('data-loading', 'lazy');
   script.crossOrigin = 'anonymous';
   script.async = true;
 
   container.appendChild(script);
 })();`}
 ></script>
-
-<style>
-    #giscus-slot > iframe {
-        border-radius: var(--radius-large);
-    }
-</style>

@@ -16,7 +16,7 @@ const { Content } = await render(linksPost);
 ---
 <MainGridLayout title={i18n(I18nKey.friendLinks)}>
     <h1 class="sr-only">{i18n(I18nKey.friendLinks)}</h1>
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 onload-animation">
         <div class="card-base z-10 px-9 py-6 relative w-full">
             <Markdown class="mt-2">
                 <Content />
