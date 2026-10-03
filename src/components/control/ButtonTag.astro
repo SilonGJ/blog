@@ -3,10 +3,12 @@ interface Props {
 	dot?: boolean;
 	href?: string;
 	label?: string;
+	count?: number;
 }
-const { dot, href, label }: Props = Astro.props;
+const { dot, href, label, count }: Props = Astro.props;
 ---
-<a href={href} aria-label={label} class="btn-regular h-8 text-sm px-3 rounded-lg">
+<a href={href} aria-label={label} class="btn-regular relative h-8 text-sm px-3 rounded-lg">
     {dot && <div class="h-1 w-1 bg-[var(--btn-content)] dark:bg-[var(--card-bg)] transition rounded-md mr-2"></div>}
     <slot></slot>
+    {count !== undefined && <span class="absolute right-1 top-0.5 text-[9px]">{count}</span>}
 </a>

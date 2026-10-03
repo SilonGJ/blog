@@ -29,10 +29,7 @@ const { badge, url, label } = Astro.props;
                 <slot></slot>
             </div>
             { badge !== undefined && badge !== null && badge !== '' &&
-                <div class="transition px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold
-                    text-[var(--btn-content)] dark:text-[var(--deep-text)]
-                    bg-[var(--btn-regular-bg)] dark:bg-[var(--primary)]
-                    flex items-center justify-center">
+                <div class="btn-regular px-2 h-7 ml-4 min-w-[2rem] rounded-lg text-sm font-bold">
                     { badge }
                 </div>
             }
