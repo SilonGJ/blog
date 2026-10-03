@@ -212,8 +212,8 @@ html.no-animations.is-animating .transition-swup-fade {
 
 /* ===== Disable rounded corners (user preference) =====
  * Applied via <html class="no-rounded">, see setting-utils.ts.
- * Only rectangular corners are removed: true circles/pills are re-declared
- * below and stay exactly as they are. */
+ * Everything follows the preference: circles, pills and rounded rectangles
+ * alike are straightened, no element is exempt. */
 html.no-rounded,
 html.no-rounded *,
 html.no-rounded *::before,
@@ -221,25 +221,17 @@ html.no-rounded *::after {
     border-radius: 0 !important;
 }
 
-/* keep true circles & pills (they are not rounded rectangles) */
-html.no-rounded .rounded-full, /* timeline dots / banner pill / profile bar */
-html.no-rounded .custom-md blockquote::before {
-    /* quote bar (@apply rounded-full) */
-    border-radius: 9999px !important;
-}
-html.no-rounded .gc-avatar {
-    /* GitHub card repo avatar */
-    border-radius: 50% !important;
-}
-
 /* native pseudo-elements that `*::before`/`*::after` cannot reach:
- * the hue slider thumb (a rounded rectangle, so it gets straightened).
- * NOTE: kept as two separate rules — Blink drops a whole rule if any
+ * the hue slider thumb and the scrollbar thumb.
+ * NOTE: kept as separate rules — Blink drops a whole rule if any
  * selector in the list carries a `::-moz-*` pseudo-element. */
 html.no-rounded #display-setting input[type="range"]::-webkit-slider-thumb {
     border-radius: 0 !important;
 }
 html.no-rounded #display-setting input[type="range"]::-moz-range-thumb {
+    border-radius: 0 !important;
+}
+html.no-rounded ::-webkit-scrollbar-thumb {
     border-radius: 0 !important;
 }
 
