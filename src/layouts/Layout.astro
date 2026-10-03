@@ -40,6 +40,7 @@ const isHomePage = pathsEqual(Astro.url.pathname, url("/"));
 
 // defines global css variables
 const configHue = siteConfig.themeColor.hue;
+const configFixed = siteConfig.themeColor.fixed;
 const enableBanner = siteConfig.banner.enable;
 
 let pageTitle: string;
@@ -113,7 +114,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 		))}
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue}}>
+		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue, configFixed}}>
 			// Load the theme from local storage
 			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
 			switch (theme) {
@@ -132,7 +133,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 			}
 
 			// Load the hue from local storage
-			const hue = localStorage.getItem('hue') || configHue;
+			// (only the "hue" key is ever removed here; other keys are untouched)
+			const hue = (configFixed ? null : localStorage.getItem('hue')) || configHue;
+			if (configFixed) localStorage.removeItem('hue');
 			document.documentElement.style.setProperty('--hue', hue);
 
 			// Apply stored preferences before the first paint to avoid flashing
