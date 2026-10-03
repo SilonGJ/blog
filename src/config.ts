@@ -94,4 +94,4 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 export const siteUrl = "https://www.zcx0217.qzz.io/";
 
 export const codeFontFamily =
-	"'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
+	"ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";

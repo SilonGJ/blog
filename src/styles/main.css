@@ -3,8 +3,8 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Roboto", "sans-serif", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --code-font-family: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --code-font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 @plugin "@tailwindcss/typography";
@@ -223,7 +223,6 @@ html.no-rounded *::after {
 
 /* keep true circles & pills (they are not rounded rectangles) */
 html.no-rounded .rounded-full, /* timeline dots / banner pill / profile bar */
-html.no-rounded .os-scrollbar-handle, /* scrollbar handles (@apply rounded-full) */
 html.no-rounded .custom-md blockquote::before {
     /* quote bar (@apply rounded-full) */
     border-radius: 9999px !important;
@@ -276,47 +275,34 @@ html.no-rounded #display-setting input[type="range"]::-moz-range-thumb {
 }
 
 /* scrollbar */
-.scrollbar-base.os-scrollbar {
-    @apply transition-all;
-    pointer-events: unset;
 
-    &.os-scrollbar-horizontal {
-        @apply py-1 px-2 h-4;
-        .os-scrollbar-track .os-scrollbar-handle {
-            @apply rounded-full h-1;
-        }
-        &:hover .os-scrollbar-track .os-scrollbar-handle {
-            @apply h-2;
-        }
-    }
-
-    &.os-scrollbar-vertical {
-        @apply px-1 py-1 w-4;
-        .os-scrollbar-track .os-scrollbar-handle {
-            @apply rounded-full w-1;
-        }
-        &:hover .os-scrollbar-track .os-scrollbar-handle {
-            @apply w-2;
-        }
-    }
+/* Styled native scrollbars.
+   Replaces the former OverlayScrollbars initialization on document.body:
+   body-mode init re-appended every body child (detach + reattach), which
+   recreated all CSS animations and visually replayed the whole
+   .onload-animation entrance sequence on first (uncached) page load.
+   NOTE: scrollbar-width is NOT inherited (scrollbar-color is), so the thin
+   width must be set on every element to cover inner scroll containers
+   (katex formulas, code blocks, ...), not just the page scrollbar. */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-bg) transparent;
 }
 
-.os-scrollbar {
-    &.scrollbar-auto {
-        --os-handle-bg: var(--scrollbar-bg);
-        --os-handle-bg-hover: var(--scrollbar-bg-hover);
-        --os-handle-bg-active: var(--scrollbar-bg-active);
-    }
-    &.scrollbar-dark {
-        --os-handle-bg: var(--scrollbar-bg-dark);
-        --os-handle-bg-hover: var(--scrollbar-bg-hover-dark);
-        --os-handle-bg-active: var(--scrollbar-bg-active-dark);
-    }
-    &.scrollbar-light {
-        --os-handle-bg: var(--scrollbar-bg-light);
-        --os-handle-bg-hover: var(--scrollbar-bg-hover-light);
-        --os-handle-bg-active: var(--scrollbar-bg-active-light);
-    }
+/* WebKit fallback for engines without scrollbar-color (e.g. Safari) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-bg);
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-bg-hover);
 }
 
 /* transition */
@@ -461,7 +447,9 @@ html.is-animating .transition-swup-fade {
 
     }
 
-    .katex-display-container {
+    /* wide formulas scroll natively (previously wrapped in a JS-generated
+     * container with OverlayScrollbars; dependency removed) */
+    .katex-display {
         max-width: 100%;
         overflow-x: auto;
         margin: 1em 0;
