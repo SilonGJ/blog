@@ -25,6 +25,7 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 import { FriendLinksComponent } from "./src/plugins/rehype-component-friend-links.mjs";
 import rehypeImageAttrs from './src/utils/rehype-image-attrs.mjs';
+import rehypeLinksNewTab from "./src/plugins/rehype-links-new-tab.mjs";
 
 export default defineConfig({
 	site: siteUrl,
@@ -162,6 +163,7 @@ export default defineConfig({
 						},
 					},
 				],
+				rehypeLinksNewTab,
 			],
 		}),
 	},
