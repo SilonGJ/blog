@@ -7,5 +7,6 @@ tags:
   - Cloudflare
   - Axisnow
   - 博客
+category: 技术
 draft: true
 ---
