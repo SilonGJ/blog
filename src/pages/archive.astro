@@ -6,8 +6,10 @@ import { getSortedPostsList } from "../utils/content-utils";
 const sortedPostsList = await getSortedPostsList();
 ---
 
-<MainGridLayout title="归档">
+<MainGridLayout
+    title="归档"
+    description="SilonGJ 博客的文章归档，可查看所有文章"
+>
     <h1 class="sr-only">归档</h1>
-    <ArchivePanel sortedPosts={sortedPostsList}></ArchivePanel>
+    <ArchivePanel sortedPosts={sortedPostsList} />
 </MainGridLayout>
-

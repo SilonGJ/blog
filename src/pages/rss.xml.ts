@@ -21,7 +21,7 @@ export async function GET(context: APIContext): Promise<Response> {
 
 	return rss({
 		title: siteConfig.title,
-		description: siteConfig.subtitle || "No description",
+		description: siteConfig.description || siteConfig.title,
 		site: context.site ?? siteUrl,
 		items: blog.map((post) => {
 			const content =

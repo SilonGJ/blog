@@ -14,21 +14,50 @@ export const getStaticPaths = (async ({ paginate }) => {
 // https://github.com/withastro/astro/issues/6507#issuecomment-1489916992
 
 const { page } = Astro.props;
+
+const isHomePage = page.currentPage === 1;
+const homeUrl = new URL("/", Astro.site ?? "/").href;
+const sameAs = profileConfig.links
+	.map((link) => link.url)
+	.filter((u) => u.startsWith("http"));
+
+// Site name signals for Google: WebSite (with alternateName) + Organization,
+// only emitted on the home page as required by the site name guidelines.
+const websiteJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	name: siteConfig.title,
+	alternateName: [
+		profileConfig.name,
+		"zcx0217.qzz.io",
+		Astro.site?.host.toLowerCase() ?? "",
+	].filter(Boolean),
+	description: siteConfig.description,
+	url: homeUrl,
+	inLanguage: siteConfig.lang.replace("_", "-"),
+	author: {
+		"@type": "Person",
+		name: profileConfig.name,
+	},
+};
+
+const organizationJsonLd = {
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	name: siteConfig.title,
+	url: homeUrl,
+	logo: new URL("/images/avatar.webp", Astro.site ?? "/").href,
+	sameAs,
+};
 ---
 
-<MainGridLayout noindex={page.currentPage > 1}>
-    <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: siteConfig.title,
-        description: siteConfig.subtitle,
-        url: Astro.site,
-        inLanguage: siteConfig.lang.replace("_", "-"),
-        author: {
-            "@type": "Person",
-            name: profileConfig.name,
-        },
-    })}></script>
+<MainGridLayout description={isHomePage ? siteConfig.description : undefined} noindex={page.currentPage > 1}>
+    {isHomePage && (
+        <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)}></script>
+    )}
+    {isHomePage && sameAs.length > 0 && (
+        <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)}></script>
+    )}
     <h1 class="sr-only">{siteConfig.title}</h1>
     <PostPage page={page}></PostPage>
     <Pagination class="mx-auto onload-animation" page={page}></Pagination>

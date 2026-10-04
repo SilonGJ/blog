@@ -7,12 +7,16 @@ import MainGridLayout from "../../layouts/MainGridLayout.astro";
 const linksPost = await getEntry("spec", "links");
 
 if (!linksPost) {
-	throw new Error("Links page content not found");
+    throw new Error("Links page content not found");
 }
 
 const { Content } = await render(linksPost);
 ---
-<MainGridLayout title="友链">
+
+<MainGridLayout
+    title="友链"
+    description="SilonGJ 的友情链接，收录朋友们的站点。"
+>
     <h1 class="sr-only">友链</h1>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 onload-animation">
         <div class="card-base z-10 px-9 py-6 relative w-full">

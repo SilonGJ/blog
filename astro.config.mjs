@@ -100,7 +100,10 @@ export default defineConfig({
 				showCopyToClipboardButton: false,
 			}
 		}),
-		sitemap(),
+		sitemap({
+			// Paginated list pages (/2/, /3/, ...) are noindex, keep them out of the sitemap
+			filter: (page) => !/^\/\d+\/$/.test(new URL(page).pathname),
+		}),
 	],
 	markdown: {
 		processor: unified({

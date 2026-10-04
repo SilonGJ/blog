@@ -1,5 +1,4 @@
 ---
-
 import { getEntry, render } from "astro:content";
 import Giscus from "@components/Giscus.astro";
 import Markdown from "@components/misc/Markdown.astro";
@@ -8,15 +7,19 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
 const aboutPost = await getEntry("spec", "about");
 
 if (!aboutPost) {
-	throw new Error("About page content not found");
+    throw new Error("About page content not found");
 }
 
 const { Content } = await render(aboutPost);
 ---
-<MainGridLayout title="关于" description="关于">
+
+<MainGridLayout
+    title="关于"
+    description="关于 SilonGJ 的个人博客，站点介绍及联系方式。"
+>
     <h1 class="sr-only">关于</h1>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 onload-animation">
-        <div class="card-base z-10 px-9 py-6 relative w-full ">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
             <Markdown class="mt-2">
                 <Content />
             </Markdown>
@@ -29,10 +32,15 @@ const { Content } = await render(aboutPost);
 
     <script is:inline>
         (function () {
-            var el = document.getElementById('site-age');
+            var el = document.getElementById("site-age");
             if (!el || !el.dataset.founded) return;
-            var p = el.dataset.founded.split('-').map(Number);
-            el.textContent = String(Math.floor((Date.now() - new Date(p[0], p[1] - 1, p[2]).getTime()) / 86400000));
+            var p = el.dataset.founded.split("-").map(Number);
+            el.textContent = String(
+                Math.floor(
+                    (Date.now() - new Date(p[0], p[1] - 1, p[2]).getTime()) /
+                        86400000,
+                ),
+            );
         })();
     </script>
 </MainGridLayout>
