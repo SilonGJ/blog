@@ -19,7 +19,6 @@ interface Props {
 	title?: string;
 	banner?: string;
 	description?: string;
-	lang?: string;
 	setOGTypeArticle?: boolean;
 	noindex?: boolean;
 	headings?: MarkdownHeading[];
@@ -29,7 +28,6 @@ const {
 	title,
 	banner,
 	description,
-	lang,
 	setOGTypeArticle,
 	noindex,
 	headings = [],
@@ -43,7 +41,7 @@ const mainPanelTop = siteConfig.banner.enable
 	: "5.5rem";
 ---
 
-<Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle} noindex={noindex}>
+<Layout title={title} banner={banner} description={description} setOGTypeArticle={setOGTypeArticle} noindex={noindex}>
 
 <!-- Navbar -->
 <slot slot="head" name="head"></slot>

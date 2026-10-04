@@ -1,6 +1,4 @@
 ---
-import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
 
 export interface Props {
 	repo?: string;
@@ -38,7 +36,7 @@ const {
             md:before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
             before:absolute before:top-[0.5rem] before:left-[-1.125rem]"
         >
-            {i18n(I18nKey.comments)}
+            评论
         </div>
     </h2>
     <div id="giscus-slot"></div>
@@ -50,10 +48,28 @@ const {
   var container = document.getElementById('giscus-slot');
   if (!container) return;
 
-  var isDark = document.documentElement.classList.contains('dark');
-  var themeUrl = isDark
-    ? '/themes/dark_tritanopia.css'
-    : '/themes/light_tritanopia.css';
+  function getThemeUrl() {
+    return document.documentElement.classList.contains('dark')
+      ? '/themes/dark_tritanopia.css'
+      : '/themes/light_tritanopia.css';
+  }
+
+  function syncTheme() {
+    var themeUrl = getThemeUrl();
+    var iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe && iframe.contentWindow) {
+      // giscus applies the new theme CSS in place (no iframe reload)
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: themeUrl } } },
+        'https://giscus.app'
+      );
+      return;
+    }
+    // iframe not created yet: update the pending script so client.js
+    // picks up the current theme when it eventually executes
+    var pending = container.querySelector('script[data-repo]');
+    if (pending) pending.setAttribute('data-theme', themeUrl);
+  }
 
   var script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
@@ -66,11 +82,43 @@ const {
   script.setAttribute('data-reactions-enabled', ${JSON.stringify(reactionsEnabled)});
   script.setAttribute('data-emit-metadata', ${JSON.stringify(emitMetadata)});
   script.setAttribute('data-input-position', ${JSON.stringify(inputPosition)});
-  script.setAttribute('data-theme', themeUrl);
+  script.setAttribute('data-theme', getThemeUrl());
   script.setAttribute('data-lang', ${JSON.stringify(lang)});
   script.crossOrigin = 'anonymous';
   script.async = true;
 
   container.appendChild(script);
+
+  // Re-apply the current theme once the giscus iframe has finished loading
+  // (covers theme toggles made while the iframe was still loading). The
+  // widget registers its message listener on mount, so sync shortly after
+  // load and once more to avoid posting the message too early.
+  function syncAfterLoad() {
+    setTimeout(syncTheme, 300);
+    setTimeout(syncTheme, 1000);
+  }
+  if (window.__giscusIframeTimer) {
+    clearInterval(window.__giscusIframeTimer);
+  }
+  window.__giscusIframeTimer = setInterval(function () {
+    var iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe) return;
+    clearInterval(window.__giscusIframeTimer);
+    window.__giscusIframeTimer = null;
+    iframe.addEventListener('load', syncAfterLoad);
+    syncAfterLoad();
+  }, 200);
+
+  // The inline script is re-executed by swup on page transitions; make sure
+  // only one observer stays alive.
+  if (window.__giscusThemeObserver) {
+    window.__giscusThemeObserver.disconnect();
+  }
+  var observer = new MutationObserver(syncTheme);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+  window.__giscusThemeObserver = observer;
 })();`}
 ></script>

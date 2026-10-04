@@ -1,6 +1,4 @@
 ---
-import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
 import { Icon } from "astro-icon/components";
 ---
 
@@ -45,19 +43,19 @@ import { Icon } from "astro-icon/components";
                     id="light-mode-btn"
             >
                 <Icon name="material-symbols:wb-sunny-outline-rounded" class="text-[1.25rem] mr-3"></Icon>
-                {i18n(I18nKey.lightMode)}
+                亮色
             </button>
             <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95 mb-0.5"
                     id="dark-mode-btn"
             >
                 <Icon name="material-symbols:dark-mode-outline-rounded" class="text-[1.25rem] mr-3"></Icon>
-                {i18n(I18nKey.darkMode)}
+                暗色
             </button>
             <button class="flex transition whitespace-nowrap items-center !justify-start w-full btn-plain scale-animation rounded-lg h-9 px-3 font-medium active:scale-95"
                     id="auto-mode-btn"
             >
                 <Icon name="material-symbols:radio-button-partial-outline" class="text-[1.25rem] mr-3"></Icon>
-                {i18n(I18nKey.systemMode)}
+                跟随系统
             </button>
         </div>
     </div>
@@ -68,9 +66,9 @@ import {
 	applyThemeToDocument,
 	getStoredTheme,
 	setTheme,
-} from "@utils/setting-utils.ts";
-import type { LIGHT_DARK_MODE } from "@/types/config.ts";
-import { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants.ts";
+} from "@utils/setting-utils";
+import type { LIGHT_DARK_MODE } from "@/types/config";
+import { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants";
 
 const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE, AUTO_MODE];
 let mode: LIGHT_DARK_MODE = AUTO_MODE;

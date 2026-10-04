@@ -1,15 +1,13 @@
 ---
 import ArchivePanel from "@components/ArchivePanel.astro";
-import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getSortedPostsList } from "../utils/content-utils";
 
 const sortedPostsList = await getSortedPostsList();
 ---
 
-<MainGridLayout title={i18n(I18nKey.archive)}>
-    <h1 class="sr-only">{i18n(I18nKey.archive)}</h1>
+<MainGridLayout title="归档">
+    <h1 class="sr-only">归档</h1>
     <ArchivePanel sortedPosts={sortedPostsList}></ArchivePanel>
 </MainGridLayout>
 

@@ -26,7 +26,6 @@ pnpm dev          # 启动开发服务器
 pnpm build        # 构建 + pagefind 搜索索引
 pnpm check        # Astro 类型检查 + tsc
 pnpm lint         # Biome 检查并自动修复
-pnpm new-post     # 创建新文章（scripts/new-post.js）
 ```
 
 ---
@@ -38,7 +37,6 @@ pnpm new-post     # 创建新文章（scripts/new-post.js）
 | `@components/*` | `src/components/*` |
 | `@utils/*` | `src/utils/*` |
 | `@constants/*` | `src/constants/*` |
-| `@i18n/*` | `src/i18n/*` |
 | `@layouts/*` | `src/layouts/*` |
 | `@/*` | `src/*` |
 
@@ -58,5 +56,3 @@ pnpm new-post     # 创建新文章（scripts/new-post.js）
 - `expressiveCodeConfig`：代码高亮主题（仅支持深色背景）
 
 **友链**：`src/links/1.json`, `src/links/2.json`… 按文件名顺序排列。
-
-**i18n**：多语言文件在 `src/i18n/languages/`，当前默认语言为 `zh_CN`。

@@ -1,9 +1,7 @@
 ---
-import I18nKey from "@i18n/i18nKey";
-import { i18n } from "@i18n/translation";
 import { Icon } from "astro-icon/components";
 
-const searchPlaceholder = i18n(I18nKey.search);
+const searchPlaceholder = "搜索";
 ---
 
 <!-- search bar for desktop view -->
@@ -34,7 +32,7 @@ const searchPlaceholder = i18n(I18nKey.search);
           dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
       ">
             <Icon name="material-symbols:search" class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/75 dark:text-white/75"></Icon>
-            <input id="search-input-mobile" placeholder="Search"
+            <input id="search-input-mobile" placeholder="搜索"
                    class="pl-10 absolute inset-0 text-sm bg-transparent outline-0
                    text-black/75 dark:text-white/75"
             >

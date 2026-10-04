@@ -2,8 +2,6 @@
 import { getEntry, render } from "astro:content";
 import Giscus from "@components/Giscus.astro";
 import Markdown from "@components/misc/Markdown.astro";
-import I18nKey from "../../i18n/i18nKey";
-import { i18n } from "../../i18n/translation";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
 
 const linksPost = await getEntry("spec", "links");
@@ -14,8 +12,8 @@ if (!linksPost) {
 
 const { Content } = await render(linksPost);
 ---
-<MainGridLayout title={i18n(I18nKey.friendLinks)}>
-    <h1 class="sr-only">{i18n(I18nKey.friendLinks)}</h1>
+<MainGridLayout title="友链">
+    <h1 class="sr-only">友链</h1>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32 onload-animation">
         <div class="card-base z-10 px-9 py-6 relative w-full">
             <Markdown class="mt-2">

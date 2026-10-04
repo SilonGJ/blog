@@ -1,6 +1,4 @@
 ---
-import I18nKey from "../i18n/i18nKey";
-import { i18n } from "../i18n/translation";
 import { getPostUrlBySlug } from "../utils/url-utils";
 
 interface Post {
@@ -58,8 +56,8 @@ function formatTag(tagList: string[]) {
 ---
 
 <div class="card-base px-8 py-6 onload-animation" id="archive-panel"
-     data-i18n-singular={i18n(I18nKey.postCount)}
-     data-i18n-plural={i18n(I18nKey.postsCount)}
+     data-i18n-singular="篇文章"
+     data-i18n-plural="篇文章"
 >
     {groups.map((group) => (
         <div class="archive-group" data-year={group.year}>
@@ -74,7 +72,7 @@ function formatTag(tagList: string[]) {
                     ></div>
                 </div>
                 <div class="w-[70%] md:w-[80%] transition text-left text-50 archive-year-posts-count">
-                    {group.posts.length} {i18n(group.posts.length === 1 ? I18nKey.postCount : I18nKey.postsCount)}
+                    {group.posts.length} 篇文章
                 </div>
             </div>
 
