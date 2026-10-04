@@ -43,7 +43,7 @@ export function FriendLinksComponent(_properties, _children) {
 						"div",
 						{
 							class:
-								"w-12 h-12 flex-shrink-0 relative rounded-lg overflow-hidden border border-[var(--line-divider)]",
+								"w-12 h-12 flex-shrink-0 relative rounded-xl overflow-hidden",
 						},
 						[
 							h(
@@ -62,7 +62,7 @@ export function FriendLinksComponent(_properties, _children) {
 											loading: "lazy",
 											referrerpolicy: "no-referrer",
 											class:
-												"absolute inset-0 w-full h-full object-cover !m-0 img-fade",
+												"absolute inset-0 w-full h-full object-cover !m-0 !rounded-[0px] img-fade",
 										}),
 									]
 								: []),
