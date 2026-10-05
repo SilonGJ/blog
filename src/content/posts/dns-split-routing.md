@@ -8,6 +8,7 @@ tags:
   - Axisnow
   - 博客
 category: 技术
+image: /images/archive/fl.png
 draft: false
 ---
 # 前言
@@ -28,7 +29,7 @@ draft: false
 
 # Axisnow
 
-最初接触到 Axisnow 是好几天前，看到有免费的提供商，于是浅浅尝试了一下，发现在国内的访问速度非常不错(至少比之前好多了)
+最初接触到 Axisnow 是好几天前，看到有**免费**的提供商，于是浅浅尝试了一下，发现在国内的访问速度非常不错(至少比之前好多了)
 
 ![image.png](/images/archive/image.png)
 
@@ -66,7 +67,7 @@ draft: false
 
 用 Deepseek 的说法就是：
 
-> 根域名通常不能直接配置 CNAME，因为它必须存在 SOA、NS 等记录，CNAME 不能与其它记录共存。Cloudflare 是通过 CNAME Flattening 在权威 DNS 侧帮你解析目标，所以看起来像支持根域 CNAME。  
+> 根域名通常不能直接配置 CNAME，因为它必须存在 SOA、NS、MX 等记录，CNAME 不能与其它记录共存。Cloudflare 是通过 CNAME Flattening 在权威 DNS 侧帮你解析目标，所以看起来像支持根域 CNAME。  
 > 在我的场景里，由于 Cloudflare 代理开启，返回的是 Cloudflare 的 Anycast IP，Axisnow 看到的是 Cloudflare 回源节点，而不是终端用户 IP，所以基于来源的分流失效。
 
 也就是说，相当于 Cloudflare 的节点自己帮你走完整条 CNAME 链，然后才把 IP 返回给客户端，这导致 Axisnow 分流那边看到的是 Cloudflare 的节点，所以自然无法分流了。
@@ -77,13 +78,13 @@ draft: false
 
 ![image.png](/images/archive/image-2.png)
 
-然后 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 把分流做好：
+然后 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 把分流做好
 
 这样，就得到了一个在中国绿油油(忽略那17个无法访问)的站点了
 
 ![image.png](/images/archive/image-4.png)
 
-当然，由于根域名没法做分流，所以 [zcx0217.qzz.io](http://zcx0217.qzz.io) 的测速结果是比 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 差很多的，这一点我暂时没想到啥好的解决方法，唯一想到的就只有把域名托管到 DNSPod，或者其它的 DNS 服务商来做分流，然后通过 `自定义主机名(SaaS)` 接入到 Cloudflare，但是太麻烦了，还没研究明白...
+当然，由于根域名没法做分流，所以 [zcx0217.qzz.io](http://zcx0217.qzz.io) 的测速结果是比 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 差很多的，这一点我暂时没想到啥好的解决方法，唯一想到的就只有把域名托管到 DNSPod，或者其它的 DNS 服务商来做分流，然后通过`自定义主机名(SaaS)` 接入到 Cloudflare，但是太麻烦了，还没研究明白...
 
 # 总结
 
@@ -98,8 +99,6 @@ draft: false
 
 
 这次优选和分流还是挺有意思的，至少让我知道了，根域在 Cloudflare 下没法做基于来源的分流，且 Cloudflare 的 CNAME Flattening 有坑。
-
-其实还是有点后悔的，很久之前我就刷到过有关 `为什么不用根域名`的视频，但是我压根没点进去看，要是当初看了，或许就不需要折腾这么久了。
 
 
 
