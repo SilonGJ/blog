@@ -24,7 +24,7 @@ draft: true
 - 套其它各种 CDN
 - ...
 
-最终选择了国内走 Axisnow CDN 和国外走 Cloudflare 的架构，所以这篇文章用来记录一些东西。
+最近选择了国内走 Axisnow CDN 和国外走 Cloudflare 的架构，所以这篇文章用来记录一些东西。
 
 # Axisnow
 
@@ -36,13 +36,25 @@ draft: true
 
 果然，不出所料，第二天在下午1点左右，再次 itdog 测速，地图红红的一片红点，300多个节点，能有100多无法访问
 
-# 分流
+## 优选 & 分流
 
-于是开始研究如何分流
+### 优选
 
-由于我长期使用的是根域名，然而我当时并不知道根域名的各种坏处...
+优选其实很简单，Axisnow 提供了非常多的拨测节点和 CDN 提供商，暂时都是免费的。
 
-直到把托管在 Cloudflare 的域名 [zcx0217.qzz.io](http://zcx0217.qzz.io) CNAME 到 Axisnow，并且做了国内外的分流和拨测，然后...神奇的事情就发生了，哪怕是国内的IP，仍然全部都分流到了 Cloudflare
+只需要把每个提供商的 CNAME 填进去
+
+![image.png](/images/archive/image-5.png)
+
+然后选好需要的拨测模板即可。
+
+### 分流
+
+由于我长期使用的是**根域名**，然而我当时并不知道根域名的各种坏处...
+
+直到把 [zcx0217.qzz.io](http://zcx0217.qzz.io) **CNAME** 到 Axisnow，并且做了国内外的分流和拨测，然后...神奇的事情就发生了：哪怕是国内的IP，仍然全部都分流到了 Cloudflare
+
+![image.png](/images/archive/image-3.png)
 
 ![image.png](/images/archive/image-1.png)
 
@@ -71,10 +83,22 @@ draft: true
 
 然后 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 把分流做好：
 
-![image.png](/images/archive/image-3.png)
-
 这样，就得到了一个在中国绿油油(忽略那17个无法访问)的站点了
 
 ![image.png](/images/archive/image-4.png)
 
-当然，由于根域名没法做分流，所以 [zcx0217.qzz.io](http://zcx0217.qzz.io) 的测速结果是比 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 差很多的，这一点我暂时没想到啥好的解决方法，唯一想到的就只有把域名托管到 DNSPod，或者其它的 DNS 服务商来做分流，然后通过 `自定义主机名` 接入到 Cloudflare，但是太麻烦了，还没研究明白...
+当然，由于根域名没法做分流，所以 [zcx0217.qzz.io](http://zcx0217.qzz.io) 的测速结果是比 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 差很多的，这一点我暂时没想到啥好的解决方法，唯一想到的就只有把域名托管到 DNSPod，或者其它的 DNS 服务商来做分流，然后通过 `自定义主机名(SaaS)` 接入到 Cloudflare，但是太麻烦了，还没研究明白...
+
+# 总结
+
+这次优选和分流还是挺有意思的，至少让我知道了，根域名默认是没法写 CNAME 解析的，且 Cloudflarfe 的 CNAME Flattening 有坑。
+
+其实还是有点后悔的，很久之前我就刷到过有关 `为什么不用根域名`的视频，但是我压根没点进去看，要是当初看了，或许就不需要折腾这么久了。
+
+
+
+参考资料： 
+
+[为什么大部分网站都不喜欢用根域名？_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1BnS7BiEF2/)
+
+[CNAME flattening · Cloudflare DNS docs](https://developers.cloudflare.com/dns/cname-flattening/)
