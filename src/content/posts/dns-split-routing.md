@@ -8,7 +8,7 @@ tags:
   - Axisnow
   - 博客
 category: 技术
-draft: true
+draft: false
 ---
 # 前言
 
@@ -90,14 +90,14 @@ draft: true
 最终架构如下：
 
 
-| **域名** | CDN | **拨测节点** | **用途** |
+| 域名 | CDN | 优选的拨测节点 | 用途 |
 | ------------------ | ------------ | ---------- | ------------ |
 | zcx0217.qzz.io | Axisnow 国内节点 | 阿里云 BGP | 301 重定向到 www |
 | www.zcx0217.qzz.io | Axisnow 国内节点 | 移动和阿里云 BGP | 国内访问 |
 | www.zcx0217.qzz.io | Cloudflare | 所有海外节点 | 国外访问 |
 
 
-这次优选和分流还是挺有意思的，至少让我知道了，根域名是没法直接写 CNAME 解析的，且 Cloudflare 的 CNAME Flattening 有坑。
+这次优选和分流还是挺有意思的，至少让我知道了，根域在 Cloudflare 下没法做基于来源的分流，且 Cloudflare 的 CNAME Flattening 有坑。
 
 其实还是有点后悔的，很久之前我就刷到过有关 `为什么不用根域名`的视频，但是我压根没点进去看，要是当初看了，或许就不需要折腾这么久了。
 
