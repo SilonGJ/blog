@@ -60,24 +60,20 @@ draft: true
 
 询问 Deepseek 后，最终得出的结论是：
 
-```
-不能用根域名
-```
+> 不能用根域名
 
 **根域名通常是没法直接配置 CNAME 解析的**，Cloudflare 之所以可以做 CNAME 是因为使用了 CNAME Flattening。
 
 用 Deepseek 的说法就是：
 
-```
-根域名通常不能直接配置 CNAME，因为它必须存在 SOA、NS 等记录，CNAME 不能与其它记录共存。Cloudflare 是通过 CNAME Flattening 在权威 DNS 侧帮你解析目标，所以看起来像支持根域 CNAME。
-在我的场景里，由于 Cloudflare 代理开启，返回的是 Cloudflare 的 Anycast IP，AxisNow 看到的是 Cloudflare 回源节点，而不是终端用户 IP，所以基于来源的分流失效。
-```
+> 根域名通常不能直接配置 CNAME，因为它必须存在 SOA、NS 等记录，CNAME 不能与其它记录共存。Cloudflare 是通过 CNAME Flattening 在权威 DNS 侧帮你解析目标，所以看起来像支持根域 CNAME。  
+> 在我的场景里，由于 Cloudflare 代理开启，返回的是 Cloudflare 的 Anycast IP，Axisnow 看到的是 Cloudflare 回源节点，而不是终端用户 IP，所以基于来源的分流失效。
 
 也就是说，相当于 Cloudflare 的节点自己帮你走完整条 CNAME 链，然后才把 IP 返回给客户端，这导致 Axisnow 分流那边看到的是 Cloudflare 的节点，所以自然无法分流了。
 
 要解决其实很简单，既然根域名没法分流，那就别用根域名了，用 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 做分流，并把 [zcx0217.qzz.io](http://zcx0217.qzz.io) 301重定向过去。
 
-由于根域名无法分流，所以我是直接让根域名通过阿里云BGP的节点做拨测了。虽然某些地区或者运营商不是最优的，但是勉强能用吧。
+由于根域名无法分流，所以我是直接通过阿里云BGP的节点做优选了。虽然某些地区或者运营商不是最优的，但是勉强能用吧。
 
 ![image.png](/images/archive/image-2.png)
 
@@ -91,7 +87,17 @@ draft: true
 
 # 总结
 
-这次优选和分流还是挺有意思的，至少让我知道了，根域名默认是没法写 CNAME 解析的，且 Cloudflarfe 的 CNAME Flattening 有坑。
+最终架构如下：
+
+
+| **域名** | CDN | **拨测节点** | **用途** |
+| ------------------ | ------------ | ---------- | ------------ |
+| zcx0217.qzz.io | Axisnow 国内节点 | 阿里云 BGP | 301 重定向到 www |
+| www.zcx0217.qzz.io | Axisnow 国内节点 | 移动和阿里云 BGP | 国内访问 |
+| www.zcx0217.qzz.io | Cloudflare | 所有海外节点 | 国外访问 |
+
+
+这次优选和分流还是挺有意思的，至少让我知道了，根域名是没法直接写 CNAME 解析的，且 Cloudflare 的 CNAME Flattening 有坑。
 
 其实还是有点后悔的，很久之前我就刷到过有关 `为什么不用根域名`的视频，但是我压根没点进去看，要是当初看了，或许就不需要折腾这么久了。
 
