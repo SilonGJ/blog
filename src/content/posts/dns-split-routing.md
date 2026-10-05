@@ -68,7 +68,7 @@ draft: false
 用 Deepseek 的说法就是：
 
 > 根域名通常不能直接配置 CNAME，因为它必须存在 SOA、NS、MX 等记录，CNAME 不能与其它记录共存。Cloudflare 是通过 CNAME Flattening 在权威 DNS 侧帮你解析目标，所以看起来像支持根域 CNAME。  
-> 在我的场景里，由于 Cloudflare 代理开启，返回的是 Cloudflare 的 Anycast IP，Axisnow 看到的是 Cloudflare 回源节点，而不是终端用户 IP，所以基于来源的分流失效。
+> 由于 Cloudflare 代理开启 CNAME Flattening，返回给 Axisnow 的是 Cloudflare 的 Anycast IP，Axisnow 看到的是 Cloudflare 回源节点，而不是终端用户 IP，所以分流失效。
 
 也就是说，相当于 Cloudflare 的节点自己帮你走完整条 CNAME 链，然后才把 IP 返回给客户端，这导致 Axisnow 分流那边看到的是 Cloudflare 的节点，所以自然无法分流了。
 
