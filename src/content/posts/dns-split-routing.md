@@ -12,7 +12,7 @@ draft: true
 ---
 # 前言
 
-本博客其实非常转折，文章没多少但是各种架构换了好多次...
+本博客经历比较曲折，文章没多少但是各种架构换了好多次...
 
 最初其实是在 NAS 上跑的 Halo，通过 Tunnel 开放出来，速度自然不用说，慢的离谱...
 
@@ -46,21 +46,26 @@ draft: true
 
 ![image.png](/images/archive/image-1.png)
 
-于是我找 Deepseek 问了好久好久
-
-最后得出的结论是：
+询问 Deepseek 后，最终得出的结论是：
 
 ```
 不能用根域名
 ```
 
-从 Deepseek 的询问才得知，根域名其实是没法做 CNAME 解析的，Cloudflare 之所以可以做 CNAME 是因为使用了 CNAME Flattening。
+**根域名通常是没法直接配置 CNAME 解析的**，Cloudflare 之所以可以做 CNAME 是因为使用了 CNAME Flattening。
+
+用 Deepseek 的说法就是：
+
+```
+根域名通常不能直接配置 CNAME，因为它必须存在 SOA、NS 等记录，CNAME 不能与其它记录共存。Cloudflare 是通过 CNAME Flattening 在权威 DNS 侧帮你解析目标，所以看起来像支持根域 CNAME。
+在我的场景里，由于 Cloudflare 代理开启，返回的是 Cloudflare 的 Anycast IP，AxisNow 看到的是 Cloudflare 回源节点，而不是终端用户 IP，所以基于来源的分流失效。
+```
 
 也就是说，相当于 Cloudflare 的节点自己帮你走完整条 CNAME 链，然后才把 IP 返回给客户端，这导致 Axisnow 分流那边看到的是 Cloudflare 的节点，所以自然无法分流了。
 
 要解决其实很简单，既然根域名没法分流，那就别用根域名了，用 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 做分流，并把 [zcx0217.qzz.io](http://zcx0217.qzz.io) 301重定向过去。
 
-由于根域名无法分流，所以我是直接让根域名通过阿里云BGP的节点做拨测了。这样虽然某些地区或者运营商或许不是最优的，但是勉强能用吧。
+由于根域名无法分流，所以我是直接让根域名通过阿里云BGP的节点做拨测了。虽然某些地区或者运营商不是最优的，但是勉强能用吧。
 
 ![image.png](/images/archive/image-2.png)
 
@@ -72,4 +77,4 @@ draft: true
 
 ![image.png](/images/archive/image-4.png)
 
-当然，由于根域名没法做分流，所以 [zcx0217.qzz.io](http://zcx0217.qzz.io) 的测速结果是比 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 差很多的，这一点我暂时没想到啥好的解决方法，唯一想到的就只有把域名托管到 DNSPod，或者其它的 DNS 服务商，然后通过 `自定义主机名` 接入到 Cloudflare，但是太麻烦了，还没研究明白...
+当然，由于根域名没法做分流，所以 [zcx0217.qzz.io](http://zcx0217.qzz.io) 的测速结果是比 [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) 差很多的，这一点我暂时没想到啥好的解决方法，唯一想到的就只有把域名托管到 DNSPod，或者其它的 DNS 服务商来做分流，然后通过 `自定义主机名` 接入到 Cloudflare，但是太麻烦了，还没研究明白...
