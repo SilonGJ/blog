@@ -154,6 +154,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          cache: pnpm
+
+      # `pnpm dlx` builds a throwaway project that does not inherit this
+      # repository's `allowBuilds` list, so pnpm aborts with
+      # ERR_PNPM_IGNORED_BUILDS (strictDepBuilds defaults to true). Installing
+      # the pinned dependency instead lets us reuse the project's wrangler.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Check Cloudflare credentials
         id: creds
@@ -185,4 +193,4 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: pnpm dlx wrangler@4 preview delete --name "${{ steps.preview.outputs.name }}" --skip-confirmation
+        run: pnpm exec wrangler preview delete --name "${{ steps.preview.outputs.name }}" --skip-confirmation
