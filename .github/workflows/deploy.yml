@@ -1,11 +1,18 @@
 name: Production deploy
 
-# Deploys to production on every push to `main` (i.e. when a pull request is
-# merged) and manually from Pages CMS or the Actions UI. The Pages CMS button
-# dispatches this workflow on `main`, so it always ships already-merged content.
+# Deploys when a push to `main` touches anything other than the files Pages CMS
+# edits, and manually from the `deploy-production` action in Pages CMS or the
+# Actions UI. Content saves and media uploads happen many times per session, so
+# they never deploy on their own: publish them explicitly, or just wait for the
+# next code push. A push that mixes both still deploys.
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "src/content/**" # articles written in Pages CMS
+      - "src/links/**" # friend links managed in Pages CMS
+      - "public/images/**" # media uploaded through Pages CMS
+      - ".pages.yml" # Pages CMS configuration
   workflow_dispatch:
     inputs:
       payload:

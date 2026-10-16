@@ -1,13 +1,11 @@
 name: Preview
 
-# Runs on pull requests (checks + Cloudflare Worker Preview), on pushes to the
-# long-lived `cms` branch used by Pages CMS, and manually (Pages CMS buttons and
-# ad-hoc re-runs). Production deployment lives in deploy.yml.
+# Manual only. Pages CMS saves and media uploads happen many times per session,
+# so nothing previews automatically: the `preview` action in Pages CMS dispatches
+# this workflow on demand. The preview worker name is fixed, which keeps its URL
+# stable (bookmarkable) and means only the assets that changed since the last
+# preview have to be uploaded. Production deployment lives in deploy.yml.
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-  push:
-    branches: [cms]
   workflow_dispatch:
     inputs:
       payload:
@@ -17,19 +15,18 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
+
+concurrency:
+  # One preview worker: clicking the button twice cancels the superseded run
+  # instead of queueing behind it.
+  group: preview
+  cancel-in-progress: true
 
 jobs:
-  ci:
-    name: Checks and preview
-    if: github.event.action != 'closed'
+  preview:
+    name: Build and preview
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    concurrency:
-      # One preview per branch: deduplicates push/pull_request runs and cancels
-      # superseded ones.
-      group: preview-${{ github.event.pull_request.head.ref || github.ref_name }}
-      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,66 +43,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Lint and type check only matter for code changes. Pull requests are the
-      # gate that protects `main`, so content-only previews (Pages CMS pushes to
-      # `cms` and manual re-runs) skip them and are ready ~8s sooner.
-      - name: Lint
-        if: github.event_name == 'pull_request'
-        run: pnpm exec biome ci ./src
-
-      - name: Type check
-        if: github.event_name == 'pull_request'
-        run: pnpm check
-
       - name: Build
         run: pnpm build
         env:
           NODE_OPTIONS: --max-old-space-size=6144
 
-      # Cloudflare secrets are unavailable for pull requests from forks and for
-      # Dependabot. In those cases the checks above still run and the preview is
-      # skipped instead of failing the workflow.
-      - name: Check Cloudflare credentials
-        id: creds
-        shell: bash
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          if [ -n "${CLOUDFLARE_API_TOKEN:-}" ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "Cloudflare credentials are not available; skipping the preview." >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-      - name: Compute preview name
-        id: preview
-        if: steps.creds.outputs.available == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            ref="${{ github.event.pull_request.head.ref }}"
-          else
-            ref="${{ github.ref_name }}"
-          fi
-          name="$(printf '%s' "$ref" \
-            | tr '[:upper:]' '[:lower:]' \
-            | sed -E 's/[^a-z0-9-]+/-/g; s/^-+//; s/-+$//' \
-            | cut -c1-50)"
-          if [ -z "$name" ]; then
-            name="preview-${{ github.run_number }}"
-          fi
-          echo "name=$name" >> "$GITHUB_OUTPUT"
-          echo "Preview name: $name"
-
+      # `wrangler preview` needs the (empty) `previews` table in wrangler.toml.
+      # `--name` is fixed on purpose: the URL is always
+      # https://preview-blog.<subdomain>.workers.dev, and only assets that changed
+      # since the previous preview are uploaded.
       - name: Deploy preview
         id: deploy
-        if: steps.creds.outputs.available == 'true'
         shell: bash
         run: |
           set -euo pipefail
-          output="$(pnpm exec wrangler preview --name "${{ steps.preview.outputs.name }}" --json)"
+          output="$(pnpm exec wrangler preview --name preview --json)"
           printf '%s\n' "$output"
           url="$(printf '%s' "$output" | jq -r '.preview.urls[0] // empty' 2>/dev/null || true)"
           if [ -z "$url" ]; then
@@ -122,80 +74,12 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Probe preview
-        if: steps.creds.outputs.available == 'true'
         run: curl --fail --show-error --silent --retry 3 --retry-delay 2 -o /dev/null "${{ steps.deploy.outputs.url }}"
 
       - name: Write job summary
-        if: steps.creds.outputs.available == 'true'
         run: |
           {
             echo "## Preview is ready"
             echo ""
             echo "Preview URL: ${{ steps.deploy.outputs.url }}"
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Comment preview URL on the pull request
-        if: github.event_name == 'pull_request' && steps.creds.outputs.available == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr comment "${{ github.event.pull_request.number }}" \
-            --edit-last --create-if-none \
-            --body "Preview (updated on every push): ${{ steps.deploy.outputs.url }}"
-
-  cleanup:
-    name: Delete preview
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: pnpm
-
-      # `pnpm dlx` builds a throwaway project that does not inherit this
-      # repository's `allowBuilds` list, so pnpm aborts with
-      # ERR_PNPM_IGNORED_BUILDS (strictDepBuilds defaults to true). Installing
-      # the pinned dependency instead lets us reuse the project's wrangler.
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Check Cloudflare credentials
-        id: creds
-        shell: bash
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          if [ -n "${CLOUDFLARE_API_TOKEN:-}" ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Compute preview name
-        id: preview
-        if: steps.creds.outputs.available == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          ref="${{ github.event.pull_request.head.ref }}"
-          name="$(printf '%s' "$ref" \
-            | tr '[:upper:]' '[:lower:]' \
-            | sed -E 's/[^a-z0-9-]+/-/g; s/^-+//; s/-+$//' \
-            | cut -c1-50)"
-          echo "name=$name" >> "$GITHUB_OUTPUT"
-
-      - name: Delete preview
-        if: steps.creds.outputs.available == 'true'
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: pnpm exec wrangler preview delete --name "${{ steps.preview.outputs.name }}" --skip-confirmation
