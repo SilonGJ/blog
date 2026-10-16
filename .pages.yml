@@ -76,7 +76,9 @@ actions:
     ref: main
     confirm:
       title: 预览？
-      message: 将重新构建预览站点（约 20 秒）。
+      message: |-
+        将重新构建预览站点（约 20 秒）。
+        构建完成后打开：https://preview-blog.silongj.workers.dev
       button: 预览
 
   - name: deploy-production
@@ -85,5 +87,7 @@ actions:
     ref: main
     confirm:
       title: 部署？
-      message: 将把 main 分支（含你保存的内容）部署到生产环境。
+      message: |-
+        将把 main 分支（含你保存的内容）部署到生产环境。
+        部署完成后打开：https://www.zcx0217.qzz.io/
       button: 部署
