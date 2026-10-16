@@ -1,5 +1,5 @@
 ---
-title: Axisnow + Cloudflare，博客最后的分流
+title: Axisnow + Cloudflare，博客最后的分流1
 published: 2026-10-05
 description: 由于 Cloudflare 在国内的访问速度堪称玄学，所以尝试使用了 Axisnow + Cloudflare 的分流方式，很大程度提升了国内访问体验
 tags:
@@ -92,10 +92,10 @@ draft: false
 
 
 | 域名 | CDN | 优选的拨测节点 | 用途 |
-| ------------------ | ------------ | ---------- | ------------ |
+| ----------------------------------------------- | ------------ | ---------- | ------------ |
 | zcx0217.qzz.io | Axisnow 国内节点 | 阿里云 BGP | 301 重定向到 www |
-| www.zcx0217.qzz.io | Axisnow 国内节点 | 移动和阿里云 BGP | 国内访问 |
-| www.zcx0217.qzz.io | Cloudflare | 所有海外节点 | 国外访问 |
+| [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) | Axisnow 国内节点 | 移动和阿里云 BGP | 国内访问 |
+| [www.zcx0217.qzz.io](http://www.zcx0217.qzz.io) | Cloudflare | 所有海外节点 | 国外访问 |
 
 
 这次优选和分流还是挺有意思的，至少让我知道了，根域在 Cloudflare 下没法做基于来源的分流，且 Cloudflare 的 CNAME Flattening 有坑。
