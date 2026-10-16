@@ -7,7 +7,7 @@ import MainGridLayout from "../../layouts/MainGridLayout.astro";
 const linksPost = await getEntry("spec", "links");
 
 if (!linksPost) {
-    throw new Error("Links page content not found");
+	throw new Error("Links page content not found");
 }
 
 const { Content } = await render(linksPost);

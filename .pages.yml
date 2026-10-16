@@ -29,24 +29,24 @@ content:
           switcher: true
           media: archive
     actions:
-      - name: deploy-site-collection
-        label: 部署
-        scope: collection
-        workflow: deploy.yml
-        ref: current
-        confirm:
-          title: 部署站点？
-          message: 将触发 Cloudflare 部署流程。
-          button: 部署
-      - name: deploy-site-entry
-        label: 部署
+      - name: preview-posts-entry
+        label: 更新预览
         scope: entry
-        workflow: deploy.yml
+        workflow: preview.yml
         ref: current
         confirm:
-          title: 部署站点？
-          message: 将触发 Cloudflare 部署流程。
-          button: 部署
+          title: 更新预览？
+          message: 将重新构建当前分支的预览站点。
+          button: 更新预览
+      - name: preview-posts-collection
+        label: 更新预览
+        scope: collection
+        workflow: preview.yml
+        ref: current
+        confirm:
+          title: 更新预览？
+          message: 将重新构建当前分支的预览站点。
+          button: 更新预览
 
   - name: links
     label: 友链
@@ -66,24 +66,24 @@ content:
       - { name: icon, label: 图标, type: image, options: { media: friend } }
       - { name: description, label: 描述, type: text }
     actions:
-      - name: deploy-site-collection
-        label: 部署
-        scope: collection
-        workflow: deploy.yml
-        ref: current
-        confirm:
-          title: 部署站点？
-          message: 将触发 Cloudflare 部署流程。
-          button: 部署
-      - name: deploy-site-entry
-        label: 部署
+      - name: preview-links-entry
+        label: 更新预览
         scope: entry
-        workflow: deploy.yml
+        workflow: preview.yml
         ref: current
         confirm:
-          title: 部署站点？
-          message: 将触发 Cloudflare 部署流程。
-          button: 部署
+          title: 更新预览？
+          message: 将重新构建当前分支的预览站点。
+          button: 更新预览
+      - name: preview-links-collection
+        label: 更新预览
+        scope: collection
+        workflow: preview.yml
+        ref: current
+        confirm:
+          title: 更新预览？
+          message: 将重新构建当前分支的预览站点。
+          button: 更新预览
 
 media:
   - name: images
@@ -91,26 +91,42 @@ media:
     input: public/images
     output: /images
     categories: [image]
+    actions:
+      - name: preview-media-images
+        label: 更新预览
+        workflow: preview.yml
+        ref: current
 
   - name: archive
     label: 文章图
     input: public/images/archive
     output: /images/archive
     categories: [image]
+    actions:
+      - name: preview-media-archive
+        label: 更新预览
+        workflow: preview.yml
+        ref: current
 
   - name: friend
     label: 友链图
     input: public/images/friend
     output: /images/friend
     categories: [image]
+    actions:
+      - name: preview-media-friend
+        label: 更新预览
+        workflow: preview.yml
+        ref: current
 
 actions:
-  - name: deploy-site
-    label: 部署
-    scope: collection
+  # Always deploys `main` (the already-merged branch), never the branch currently
+  # open in Pages CMS. Prefer merging a pull request to publish changes.
+  - name: deploy-production
+    label: 部署到生产
     workflow: deploy.yml
-    ref: current
+    ref: main
     confirm:
-      title: 部署站点？
-      message: 将触发 Cloudflare 部署流程。
+      title: 部署到生产？
+      message: 将把 main 分支（已合并的内容）部署到生产环境。
       button: 部署

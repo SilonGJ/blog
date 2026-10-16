@@ -1,4 +1,4 @@
-name: 检查并删除垃圾评论
+name: Check and delete spam comments
 on:
   discussion_comment:
     types: [created]
@@ -7,7 +7,7 @@ jobs:
   check-akismet:
     runs-on: ubuntu-latest
     steps:
-      - name: 检查并删除垃圾评论
+      - name: Check with Akismet and delete spam
         env:
           AKISMET_API_KEY: ${{ secrets.AKISMET_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -20,12 +20,12 @@ jobs:
           REPO_NAME: ${{ github.event.repository.name }}
         run: |
           set -uo pipefail
-          echo "评论作者: ${COMMENT_AUTHOR}"
-          echo "讨论标题: ${DISCUSSION_TITLE}"
-          echo "评论链接: ${COMMENT_HTML_URL}"
-          echo "评论内容: ${COMMENT_BODY}"
+          echo "Comment author: ${COMMENT_AUTHOR}"
+          echo "Discussion title: ${DISCUSSION_TITLE}"
+          echo "Comment URL: ${COMMENT_HTML_URL}"
+          echo "Comment body: ${COMMENT_BODY}"
           
-          # 构建 Akismet API 请求
+          # Build the Akismet API request
           AKISMET_URL="https://${AKISMET_API_KEY}.rest.akismet.com/1.1/comment-check"
           AKISMET_RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}\nTOTAL_TIME:%{time_total}" \
             -X POST "$AKISMET_URL" \
@@ -39,16 +39,16 @@ jobs:
             --data-urlencode "comment_content=${COMMENT_BODY}" \
             2>/dev/null || echo "false")
           
-          # 解析响应
+          # Parse the response
           SPAM_CHECK_RESULT=$(echo "$AKISMET_RESPONSE" | head -n1)
           HTTP_CODE=$(echo "$AKISMET_RESPONSE" | grep "HTTP_CODE:" | cut -d: -f2)
           RESPONSE_TIME=$(echo "$AKISMET_RESPONSE" | grep "TOTAL_TIME:" | cut -d: -f2)
           
-          echo "垃圾评论检测结果: '${SPAM_CHECK_RESULT}'"
+          echo "Spam check result: '${SPAM_CHECK_RESULT}'"
           
-          # 检查是否为垃圾评论
+          # Check whether the comment is spam
           if [ "$SPAM_CHECK_RESULT" = "true" ]; then
-            echo "删除垃圾评论..."
+            echo "Deleting spam comment..."
             GRAPHQL_MUTATION='{
               "query": "mutation DeleteDiscussionComment($commentId: ID!) { deleteDiscussionComment(input: { id: $commentId }) { clientMutationId } }",
               "variables": {
@@ -67,34 +67,34 @@ jobs:
             DELETE_TIME=$(echo "$DELETE_RESPONSE" | grep "TOTAL_TIME:" | cut -d: -f2)
             DELETE_BODY=$(echo "$DELETE_RESPONSE" | head -n -2)
             
-            # 检查是否删除成功
+            # Check whether the deletion succeeded
             if [ "$DELETE_HTTP_CODE" = "200" ]; then
-              # 检查 GraphQL 响应中是否有错误
+              # Check for errors in the GraphQL response
               if echo "$DELETE_BODY" | grep -q '"errors"'; then
-                echo "GraphQL 错误: $DELETE_BODY" | jq '.errors' 2>/dev/null || echo "$DELETE_BODY"
+                echo "GraphQL error: $DELETE_BODY" | jq '.errors' 2>/dev/null || echo "$DELETE_BODY"
                 
-                # 分析常见错误
+                # Diagnose common errors
                 if echo "$DELETE_BODY" | grep -q "Resource not accessible"; then
-                  echo "资源不可访问 - 可能是权限问题或评论已被删除"
+                  echo "Resource not accessible - likely a permissions issue, or the comment was already deleted"
                 elif echo "$DELETE_BODY" | grep -q "Could not resolve to a node"; then
-                  echo "无法解析节点ID - Node ID 可能不正确"
+                  echo "Could not resolve to a node - the node ID may be incorrect"
                 else
-                  echo "其他 GraphQL 错误"
+                  echo "Other GraphQL error"
                 fi
               else
-                echo "垃圾评论已成功删除"
+                echo "Spam comment deleted successfully"
               fi
             else
-              echo "失败: HTTP 请求失败"
-              echo "TTP 状态码: ${DELETE_HTTP_CODE}"
-              echo "错误响应: ${DELETE_BODY}"
+              echo "Failure: HTTP request failed"
+              echo "HTTP status code: ${DELETE_HTTP_CODE}"
+              echo "Error response: ${DELETE_BODY}"
             fi
             
           elif [ "$SPAM_CHECK_RESULT" = "false" ]; then
-            echo "正常评论"
+            echo "Comment is not spam"
             
           else
-            echo "AKISMET 错误"
-            echo "原始响应: '${SPAM_CHECK_RESULT}'"
-            echo "HTTP 状态码: ${HTTP_CODE:-未知}"
+            echo "AKISMET error"
+            echo "Raw response: '${SPAM_CHECK_RESULT}'"
+            echo "HTTP status code: ${HTTP_CODE:-unknown}"
           fi
