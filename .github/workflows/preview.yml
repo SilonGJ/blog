@@ -46,10 +46,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Lint and type check only matter for code changes. Pull requests are the
+      # gate that protects `main`, so content-only previews (Pages CMS pushes to
+      # `cms` and manual re-runs) skip them and are ready ~8s sooner.
       - name: Lint
+        if: github.event_name == 'pull_request'
         run: pnpm exec biome ci ./src
 
       - name: Type check
+        if: github.event_name == 'pull_request'
         run: pnpm check
 
       - name: Build
