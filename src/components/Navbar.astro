@@ -72,38 +72,3 @@ let links: (NavBarLink & { presetIndex?: number })[] = navBarConfig.links.map(
         <DisplaySettings></DisplaySettings>
     </div>
 </div>
-
-{import.meta.env.PROD && <script is:inline define:vars={{scriptUrl: url('/pagefind/pagefind.js')}}>
-async function loadPagefind() {
-    try {
-        const pagefind = await import(scriptUrl);
-
-        await pagefind.options({
-            excerptLength: 20
-        });
-
-        window.pagefind = pagefind;
-
-        document.dispatchEvent(new CustomEvent('pagefindready'));
-
-        // Warm up the web worker + index in the background so the first
-        // search doesn't pay the one-time initialization cost (~700ms).
-        // Shares the same init promise as search(), so an early search
-        // just waits for the same work instead of being slower.
-        pagefind.preload("").catch(() => {});
-    } catch (error) {
-        console.error('Failed to load Pagefind:', error);
-        window.pagefind = {
-            search: () => Promise.resolve({ results: [] }),
-            options: () => Promise.resolve(),
-        };
-        document.dispatchEvent(new CustomEvent('pagefindloaderror'));
-    }
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadPagefind);
-} else {
-    loadPagefind();
-}
-</script>}

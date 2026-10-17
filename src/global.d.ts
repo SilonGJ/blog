@@ -4,13 +4,19 @@ declare global {
 	interface Window {
 		// type from '@swup/astro' is incorrect
 		swup: AstroIntegration;
-		pagefind: {
+		// Loaded on demand by Search.astro; its presence also means "ready"
+		pagefind?: {
 			search: (query: string) => Promise<{
 				results: Array<{
 					data: () => Promise<SearchResult>;
 				}>;
 			}>;
+			options: (options?: { excerptLength?: number }) => Promise<void>;
+			init: () => Promise<void>;
 		};
+		// One-time guard for Search.astro: swup re-executes inline scripts on
+		// every page view, which would otherwise stack duplicate listeners
+		__searchInitialized?: boolean;
 	}
 }
 

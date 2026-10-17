@@ -5,15 +5,20 @@ const searchPlaceholder = "搜索";
 ---
 
 <!-- search bar for desktop view -->
-<div id="search-bar" class="hidden lg:flex items-center h-11 mr-2 rounded-lg transition-[background-color]
+<div id="search-bar" class="relative hidden lg:flex items-center h-11 mr-2 rounded-lg transition-[background-color]
       bg-black/[0.04] hover:bg-black/[0.06] focus-within:bg-black/[0.06]
       dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10
 ">
     <Icon name="material-symbols:search" class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/75 dark:text-white/75"></Icon>
     <input id="search-input-desktop" placeholder={searchPlaceholder}
-           class="pl-10 text-sm bg-transparent outline-0
+           class="pl-10 pr-9 text-sm bg-transparent outline-0
          h-full w-40 text-black/75 dark:text-white/75"
     >
+    <button type="button" id="search-clear-desktop" aria-label="Clear Search"
+            class="search-clear absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 items-center justify-center rounded-lg
+                   transition text-black/40 hover:text-black/75 dark:text-white/40 dark:hover:text-white/75">
+        <Icon name="material-symbols:close-rounded" class="text-[1.125rem]"></Icon>
+    </button>
 </div>
 
 <!-- toggle btn for phone/tablet view -->
@@ -33,9 +38,14 @@ const searchPlaceholder = "搜索";
       ">
             <Icon name="material-symbols:search" class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/75 dark:text-white/75"></Icon>
             <input id="search-input-mobile" placeholder="搜索"
-                   class="pl-10 absolute inset-0 text-sm bg-transparent outline-0
+                   class="pl-10 pr-9 absolute inset-0 text-sm bg-transparent outline-0
                    text-black/75 dark:text-white/75"
             >
+            <button type="button" id="search-clear-mobile" aria-label="Clear Search"
+                    class="search-clear absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 items-center justify-center rounded-lg
+                           transition text-black/40 hover:text-black/75 dark:text-white/40 dark:hover:text-white/75">
+                <Icon name="material-symbols:close-rounded" class="text-[1.125rem]"></Icon>
+            </button>
         </div>
 
         <!-- search results -->
@@ -51,64 +61,118 @@ const searchPlaceholder = "搜索";
     max-height: calc(100vh - 100px);
     overflow-y: auto;
   }
+  .search-clear {
+    display: none;
+  }
+  .search-clear.show {
+    display: flex;
+  }
 </style>
 
 <script>
-const searchInputDesktop = document.getElementById("search-input-desktop") as HTMLInputElement;
-const searchInputMobile = document.getElementById("search-input-mobile") as HTMLInputElement;
-const searchPanel = document.getElementById("search-panel");
-const searchResults = document.getElementById("search-results");
+	import { url } from "../utils/url-utils";
 
-let keywordDesktop = "";
-let keywordMobile = "";
-let result: any[] = [];
-let pagefindLoaded = false;
-let initialized = false;
-let closeTimeout: ReturnType<typeof setTimeout> | null = null;
+	type PagefindModule = NonNullable<Window["pagefind"]>;
 
-const fakeResult = [
-	{
-		url: "/",
-		meta: {
-			title: "This Is a Fake Search Result",
-		},
-		excerpt:
-			"Because the search cannot work in the <mark>dev</mark> environment.",
-	},
-	{
-		url: "/",
-		meta: {
-			title: "If You Want to Test the Search",
-		},
-		excerpt: "Try running <mark>npm build && npm preview</mark> instead.",
-	},
-];
+	// Pagefind is loaded on first search intent instead of on page load, so the
+	// empty-page cost of the search engine is zero. The loader lives here because
+	// this component is its only consumer.
+	//
+	// swup re-executes every inline script in the document on each page view
+	// (@swup/scripts-plugin, selector `script:not([data-swup-ignore-script])`,
+	// scope = document), so the whole feature is guarded to run exactly once.
+	if (!window.__searchInitialized) {
+		window.__searchInitialized = true;
 
-function togglePanel() {
-	searchPanel?.classList.toggle("float-panel-closed");
-}
+		const searchBar = document.getElementById("search-bar");
+		const searchSwitch = document.getElementById("search-switch");
+		const searchInputDesktop = document.getElementById("search-input-desktop") as HTMLInputElement | null;
+		const searchInputMobile = document.getElementById("search-input-mobile") as HTMLInputElement | null;
+		const searchPanel = document.getElementById("search-panel");
+		const searchResults = document.getElementById("search-results");
+		const searchClearDesktop = document.getElementById("search-clear-desktop");
+		const searchClearMobile = document.getElementById("search-clear-mobile");
 
-function setPanelVisibility(show: boolean): void {
-	if (!searchPanel) return;
+		let keywordDesktop = "";
+		let keywordMobile = "";
+		let result: any[] = [];
+		let searchSeq = 0;
+		let closeTimeout: ReturnType<typeof setTimeout> | null = null;
 
-	if (show) {
-		searchPanel.classList.remove("float-panel-closed");
-	} else {
-		searchPanel.classList.add("float-panel-closed");
-	}
-}
+		const fakeResult = [
+			{
+				url: "/",
+				meta: {
+					title: "This Is a Fake Search Result",
+				},
+				excerpt:
+					"Because the search cannot work in the <mark>dev</mark> environment.",
+			},
+			{
+				url: "/",
+				meta: {
+					title: "If You Want to Test the Search",
+				},
+				excerpt: "Try running <mark>npm build && npm preview</mark> instead.",
+			},
+		];
 
-function renderResults() {
-	if (!searchResults) return;
+		/* ---------- pagefind: on-demand, memoized ---------- */
 
-	searchResults.innerHTML = "";
+		let pagefindPromise: Promise<PagefindModule> | null = null;
 
-	result.forEach((item) => {
-		const a = document.createElement("a");
-		a.href = item.url;
-		a.className = "transition first-of-type:mt-2 lg:first-of-type:mt-0 group block rounded-xl text-lg px-3 py-2 hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]";
+		function getPagefind(): Promise<PagefindModule> {
+			if (!pagefindPromise) {
+				pagefindPromise = import(/* @vite-ignore */ url("/pagefind/pagefind.js")).then(async (pf: PagefindModule) => {
+					await pf.options({
+						excerptLength: 20,
+					});
 
-		a.innerHTML = `
+					// Warm up the worker and the wasm module, but not the index,
+					// so the first real search only has to fetch its index chunks.
+					await pf.init();
+
+					// Only expose it once it is actually usable: search() treats
+					// this as the synchronous cold/warm check.
+					window.pagefind = pf;
+
+					return pf;
+				});
+			}
+
+			return pagefindPromise;
+		}
+
+		// There is no pagefind bundle in the dev environment.
+		const warmup = () => {
+			if (!import.meta.env.DEV) void getPagefind().catch(() => {});
+		};
+
+		function togglePanel() {
+			searchPanel?.classList.toggle("float-panel-closed");
+		}
+
+		function setPanelVisibility(show: boolean): void {
+			if (!searchPanel) return;
+
+			if (show) {
+				searchPanel.classList.remove("float-panel-closed");
+			} else {
+				searchPanel.classList.add("float-panel-closed");
+			}
+		}
+
+		function renderResults() {
+			if (!searchResults) return;
+
+			searchResults.innerHTML = "";
+
+			result.forEach((item) => {
+				const a = document.createElement("a");
+				a.href = item.url;
+				a.className = "transition first-of-type:mt-2 lg:first-of-type:mt-0 group block rounded-xl text-lg px-3 py-2 hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)]";
+
+				a.innerHTML = `
 			<div class="transition text-90 inline-flex font-bold group-hover:text-[var(--primary)]">
 				${item.meta.title}
 				<svg class="transition text-[0.75rem] translate-x-1 my-auto text-[var(--primary)]" viewBox="0 0 24 24" width="12" height="12">
@@ -120,97 +184,149 @@ function renderResults() {
 			</div>
 		`;
 
-		searchResults!.appendChild(a);
-	});
-}
+				searchResults!.appendChild(a);
+			});
+		}
 
-async function search(keyword: string): Promise<void> {
-	if (!keyword) {
-		setPanelVisibility(false);
-		if (closeTimeout) clearTimeout(closeTimeout);
-		closeTimeout = setTimeout(() => { result = []; renderResults(); }, 160);
-		return;
-	}
+		function renderMessage(text: string) {
+			if (!searchResults) return;
 
-	if (!initialized) {
-		return;
-	}
+			searchResults.innerHTML = `<div class="px-3 py-4 text-center text-sm text-50">${text}</div>`;
+		}
 
-	try {
-		let searchResultsData: any[] = [];
+		async function search(keyword: string): Promise<void> {
+			if (!keyword) {
+				setPanelVisibility(false);
+				if (closeTimeout) clearTimeout(closeTimeout);
+				closeTimeout = setTimeout(() => {
+					result = [];
+					renderResults();
+				}, 160);
+				return;
+			}
 
-		if (import.meta.env.PROD && pagefindLoaded && window.pagefind) {
-			const response = await window.pagefind.search(keyword);
-			searchResultsData = await Promise.all(
-				response.results.map((item) => item.data()),
-			);
-		} else if (import.meta.env.DEV) {
-			searchResultsData = fakeResult;
+			const seq = ++searchSeq;
+
+			// Open the panel right away, even before any result exists.
+			setPanelVisibility(true);
+
+			try {
+				let searchResultsData: any[] = [];
+
+				if (import.meta.env.DEV) {
+					searchResultsData = fakeResult;
+				} else {
+					let pf = window.pagefind;
+
+					if (!pf) {
+						renderMessage("加载中……");
+						pf = await getPagefind();
+					}
+
+					// The user may have typed something else while we were waiting.
+					if (seq !== searchSeq) return;
+
+					const response = await pf.search(keyword);
+					searchResultsData = await Promise.all(
+						response.results.map((item) => item.data()),
+					);
+				}
+
+				if (seq !== searchSeq) return;
+
+				if (closeTimeout) {
+					clearTimeout(closeTimeout);
+					closeTimeout = null;
+				}
+
+				result = searchResultsData;
+
+				if (searchResultsData.length > 0) {
+					renderResults();
+				} else {
+					renderMessage("没有找到相关内容");
+				}
+			} catch (error) {
+				if (seq !== searchSeq) return;
+
+				console.error("Search error:", error);
+				renderMessage("搜索暂时不可用，请稍后重试");
+			}
+		}
+
+		/* ---------- clear buttons ---------- */
+
+		function syncClearButtons() {
+			searchClearDesktop?.classList.toggle("show", keywordDesktop.length > 0);
+			searchClearMobile?.classList.toggle("show", keywordMobile.length > 0);
+		}
+
+		function bindClearButton(
+			button: HTMLElement | null,
+			input: HTMLInputElement | null,
+			clear: () => void,
+		) {
+			button?.addEventListener("click", () => {
+				if (input) input.value = "";
+				clear();
+				input?.focus();
+			});
+		}
+
+		bindClearButton(searchClearDesktop, searchInputDesktop, () => {
+			keywordDesktop = "";
+			syncClearButtons();
+			void search("");
+		});
+
+		bindClearButton(searchClearMobile, searchInputMobile, () => {
+			keywordMobile = "";
+			syncClearButtons();
+			void search("");
+		});
+
+		/* ---------- inputs ---------- */
+
+		if (searchInputDesktop) {
+			searchInputDesktop.addEventListener("input", (e) => {
+				keywordDesktop = (e.target as HTMLInputElement).value;
+				syncClearButtons();
+				void search(keywordDesktop);
+			});
+			searchInputDesktop.addEventListener("focus", () => {
+				// The user is reaching for the search box: start loading now.
+				warmup();
+				void search(keywordDesktop);
+			});
+		}
+
+		if (searchInputMobile) {
+			searchInputMobile.addEventListener("input", (e) => {
+				keywordMobile = (e.target as HTMLInputElement).value;
+				syncClearButtons();
+				void search(keywordMobile);
+			});
+		}
+
+		searchSwitch?.addEventListener("click", togglePanel);
+
+		/* ---------- load intents ---------- */
+
+		searchBar?.addEventListener("pointerenter", warmup, { once: true });
+		searchSwitch?.addEventListener("pointerdown", warmup, { once: true });
+
+		/* ---------- keep the panel closed across page views ---------- */
+
+		const closePanelOnNavigation = () => setPanelVisibility(false);
+
+		const setupSwup = () => window.swup.hooks.on("visit:start", closePanelOnNavigation);
+
+		if (window?.swup?.hooks) {
+			setupSwup();
 		} else {
-			searchResultsData = [];
-			console.error("Pagefind is not available in production environment.");
+			document.addEventListener("swup:enable", setupSwup);
 		}
 
-		if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
-		result = searchResultsData;
-		renderResults();
-		setPanelVisibility(result.length > 0);
-	} catch (error) {
-		console.error("Search error:", error);
-		setPanelVisibility(false);
-		if (closeTimeout) clearTimeout(closeTimeout);
-		closeTimeout = setTimeout(() => { result = []; renderResults(); }, 160);
+		syncClearButtons();
 	}
-}
-
-function initializeSearch() {
-	initialized = true;
-	pagefindLoaded =
-		typeof window !== "undefined" &&
-		!!window.pagefind &&
-		typeof window.pagefind.search === "function";
-	if (keywordDesktop) search(keywordDesktop);
-	if (keywordMobile) search(keywordMobile);
-}
-
-// Desktop input events
-if (searchInputDesktop) {
-	searchInputDesktop.addEventListener("input", (e) => {
-		keywordDesktop = (e.target as HTMLInputElement).value;
-		search(keywordDesktop);
-	});
-	searchInputDesktop.addEventListener("focus", () => {
-		search(keywordDesktop);
-	});
-}
-
-// Mobile input events
-if (searchInputMobile) {
-	searchInputMobile.addEventListener("input", (e) => {
-		keywordMobile = (e.target as HTMLInputElement).value;
-		search(keywordMobile);
-	});
-}
-
-// Toggle panel
-document.getElementById("search-switch")?.addEventListener("click", togglePanel);
-
-// Initialize
-if (import.meta.env.DEV) {
-	initializeSearch();
-} else {
-	document.addEventListener("pagefindready", () => {
-		initializeSearch();
-	});
-	document.addEventListener("pagefindloaderror", () => {
-		initializeSearch();
-	});
-
-	// Fallback in case events are not caught or pagefind is already loaded by the time this script runs
-	setTimeout(() => {
-		if (!initialized) {
-			initializeSearch();
-		}
-	}, 2000);
-}
 </script>
