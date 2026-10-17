@@ -39,86 +39,62 @@ const {
             评论
         </div>
     </h2>
-    <div id="giscus-slot"></div>
+    <giscus-widget
+        id="giscus-comments"
+        repo={repo}
+        repoid={repoId}
+        category={category}
+        categoryid={categoryId}
+        mapping={mapping}
+        strict={strict}
+        reactionsenabled={reactionsEnabled}
+        emitmetadata={emitMetadata}
+        inputposition={inputPosition}
+        lang={lang}
+        loading="eager"
+    ></giscus-widget>
+    <script
+        is:inline
+        set:html={`(function () {
+  // Runs during HTML parsing (and is re-run by swup after every page
+  // transition), i.e. before the widget custom element is upgraded and renders
+  // its iframe. Seeding the attribute here is what prevents a flash of the
+  // light theme for dark-mode visitors.
+  var el = document.getElementById('giscus-comments');
+  if (!el) return;
+  el.setAttribute(
+    'theme',
+    document.documentElement.classList.contains('dark')
+      ? 'dark_tritanopia'
+      : 'light_tritanopia'
+  );
+})();`}
+    ></script>
 </div>
 
-<script
-    is:inline
-    set:html={`(function () {
-  var container = document.getElementById('giscus-slot');
-  if (!container) return;
+<script>
+import "giscus";
+import type { GiscusWidget } from "giscus";
 
-  function getThemeUrl() {
-    return document.documentElement.classList.contains('dark')
-      ? '/themes/dark_tritanopia.css'
-      : '/themes/light_tritanopia.css';
-  }
+function themeName(): "dark_tritanopia" | "light_tritanopia" {
+	return document.documentElement.classList.contains("dark")
+		? "dark_tritanopia"
+		: "light_tritanopia";
+}
 
-  function syncTheme() {
-    var themeUrl = getThemeUrl();
-    var iframe = document.querySelector('iframe.giscus-frame');
-    if (iframe && iframe.contentWindow) {
-      // giscus applies the new theme CSS in place (no iframe reload)
-      iframe.contentWindow.postMessage(
-        { giscus: { setConfig: { theme: themeUrl } } },
-        'https://giscus.app'
-      );
-      return;
-    }
-    // iframe not created yet: update the pending script so client.js
-    // picks up the current theme when it eventually executes
-    var pending = container.querySelector('script[data-repo]');
-    if (pending) pending.setAttribute('data-theme', themeUrl);
-  }
+// The widget reflects the `theme` property into its iframe via postMessage and
+// re-sends the whole config once the iframe has loaded, so it handles the
+// "iframe not ready yet" race on its own — no timers needed here.
+function syncGiscusTheme(): void {
+	const el = document.querySelector<GiscusWidget>("giscus-widget");
+	if (el && el.theme !== themeName()) {
+		el.theme = themeName();
+	}
+}
 
-  var script = document.createElement('script');
-  script.src = 'https://giscus.app/client.js';
-  script.setAttribute('data-repo', ${JSON.stringify(repo)});
-  script.setAttribute('data-repo-id', ${JSON.stringify(repoId)});
-  script.setAttribute('data-category', ${JSON.stringify(category)});
-  script.setAttribute('data-category-id', ${JSON.stringify(categoryId)});
-  script.setAttribute('data-mapping', ${JSON.stringify(mapping)});
-  script.setAttribute('data-strict', ${JSON.stringify(strict)});
-  script.setAttribute('data-reactions-enabled', ${JSON.stringify(reactionsEnabled)});
-  script.setAttribute('data-emit-metadata', ${JSON.stringify(emitMetadata)});
-  script.setAttribute('data-input-position', ${JSON.stringify(inputPosition)});
-  script.setAttribute('data-theme', getThemeUrl());
-  script.setAttribute('data-lang', ${JSON.stringify(lang)});
-  script.crossOrigin = 'anonymous';
-  script.async = true;
-
-  container.appendChild(script);
-
-  // Re-apply the current theme once the giscus iframe has finished loading
-  // (covers theme toggles made while the iframe was still loading). The
-  // widget registers its message listener on mount, so sync shortly after
-  // load and once more to avoid posting the message too early.
-  function syncAfterLoad() {
-    setTimeout(syncTheme, 300);
-    setTimeout(syncTheme, 1000);
-  }
-  if (window.__giscusIframeTimer) {
-    clearInterval(window.__giscusIframeTimer);
-  }
-  window.__giscusIframeTimer = setInterval(function () {
-    var iframe = document.querySelector('iframe.giscus-frame');
-    if (!iframe) return;
-    clearInterval(window.__giscusIframeTimer);
-    window.__giscusIframeTimer = null;
-    iframe.addEventListener('load', syncAfterLoad);
-    syncAfterLoad();
-  }, 200);
-
-  // The inline script is re-executed by swup on page transitions; make sure
-  // only one observer stays alive.
-  if (window.__giscusThemeObserver) {
-    window.__giscusThemeObserver.disconnect();
-  }
-  var observer = new MutationObserver(syncTheme);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class'],
-  });
-  window.__giscusThemeObserver = observer;
-})();`}
-></script>
+syncGiscusTheme();
+new MutationObserver(syncGiscusTheme).observe(document.documentElement, {
+	attributes: true,
+	attributeFilter: ["class"],
+});
+</script>
