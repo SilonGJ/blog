@@ -3,7 +3,7 @@ name: Preview
 # Manual only. Pages CMS saves and media uploads happen many times per session,
 # so nothing previews automatically: the `preview` action in Pages CMS dispatches
 # this workflow on demand. The preview worker name is fixed, which keeps its URL
-# stable (https://preview-blog.silongj.workers.dev, bookmarkable) and means only
+# stable and means only
 # the assets that changed since the last preview have to be uploaded.
 # Production deployment lives in deploy.yml.
 on:
@@ -50,7 +50,7 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=6144
 
       # `wrangler preview` needs the (empty) `previews` table in wrangler.toml.
-      # `--name` is fixed so the URL stays https://preview-blog.silongj.workers.dev.
+      # `--name` is fixed so the preview URL stays stable.
       # It returns both a Preview URL (always the latest build) and a Deployment
       # URL (unique per build, never changes).
       - name: Deploy preview

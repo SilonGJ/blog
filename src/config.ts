@@ -71,7 +71,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "Email",
 			icon: "simple-icons:maildotru",
-			url: "mailto:blog@silongj.cc.cd",
+			url: "mailto:SilonGJ-0217@outlook.com",
 		},
 		{
 			name: "NameMC",
@@ -93,7 +93,7 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	theme: "github-dark",
 };
 
-export const siteUrl = "https://www.zcx0217.qzz.io/";
+export const siteUrl = "https://silongj.us.ci/";
 
 export const codeFontFamily =
 	"ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
