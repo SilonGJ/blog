@@ -18,6 +18,7 @@ import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
 import { expressiveCodeConfig, siteUrl, codeFontFamily } from "./src/config.ts";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
+import { postSlugsPlugin } from "./src/plugins/post-slugs.mjs";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
@@ -176,7 +177,7 @@ export default defineConfig({
 		}),
 	},
 	vite: {
-		plugins: [tailwindcss()],
+		plugins: [postSlugsPlugin(), tailwindcss()],
 		build: {
 			rollupOptions: {
 				onwarn(warning, warn) {

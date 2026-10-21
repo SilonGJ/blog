@@ -23,7 +23,12 @@ export async function routeViews(request: Request, env: Env): Promise<Response> 
 
 		const singleMatch = normalizedPath.match(SINGLE_ROUTE);
 		if (singleMatch) {
-			const slug = decodeURIComponent(singleMatch[1]);
+			let slug: string;
+			try {
+				slug = decodeURIComponent(singleMatch[1]);
+			} catch {
+				return jsonError("Invalid slug", 400);
+			}
 			if (request.method === "GET") return await getViews(slug, env.D1);
 			if (request.method === "POST") return await incrementViews(slug, request, env);
 		}

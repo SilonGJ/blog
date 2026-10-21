@@ -66,6 +66,7 @@
     "@types/hast": "^3.0.5",
     "@types/mdast": "^4.0.4",
     "@types/sanitize-html": "^2.16.2",
+    "github-slugger": "^2.0.0",
     "postcss-import": "^17.0.0",
     "postcss-nesting": "^14.0.1",
     "wrangler": "^4.151.3"
