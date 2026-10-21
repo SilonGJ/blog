@@ -7,6 +7,8 @@ import { PAGE_SIZE } from "../constants/constants";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 import { getSortedPosts } from "../utils/content-utils";
 
+export const prerender = true;
+
 export const getStaticPaths = (async ({ paginate }) => {
 	const allBlogPosts = await getSortedPosts();
 	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
@@ -95,7 +97,7 @@ const organizationJsonLd = {
             const uncached = allSlugs.filter(s => cache === null || !(s in cache));
             if (uncached.length === 0) return;
 
-            const res = await fetch('/api/views/batch', {
+            const res = await fetch('/api/views/batch/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ slugs: uncached })

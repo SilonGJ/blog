@@ -13,6 +13,8 @@ import PostMetadata from "../../components/PostMeta.astro";
 import { licenseConfig, profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
 	return blogEntries.map((entry) => ({
@@ -214,7 +216,7 @@ const jsonLd = {
                 }
             }
 
-            const res = await fetch('/api/views/' + encodeURIComponent(slug), { method: 'POST' });
+            const res = await fetch('/api/views/' + encodeURIComponent(slug) + '/', { method: 'POST' });
             if (!res.ok) return;
             const { count } = await res.json();
 

@@ -1,3 +1,4 @@
+import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
@@ -30,11 +31,16 @@ import rehypeLinksNewTab from "./src/plugins/rehype-links-new-tab.mjs";
 export default defineConfig({
 	site: siteUrl,
 	base: "/",
+	output: "server",
 	trailingSlash: "always",
 	compressHTML: true,
 	server: {
 		host: true
 	},
+	adapter: cloudflare({
+		imageService: "compile",
+	}),
+	session: false,
 	integrations: [
 		swup({
 			theme: false,

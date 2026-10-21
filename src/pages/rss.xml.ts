@@ -8,6 +8,8 @@ import { siteConfig, siteUrl } from "@/config";
 
 const parser = new MarkdownIt();
 
+export const prerender = true;
+
 function stripInvalidXmlChars(str: string): string {
 	return str.replace(
 		// biome-ignore lint/suspicious/noControlCharactersInRegex: https://www.w3.org/TR/xml/#charsets

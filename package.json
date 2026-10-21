@@ -8,6 +8,8 @@
     "check": "astro check",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
+    "cf-typegen": "wrangler types src/worker-configuration.d.ts",
+    "db:local": "wrangler d1 execute D1 --local --file=./d1/schema.sql",
     "astro": "astro",
     "type-check": "tsc --noEmit",
     "format": "biome format --write ./src",
@@ -16,6 +18,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/cloudflare": "^14.4.1",
     "@astrojs/markdown-remark": "^7.3.1",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
@@ -30,7 +33,7 @@
     "@swup/astro": "^1.8.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.5",
+    "astro": "^7.4.1",
     "astro-expressive-code": "^0.44.2",
     "astro-icon": "^1.2.0",
     "giscus": "^1.6.0",
@@ -65,7 +68,7 @@
     "@types/sanitize-html": "^2.16.2",
     "postcss-import": "^17.0.0",
     "postcss-nesting": "^14.0.1",
-    "wrangler": "^4.146.0"
+    "wrangler": "^4.151.3"
   },
   "packageManager": "pnpm@12.3.4"
 }

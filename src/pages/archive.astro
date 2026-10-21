@@ -3,6 +3,8 @@ import ArchivePanel from "@components/ArchivePanel.astro";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getSortedPostsList } from "../utils/content-utils";
 
+export const prerender = true;
+
 const sortedPostsList = await getSortedPostsList();
 ---
 
