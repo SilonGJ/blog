@@ -19,7 +19,6 @@ image: /images/archive/cf.png
 ## 部署
 
 - **Cloudflare Pages** — 前端托管
-- **Cloudflare D1** - 浏览量计数
 
 ## 其他
 

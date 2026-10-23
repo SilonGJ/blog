@@ -4,12 +4,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "start": "astro dev",
     "check": "astro check",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
-    "cf-typegen": "wrangler types src/worker-configuration.d.ts",
-    "db:local": "wrangler d1 execute D1 --local --file=./d1/schema.sql",
+    "deploy:site": "wrangler deploy -c wrangler.jsonc",
     "astro": "astro",
     "type-check": "tsc --noEmit",
     "format": "biome format --write ./src",
@@ -18,7 +16,6 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
-    "@astrojs/cloudflare": "^14.4.1",
     "@astrojs/markdown-remark": "^7.3.1",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",

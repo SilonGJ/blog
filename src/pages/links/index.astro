@@ -4,8 +4,6 @@ import Giscus from "@components/Giscus.astro";
 import Markdown from "@components/misc/Markdown.astro";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
 
-export const prerender = true;
-
 const linksPost = await getEntry("spec", "links");
 
 if (!linksPost) {

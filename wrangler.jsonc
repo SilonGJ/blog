@@ -1,37 +1,10 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "blog",
-	"main": "./src/worker.ts",
 	"compatibility_date": "2026-09-07",
-	"compatibility_flags": ["nodejs_compat"],
 	"assets": {
 		"directory": "./dist",
-		"binding": "ASSETS",
 		"not_found_handling": "404-page"
-	},
-	"d1_databases": [
-		{
-			"binding": "D1",
-			"database_id": "9346117a-74df-4af3-bd52-7ad22df67ec6"
-		}
-	],
-	"triggers": {
-		"crons": ["0 3 * * *"]
-	},
-	"observability": {
-		"enabled": true,
-		"head_sampling_rate": 1,
-		"logs": {
-			"enabled": true,
-			"head_sampling_rate": 1,
-			"invocation_logs": true,
-			"persist": true
-		},
-		"traces": {
-			"enabled": false,
-			"head_sampling_rate": 1,
-			"persist": true
-		}
 	},
 	"previews": {}
 }

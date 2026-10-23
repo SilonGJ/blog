@@ -13,7 +13,7 @@
 
 ## 项目概述
 
-基于 [Astro](https://astro.build/) 的静态博客，使用 fuwari 主题并进行深度魔改。部署在 Cloudflare Worker。
+基于 [Astro](https://astro.build/) 的静态博客，使用 fuwari 主题并进行深度魔改。部署在 Cloudflare Workers。
 
 包管理器：**pnpm**（`preinstall` 脚本禁止使用 npm/yarn）。
 

@@ -13,8 +13,6 @@ import PostMetadata from "../../components/PostMeta.astro";
 import { licenseConfig, profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 
-export const prerender = true;
-
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
 	return blogEntries.map((entry) => ({
@@ -88,15 +86,6 @@ const jsonLd = {
                         {remarkPluginFrontmatter.minutes} 分钟
                     </div>
                 </div>
-                <div class="flex flex-row items-center">
-                    <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
-                        <Icon name="material-symbols:visibility-outline-rounded"></Icon>
-                    </div>
-                    <div class="text-sm">
-                        <span class="view-count" data-slug={entry.id}>--</span>
-                        次阅读
-                    </div>
-                </div>
             </div>
 
             <!-- title -->
@@ -166,68 +155,5 @@ const jsonLd = {
     <div class="max-w-4xl mx-auto mt-6 max-md:mt-4">
         <Giscus />
     </div>
-
-    <script is:inline>
-    (async () => {
-        const el = document.querySelector('.view-count[data-slug]');
-        if (!el) return;
-        const slug = el.dataset.slug;
-
-        const CACHE_KEY = 'views_data';
-        const CACHE_TS_KEY = 'views_ts';
-        const VIEWED_KEY = 'viewed_set';
-        const CACHE_TTL = 30 * 60 * 1000;
-
-        function getCache() {
-            const ts = Number(localStorage.getItem(CACHE_TS_KEY) || 0);
-            if (Date.now() - ts > CACHE_TTL) return null;
-            const raw = localStorage.getItem(CACHE_KEY);
-            if (!raw) return null;
-            try { return JSON.parse(raw); } catch { return null; }
-        }
-
-        function setCache(data) {
-            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-            localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
-        }
-
-        function getViewedSet() {
-            const ts = Number(localStorage.getItem(CACHE_TS_KEY) || 0);
-            if (Date.now() - ts > CACHE_TTL) return [];
-            try { return JSON.parse(localStorage.getItem(VIEWED_KEY) || '[]'); } catch { return []; }
-        }
-
-        function addViewed(s) {
-            const viewed = getViewedSet();
-            if (!viewed.includes(s)) {
-                viewed.push(s);
-                localStorage.setItem(VIEWED_KEY, JSON.stringify(viewed));
-            }
-        }
-
-        try {
-            const viewed = getViewedSet();
-
-            if (viewed.includes(slug)) {
-                const cache = getCache();
-                if (cache && slug in cache) {
-                    el.textContent = cache[slug].toLocaleString();
-                    return;
-                }
-            }
-
-            const res = await fetch('/api/views/' + encodeURIComponent(slug) + '/', { method: 'POST' });
-            if (!res.ok) return;
-            const { count } = await res.json();
-
-            el.textContent = count.toLocaleString();
-
-            const updated = getCache() ?? {};
-            updated[slug] = count;
-            setCache(updated);
-            addViewed(slug);
-        } catch {}
-    })();
-    </script>
 
 </MainGridLayout>

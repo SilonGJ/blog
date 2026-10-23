@@ -1,4 +1,3 @@
-import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
@@ -18,7 +17,6 @@ import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
 import { expressiveCodeConfig, siteUrl, codeFontFamily } from "./src/config.ts";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
-import { postSlugsPlugin } from "./src/plugins/post-slugs.mjs";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
@@ -32,16 +30,12 @@ import rehypeLinksNewTab from "./src/plugins/rehype-links-new-tab.mjs";
 export default defineConfig({
 	site: siteUrl,
 	base: "/",
-	output: "server",
+	output: "static",
 	trailingSlash: "always",
 	compressHTML: true,
 	server: {
 		host: true
 	},
-	adapter: cloudflare({
-		imageService: "compile",
-	}),
-	session: false,
 	integrations: [
 		swup({
 			theme: false,
@@ -177,7 +171,7 @@ export default defineConfig({
 		}),
 	},
 	vite: {
-		plugins: [postSlugsPlugin(), tailwindcss()],
+		plugins: [tailwindcss()],
 		build: {
 			rollupOptions: {
 				onwarn(warning, warn) {
