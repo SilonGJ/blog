@@ -1,4 +1,4 @@
 {
   "defaultCommentOrder": "newest",
-  "origins": ["https://silongj.us.ci"]
+  "origins": ["https://silongj.us.ci", "http://192.168.1.220:4321", "http://localhost:4321", "http://127.0.0.1:4321"]
 }
