@@ -1,0 +1,15 @@
+/* Sharp-corner overrides shared by all no-rounded variants. */
+main {
+    --giscus-radius-card: 0;
+    --giscus-radius-control: 0;
+}
+
+*,
+*::before,
+*::after {
+    border-radius: 0 !important;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0 !important;
+}

@@ -1,4 +1,29 @@
 ---
+import { siteUrl } from "@/config";
+const GISCUS_THEME_BASE = new URL("giscus", siteUrl).href;
+
+// All visual rules live in the CSS files below; this map only selects which
+// pre-written file the iframe should load for the current blog preferences.
+const GISCUS_THEMES = {
+	"rounded-anim": {
+		light: `${GISCUS_THEME_BASE}/light.css`,
+		dark: `${GISCUS_THEME_BASE}/dark.css`,
+	},
+	"rounded-noanim": {
+		light: `${GISCUS_THEME_BASE}/light-noanim.css`,
+		dark: `${GISCUS_THEME_BASE}/dark-noanim.css`,
+	},
+	"norounded-anim": {
+		light: `${GISCUS_THEME_BASE}/light-norounded.css`,
+		dark: `${GISCUS_THEME_BASE}/dark-norounded.css`,
+	},
+	"norounded-noanim": {
+		light: `${GISCUS_THEME_BASE}/light-norounded-noanim.css`,
+		dark: `${GISCUS_THEME_BASE}/dark-norounded-noanim.css`,
+	},
+} as const;
+
+const GISCUS_THEME_MAP = JSON.stringify(GISCUS_THEMES);
 
 export interface Props {
 	repo?: string;
@@ -50,6 +75,8 @@ const {
         reactionsenabled={reactionsEnabled}
         emitmetadata={emitMetadata}
         inputposition={inputPosition}
+        theme={GISCUS_THEMES["rounded-anim"].light}
+        data-theme-map={GISCUS_THEME_MAP}
         lang={lang}
         loading="eager"
     ></giscus-widget>
@@ -62,12 +89,16 @@ const {
   // light theme for dark-mode visitors.
   var el = document.getElementById('giscus-comments');
   if (!el) return;
-  el.setAttribute(
-    'theme',
-    document.documentElement.classList.contains('dark')
-      ? 'dark_tritanopia'
-      : 'light_tritanopia'
-  );
+  var map = {};
+  try {
+    map = JSON.parse(el.getAttribute('data-theme-map') || '{}');
+  } catch {}
+  var root = document.documentElement;
+  var corners = root.classList.contains('no-rounded') ? 'norounded' : 'rounded';
+  var motion = root.classList.contains('no-animations') ? 'noanim' : 'anim';
+  var mode = root.classList.contains('dark') ? 'dark' : 'light';
+  var pair = map[corners + '-' + motion];
+  if (pair && pair[mode]) el.setAttribute('theme', pair[mode]);
 })();`}
     ></script>
 </div>
@@ -76,19 +107,41 @@ const {
 import "giscus";
 import type { GiscusWidget } from "giscus";
 
-function themeName(): "dark_tritanopia" | "light_tritanopia" {
-	return document.documentElement.classList.contains("dark")
-		? "dark_tritanopia"
-		: "light_tritanopia";
+type GiscusThemeMap = Record<string, { light: string; dark: string }>;
+
+function themeName(el: GiscusWidget): string {
+	const raw = el.getAttribute("data-theme-map");
+	if (!raw) return "";
+
+	let map: GiscusThemeMap;
+	try {
+		map = JSON.parse(raw) as GiscusThemeMap;
+	} catch {
+		return "";
+	}
+
+	const root = document.documentElement;
+	const corners = root.classList.contains("no-rounded")
+		? "norounded"
+		: "rounded";
+	const motion = root.classList.contains("no-animations")
+		? "noanim"
+		: "anim";
+	const mode = root.classList.contains("dark") ? "dark" : "light";
+
+	return map[`${corners}-${motion}`]?.[mode] ?? "";
 }
 
 // The widget reflects the `theme` property into its iframe via postMessage and
 // re-sends the whole config once the iframe has loaded, so it handles the
 // "iframe not ready yet" race on its own — no timers needed here.
 function syncGiscusTheme(): void {
-	const el = document.querySelector<GiscusWidget>("giscus-widget");
-	if (el && el.theme !== themeName()) {
-		el.theme = themeName();
+	const el = document.querySelector<GiscusWidget>("#giscus-comments");
+	if (!el) return;
+
+	const theme = themeName(el);
+	if (theme && el.theme !== theme) {
+		el.theme = theme;
 	}
 }
 

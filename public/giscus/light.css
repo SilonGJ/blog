@@ -1,0 +1,544 @@
+/* giscus-hue: 260 */
+/*
+ * Static build of the Yukari0201/Yukari0201.github.io giscus theme.
+ * Source: src/styles/giscus-light.css + src/styles/giscus-base.css
+ * Upstream: astro branch, commit 1ea16f558c9f5df8322fb3383cbed9b334b2866f
+ * (byte-identical to hikaru-im/akari).
+ *
+ * Hue is hardcoded to 260; no runtime hue variable, no calc, no data URI or JS.
+ * Border-radius values use CSS variables so the sharp-corner variants work.
+ */
+
+main {
+    --giscus-radius-card: 1rem;
+    --giscus-radius-control: 0.5rem;
+
+    --color-prettylights-syntax-comment: oklch(0.65 0.03 260);
+    --color-prettylights-syntax-constant: oklch(0.60 0.12 290);
+    --color-prettylights-syntax-entity: oklch(0.65 0.14 320);
+    --color-prettylights-syntax-storage-modifier-import: oklch(0.50 0.05 260);
+    --color-prettylights-syntax-entity-tag: oklch(0.60 0.14 20);
+    --color-prettylights-syntax-keyword: oklch(0.65 0.14 200);
+    --color-prettylights-syntax-string: oklch(0.60 0.12 80);
+    --color-prettylights-syntax-variable: oklch(0.65 0.12 230);
+    --color-prettylights-syntax-brackethighlighter-unmatched: oklch(0.60 0.18 0);
+    --color-prettylights-syntax-invalid-illegal-text: white;
+    --color-prettylights-syntax-invalid-illegal-bg: oklch(0.60 0.18 0);
+    --color-prettylights-syntax-carriage-return-text: white;
+    --color-prettylights-syntax-carriage-return-bg: oklch(0.60 0.18 0);
+    --color-prettylights-syntax-string-regexp: oklch(0.60 0.14 20);
+    --color-prettylights-syntax-markup-list: oklch(0.60 0.10 300);
+    --color-prettylights-syntax-markup-heading: oklch(0.60 0.12 290);
+    --color-prettylights-syntax-markup-italic: oklch(0.50 0.05 260);
+    --color-prettylights-syntax-markup-bold: oklch(0.45 0.05 260);
+    --color-prettylights-syntax-markup-deleted-text: oklch(0.60 0.18 0);
+    --color-prettylights-syntax-markup-deleted-bg: oklch(0.95 0.03 0);
+    --color-prettylights-syntax-markup-inserted-text: oklch(0.60 0.14 20);
+    --color-prettylights-syntax-markup-inserted-bg: oklch(0.95 0.03 20);
+    --color-prettylights-syntax-markup-changed-text: oklch(0.65 0.12 230);
+    --color-prettylights-syntax-markup-changed-bg: oklch(0.95 0.03 230);
+    --color-prettylights-syntax-markup-ignored-text: oklch(0.90 0.02 260);
+    --color-prettylights-syntax-markup-ignored-bg: oklch(0.60 0.12 290);
+    --color-prettylights-syntax-meta-diff-range: oklch(0.65 0.14 320);
+    --color-prettylights-syntax-brackethighlighter-angle: oklch(0.60 0.03 260);
+    --color-prettylights-syntax-sublimelinter-gutter-mark: oklch(0.70 0.03 260);
+    --color-prettylights-syntax-constant-other-reference-link: oklch(0.60 0.12 80);
+
+    --color-btn-text: oklch(0.25 0.02 260);
+    --color-btn-bg: oklch(0.95 0.025 260);
+    --color-btn-border: rgba(0, 0, 0, 0.1);
+    --color-btn-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+    --color-btn-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    --color-btn-hover-bg: oklch(0.9 0.05 260);
+    --color-btn-hover-border: rgba(0, 0, 0, 0.1);
+    --color-btn-active-bg: oklch(0.85 0.08 260);
+    --color-btn-active-border: rgba(0, 0, 0, 0.1);
+    --color-btn-selected-bg: oklch(0.85 0.08 260);
+
+    --color-btn-primary-text: white;
+    --color-btn-primary-bg: oklch(0.70 0.14 260);
+    --color-btn-primary-border: rgba(0, 0, 0, 0.1);
+    --color-btn-primary-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    --color-btn-primary-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    --color-btn-primary-hover-bg: oklch(0.65 0.16 260);
+    --color-btn-primary-hover-border: rgba(0, 0, 0, 0.1);
+    --color-btn-primary-selected-bg: oklch(0.60 0.18 260);
+    --color-btn-primary-selected-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2);
+    --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.8);
+    --color-btn-primary-disabled-bg: oklch(0.80 0.08 260);
+    --color-btn-primary-disabled-border: rgba(0, 0, 0, 0.1);
+
+    --color-action-list-item-default-hover-bg: oklch(0.95 0.025 260);
+    --color-segmented-control-bg: oklch(0.95 0.025 260);
+    --color-segmented-control-button-bg: white;
+    --color-segmented-control-button-selected-border: oklch(0.70 0.14 260);
+
+    --color-fg-default: oklch(0.25 0.02 260);
+    --color-fg-muted: oklch(0.60 0.03 260);
+    --color-fg-subtle: oklch(0.65 0.03 260);
+
+    --color-canvas-default: white;
+    --color-canvas-overlay: white;
+    --color-canvas-inset: rgba(0, 0, 0, 0.03);
+    --color-canvas-subtle: rgba(0, 0, 0, 0.05);
+
+    --color-border-default: rgba(0, 0, 0, 0.1);
+    --color-border-muted: rgba(0, 0, 0, 0.08);
+    --color-neutral-muted: rgba(0, 0, 0, 0.1);
+
+    --color-accent-fg: oklch(0.70 0.14 260);
+    --color-accent-emphasis: oklch(0.70 0.14 260);
+    --color-accent-muted: oklch(0.75 0.08 260 / 0.4);
+    --color-accent-subtle: oklch(0.95 0.025 260);
+
+    --giscus-link-underline: oklch(0.93 0.04 260);
+    --giscus-link-bg-active: oklch(0.98 0.01 260);
+
+    --color-success-fg: oklch(0.7 0.14 180);
+    --color-attention-fg: oklch(0.7 0.14 60);
+    --color-attention-muted: oklch(0.75 0.10 60 / 0.4);
+    --color-attention-subtle: oklch(0.95 0.025 60);
+    --color-danger-fg: oklch(0.6 0.2 25);
+    --color-danger-muted: oklch(0.75 0.15 0 / 0.4);
+    --color-danger-subtle: oklch(0.95 0.025 0);
+
+    --color-primer-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    --color-scale-gray-1: oklch(0.95 0.025 260);
+    --color-scale-blue-1: oklch(0.90 0.05 260);
+
+    --color-social-reaction-bg-hover: oklch(0.9 0.05 260);
+    --color-social-reaction-bg-reacted-hover: oklch(0.85 0.07 260);
+}
+
+.gsc-main {
+    gap: 1rem !important;
+}
+
+/* Text that changes colour on hover fades instead of switching abruptly. */
+.link-primary,
+.link-secondary {
+    transition: color 0.25s ease;
+}
+
+/*
+ * Links inside comment bodies copy the article page: a dashed underline that
+ * disappears on hover, plus the same expanding background behind the label.
+ */
+.gsc-comment-content.markdown a:not(.anchor),
+.gsc-reply-content.markdown a:not(.anchor) {
+    position: relative;
+    z-index: 0;
+    display: inline-block;
+    margin: -0.25rem;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    background: none;
+    color: var(--color-accent-emphasis) !important;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: var(--giscus-link-underline);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    transition:
+        color 0.15s ease,
+        text-decoration-color 0.15s ease;
+}
+
+.gsc-comment-content.markdown a:not(.anchor)::before,
+.gsc-reply-content.markdown a:not(.anchor)::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-color: transparent;
+    content: "";
+    transform: scale(0.85);
+    transition:
+        background-color 0.15s ease-out,
+        transform 0.15s ease-out;
+}
+
+.gsc-comment-content.markdown a:not(.anchor):hover,
+.gsc-comment-content.markdown a:not(.anchor):active,
+.gsc-reply-content.markdown a:not(.anchor):hover,
+.gsc-reply-content.markdown a:not(.anchor):active {
+    text-decoration: none;
+}
+
+.gsc-comment-content.markdown a:not(.anchor):hover::before,
+.gsc-comment-content.markdown a:not(.anchor):active::before,
+.gsc-reply-content.markdown a:not(.anchor):hover::before,
+.gsc-reply-content.markdown a:not(.anchor):active::before {
+    background-color: var(--color-action-list-item-default-hover-bg);
+    transform: scale(1);
+}
+
+.gsc-comment-content.markdown a:not(.anchor):active::before,
+.gsc-reply-content.markdown a:not(.anchor):active::before {
+    background-color: var(--giscus-link-bg-active);
+}
+
+/*
+ * Plain buttons modelled on the site's navbar buttons: the background grows
+ * from 0.85 to 1 behind the label and the text turns into the accent colour.
+ * Used by the write/preview tabs and the sign-out action.
+ */
+.gsc-comment-box-tabs button,
+.gsc-comment-box-bottom > button {
+    position: relative;
+    isolation: isolate;
+    z-index: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.5rem !important;
+    border: 0 !important;
+    background-color: transparent !important;
+    color: var(--color-fg-muted) !important;
+    transition:
+        color 0.25s ease,
+        transform 0.15s ease;
+}
+
+.gsc-comment-box-tabs button::before,
+.gsc-comment-box-bottom > button::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-color: var(--color-action-list-item-default-hover-bg);
+    content: "";
+    opacity: 0;
+    transform: scale(0.85);
+    transition:
+        opacity 0.2s ease,
+        transform 0.15s ease;
+}
+
+.gsc-comment-box-tabs button:hover,
+.gsc-comment-box-tabs button.color-bg-canvas,
+.gsc-comment-box-bottom > button:hover {
+    color: var(--color-accent-emphasis) !important;
+}
+
+.gsc-comment-box-tabs button:hover::before,
+.gsc-comment-box-bottom > button:hover::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.gsc-comment-box-tabs button:active,
+.gsc-comment-box-bottom > button:active {
+    transform: scale(0.95);
+}
+
+/*
+ * The selected tab is one shared pill rather than a per-button background, so
+ * switching write/preview slides it across. The two zh-CN labels are the same
+ * width, which lets the first button's pseudo-element cover either tab.
+ */
+.gsc-comment-box-tabs button:first-child::after {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-color: var(--color-action-list-item-default-hover-bg);
+    content: "";
+    transform: translateX(0);
+    transition: transform 0.25s ease;
+}
+
+.gsc-comment-box-tabs button:first-child:not(.color-bg-canvas)::after {
+    transform: translateX(calc(100% + 0.25rem));
+}
+
+/* Sidebar tag buttons use 8px; keep every giscus action at the same radius. */
+.gsc-main .gsc-comment-box button,
+.gsc-main .gsc-comment-box .btn,
+.gsc-main .gsc-reply-box > button,
+.gsc-main .gsc-social-reaction-summary-item,
+.gsc-main .gsc-pagination-button,
+.gsc-main .gsc-reactions-popover button {
+    border-radius: var(--giscus-radius-control) !important;
+}
+
+/* Code-block copy button mirrors the article-page copy button. */
+.gsc-main .ClipboardButton {
+    position: relative !important;
+    width: 2rem !important;
+    height: 2rem !important;
+    margin: 0.75rem !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: var(--giscus-radius-control) !important;
+    background-color: oklch(0.45 0.01 260) !important;
+    color: #fff !important;
+    z-index: 20;
+    box-shadow:
+        0 10px 15px -3px rgb(0 0 0 / 0.5),
+        0 4px 6px -4px rgb(0 0 0 / 0.5) !important;
+    opacity: 0;
+    animation: none !important;
+    transition:
+        opacity 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        transform 0.15s ease-in-out !important;
+}
+
+.gsc-main .ClipboardButton:hover {
+    background-color: oklch(0.50 0.01 260) !important;
+}
+
+.gsc-main .ClipboardButton:active {
+    background-color: oklch(0.55 0.01 260) !important;
+    transform: scale(0.9);
+}
+
+.gsc-main .ClipboardButton:focus,
+.gsc-main .highlight:hover .ClipboardButton,
+.gsc-main .snippet-clipboard-content:hover .ClipboardButton {
+    opacity: 1;
+}
+
+.gsc-main .ClipboardButton svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block !important;
+    width: 1rem;
+    height: 1rem;
+    margin: 0 !important;
+    fill: currentColor !important;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.15s ease-in-out;
+}
+
+.gsc-main .ClipboardButton .js-clipboard-copy-icon {
+    color: #fff !important;
+}
+
+.gsc-main .ClipboardButton .js-clipboard-check-icon {
+    color: #fff !important;
+}
+
+/* Keep both icons in the layout and fade between them like the article page. */
+.gsc-main .ClipboardButton svg.d-none {
+    display: block !important;
+    opacity: 0;
+}
+
+/* Sign-out is a button, not a link, so drop the shared link underline. */
+.gsc-comment-box-bottom > button.link-secondary {
+    text-decoration: none !important;
+}
+
+/* Comment order and fixed-width toggles are not part of this design. */
+.gsc-right-header,
+.gsc-comment-box-md-toolbar {
+    display: none !important;
+}
+
+.gsc-comments {
+    gap: 0.75rem !important;
+
+    .gsc-timeline {
+        gap: 0.75rem !important;
+    }
+
+    .gsc-header {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+
+    .gsc-comment {
+        > div {
+            border: none !important;
+            border-radius: var(--giscus-radius-card) !important;
+            padding: 0.75rem !important;
+            background-color: var(--color-canvas-inset);
+        }
+
+        .gsc-comment-header {
+            padding: 0 0.25rem !important;
+            gap: 0.25rem !important;
+        }
+
+        .gsc-comment-author {
+            gap: 0.25rem !important;
+
+            img {
+                margin-right: 0.25rem !important;
+            }
+        }
+
+        /* Align body and actions with the author name column: 30px avatar + 0.5rem gap. */
+        .gsc-comment-content {
+            padding: 0.5rem 0 0.25rem calc(0.5rem + 30px) !important;
+        }
+
+        .gsc-comment-footer {
+            margin-bottom: 0.25rem !important;
+            padding-left: calc(0.5rem + 30px) !important;
+        }
+
+        .gsc-comment-reactions {
+            margin-left: 0 !important;
+        }
+
+        .gsc-comment-author,
+        .gsc-reply-author {
+            > div span {
+                border-color: var(--color-accent-emphasis);
+                background-color: var(--color-accent-subtle);
+            }
+        }
+
+        .gsc-replies {
+            padding-top: 0 !important;
+            padding-bottom: 0.5rem !important;
+            margin-bottom: 0.5rem;
+            border-radius: var(--giscus-radius-control) !important;
+            border: none !important;
+
+            .gsc-reply {
+                padding: 0.5rem 0.25rem 0.25rem !important;
+
+                .gsc-tl-line {
+                    left: 1.125rem !important;
+                }
+
+                .gsc-reply-author-avatar + div {
+                    margin-left: 0.25rem !important;
+                }
+            }
+        }
+
+        .gsc-reply-box {
+            border: none !important;
+            border-radius: var(--giscus-radius-control) !important;
+            padding-inline-start: 0.5rem !important;
+            padding-inline-end: 0.5rem !important;
+            background-color: var(--color-canvas-default);
+            button {
+                border: none !important;
+            }
+        }
+
+        .gsc-comment-box {
+            border-radius: var(--giscus-radius-control) !important;
+            button {
+                border: none !important;
+            }
+        }
+    }
+
+    .gsc-comment-box {
+        border: none !important;
+        border-radius: var(--giscus-radius-card) !important;
+
+        .gsc-comment-box-tabs {
+            padding: 0.5rem 0 !important;
+            border: none !important;
+            background-color: transparent !important;
+
+            > div {
+                margin: 0 !important;
+            }
+        }
+
+        .gsc-comment-box-main {
+            margin: 0 !important;
+        }
+
+        .gsc-comment-box-write {
+            position: relative;
+            border-radius: var(--giscus-radius-control);
+        }
+
+        /* The base theme draws an outer focus ring; on a full-width input it
+           would be clipped by the iframe, so use an inner solid accent border. */
+        .gsc-comment-box-write:focus-within {
+            box-shadow: none !important;
+        }
+
+        .gsc-comment-box-write::after {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            border: 2px solid var(--color-accent-emphasis);
+            border-radius: inherit;
+            content: "";
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .gsc-comment-box-write:focus-within::after {
+            opacity: 1;
+        }
+
+        .gsc-comment-box-textarea,
+        .gsc-comment-box-textarea-extras {
+            background-color: #f7f7f7 !important;
+            border-color: var(--color-border-default) !important;
+        }
+
+        .gsc-comment-box-textarea {
+            border-radius:
+                var(--giscus-radius-control)
+                var(--giscus-radius-control)
+                0
+                0 !important;
+        }
+
+        .gsc-comment-box-textarea-extras {
+            border-radius:
+                0
+                0
+                var(--giscus-radius-control)
+                var(--giscus-radius-control) !important;
+        }
+
+        .gsc-comment-box-bottom {
+            margin: 0 !important;
+            padding: 0.5rem 0 !important;
+        }
+    }
+
+    /* The reply composer sits on a comment card, so blend into its background. */
+    .gsc-comment-box-is-reply {
+        background-color: transparent !important;
+
+        .gsc-comment-box-tabs {
+            padding: 0.5rem 0.5rem !important;
+        }
+
+        .gsc-comment-box-main {
+            margin: 0 0.5rem !important;
+        }
+
+        .gsc-comment-box-bottom {
+            padding: 0.5rem 0.5rem !important;
+        }
+    }
+}
+
+.gsc-reactions-popover {
+    margin-top: 0 !important;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    border-radius: var(--giscus-radius-card);
+    background-color: var(--color-canvas-default);
+}
+
+.gsc-reactions-popover::before {
+    display: none;
+}
+
+.gsc-reactions-popover::after {
+    display: none;
+}
