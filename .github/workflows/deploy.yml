@@ -29,7 +29,7 @@ concurrency:
 
 jobs:
   deploy-site:
-    name: Deploy site (static)
+    name: Deploy site
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

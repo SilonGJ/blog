@@ -10,7 +10,7 @@
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "deploy:site": "wrangler deploy -c wrangler.jsonc",
-    "deploy:api": "pnpm --filter blog-api deploy",
+    "deploy:api": "pnpm --filter blog-api run deploy",
     "db:init:local": "pnpm --filter blog-api db:init:local",
     "db:init:remote": "pnpm --filter blog-api db:init:remote",
     "astro": "astro",
