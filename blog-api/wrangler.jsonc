@@ -1,0 +1,23 @@
+{
+	"$schema": "../node_modules/wrangler/config-schema.json",
+	"name": "blog-api",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-09-07",
+	"observability": {
+		"enabled": true
+	},
+	"triggers": {
+		"crons": ["17 3 * * *"]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "blog-db",
+			"database_id": "657aa384-ba87-4aa0-aad4-1134000f6d53"
+		}
+	],
+	"vars": {
+		// 站点地址，sitemap 校验用
+		"SITE_URL": "https://silongj.us.ci/"
+	}
+}

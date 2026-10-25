@@ -37,6 +37,12 @@ export type SiteConfig = {
 		depth: 1 | 2 | 3;
 	};
 
+	viewCount: {
+		enable: boolean;
+		/** 浏览量 API 的基础地址，留空则使用同源的 `/api` */
+		apiBase?: string;
+	};
+
 	favicon: Favicon[];
 };
 

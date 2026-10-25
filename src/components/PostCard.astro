@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import path from "node:path";
 import { Icon } from "astro-icon/components";
+import { siteConfig } from "../config";
 import { getDir } from "../utils/url-utils";
 import ImageWrapper from "./misc/ImageWrapper.astro";
 import PostMetadata from "./PostMeta.astro";
@@ -71,6 +72,14 @@ const { remarkPluginFrontmatter } = await render(entry);
             <div>
                 {remarkPluginFrontmatter.minutes} 分钟
             </div>
+            {siteConfig.viewCount.enable &&
+                <div data-view-group class="flex items-center gap-4">
+                    <div>|</div>
+                    <div>
+                        <span data-view-count data-path={url}>…</span> 次浏览
+                    </div>
+                </div>
+            }
         </div>
 
     </div>

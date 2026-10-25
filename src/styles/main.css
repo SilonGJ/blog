@@ -160,17 +160,13 @@
 }
 
 /* ===== image fade-in on load ===== */
-@keyframes fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
 .img-fade {
     opacity: 0;
+    transition: opacity 600ms ease;
 }
 
 .img-fade.img-loaded {
-    animation: 600ms fade-in ease forwards;
+    opacity: 1;
 }
 
 #banner img {

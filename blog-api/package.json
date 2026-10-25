@@ -1,0 +1,19 @@
+{
+	"name": "blog-api",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy",
+		"type-check": "tsc --noEmit",
+		"db:init:local": "wrangler d1 execute blog-db --local --file schema.sql",
+		"db:init:remote": "wrangler d1 execute blog-db --remote --file schema.sql",
+		"db:cleanup:local": "wrangler d1 execute blog-db --local --command \"DELETE FROM visit_log WHERE expires_at <= strftime('%s','now')\""
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^5.20261025.1",
+		"typescript": "^6.0.3",
+		"wrangler": "^4.151.3"
+	}
+}

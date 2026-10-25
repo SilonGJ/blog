@@ -22,10 +22,15 @@
 ## 常用命令
 
 ```bash
-pnpm dev          # 启动开发服务器
+pnpm dev          # 启动开发服务器（不含浏览量 API）
+pnpm dev:all      # 同时启动站点 + blog-api Worker，/api 自动代理到 8787
+pnpm dev:api      # 仅启动 blog-api Worker（wrangler dev）
 pnpm build        # 构建 + pagefind 搜索索引
-pnpm check        # Astro 类型检查 + tsc
+pnpm check        # Astro 类型检查 + 根 tsc + blog-api 类型检查
 pnpm lint         # Biome 检查并自动修复
+pnpm deploy:api   # 部署 blog-api Worker
+pnpm db:init:local   # 本地 D1 初始化（幂等，可重复执行）
+pnpm db:init:remote  # 远程 D1 初始化（首次部署手动执行一次）
 ```
 
 ---
@@ -56,3 +61,10 @@ pnpm lint         # Biome 检查并自动修复
 - `expressiveCodeConfig`：代码高亮主题（仅支持深色背景）
 
 **友链**：`src/links/1.json`, `src/links/2.json`… 按文件名顺序排列。
+
+**浏览量 API**（`blog-api/`，pnpm workspace 子包）：
+- 独立 Worker `blog-api`，通过 `域名/api*` 路由接入；D1 绑定 `DB`，每日 Cron 清理过期去重记录
+- 端点只有两个：`POST /api/views/batch/`（列表页批量读取，body `{ "paths": [...] }`）与 `POST /api/views/`（文章页去重计数 + 读取，单次请求完成）
+- 去重：`SHA-256(SALT + IP + UA + path)` 存 D1，14 天有效；盐值生产用 `wrangler secret put SALT`，本地放 `blog-api/.dev.vars`
+- 文章存在性：POST 前用站点 sitemap（`SITE_URL` 变量）校验 path，不存在的文章 404 不写库；路径集合缓存于 isolate 内存（见 `src/posts-registry.ts`）
+- **新增接口或表结构时同步更新本节说明**，本 Worker 不使用框架，路由在 `src/router.ts` 中显式匹配

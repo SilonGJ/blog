@@ -172,6 +172,12 @@ export default defineConfig({
 	},
 	vite: {
 		plugins: [tailwindcss()],
+		server: {
+			// 本地把 /api 转发给 blog-api（wrangler dev）
+			proxy: {
+				"/api": "http://localhost:8787",
+			},
+		},
 		build: {
 			rollupOptions: {
 				onwarn(warning, warn) {

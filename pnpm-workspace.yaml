@@ -1,3 +1,6 @@
+packages:
+  - blog-api
+
 allowBuilds:
   esbuild: true
   sharp: true
@@ -16,3 +19,4 @@ minimumReleaseAgeExclude:
   - markdown-it@15.0.2
   - miniflare@5.20261019.1-beta
   - wrangler@4.151.3
+  - '@cloudflare/workers-types@5.20261025.1'

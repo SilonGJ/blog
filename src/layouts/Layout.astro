@@ -480,3 +480,23 @@ if (window.swup) {
 	document.addEventListener("swup:enable", setup)
 }
 </script>
+
+<script>
+	import { initViewCounts } from "../utils/view-count";
+
+	// 首屏立即填充：模块脚本在 DOM 解析完成后执行，不等图片/字体/swup
+	void initViewCounts();
+
+	// 仅负责后续 swup 切页后的重新扫描
+	const setup = () => {
+		window.swup.hooks.on("page:view", () => {
+			void initViewCounts();
+		});
+	};
+
+	if (window.swup?.hooks) {
+		setup();
+	} else {
+		document.addEventListener("swup:enable", setup, { once: true });
+	}
+</script>

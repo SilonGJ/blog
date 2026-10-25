@@ -26,22 +26,5 @@ const currentYear = new Date().getFullYear();
         由
         <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://astro.build">Astro</a> 和
         <a class="transition link text-[var(--primary)] font-medium" target="_blank" href="https://github.com/saicaca/fuwari">Fuwari</a> 强力驱动
-        <div id="cdn-status" hidden></div>
     </div>
 </div>
-
-<script>
-    const el = document.getElementById('cdn-status');
-    if (el) {
-        fetch('/cdn-cgi/trace', { cache: 'no-store' })
-            .then((r) => (r.ok ? r.text() : Promise.reject()))
-            .then((text) => {
-                const sliver = text.match(/^sliver=(.*)$/m)?.[1];
-                el.textContent = `你当前正在使用 ${sliver === 'axisnow' ? 'Axisnow' : 'Cloudflare'} CDN 访问`;
-                el.hidden = false;
-            })
-            .catch(() => {
-                // 检测失败，保持隐藏
-            });
-    }
-</script>

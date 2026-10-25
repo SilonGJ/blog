@@ -4,6 +4,9 @@ dist/
 # wrangler local state / generated deploy config
 .wrangler/
 
+# miniflare local cache
+.mf/
+
 # generated types
 .astro/
 
