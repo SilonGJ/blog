@@ -17,6 +17,10 @@ declare global {
 		// One-time guard for Search.astro: swup re-executes inline scripts on
 		// every page view, which would otherwise stack duplicate listeners
 		__searchInitialized?: boolean;
+		// Same guard for Markdown.astro's copy-button delegation
+		__copyCodeInitialized?: boolean;
+		// Same guard for ArchivePanel.astro's swup hook registration
+		__archiveFilterHooked?: boolean;
 	}
 }
 

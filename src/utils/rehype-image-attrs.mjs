@@ -11,7 +11,9 @@ function walk(node) {
 		if (node.properties.decoding === undefined)
 			node.properties.decoding = "async";
 		const cls = node.properties.class;
-		node.properties.class = cls ? `${cls} img-fade` : "img-fade";
+		node.properties.class = cls
+			? `${cls} rounded-xl img-fade`
+			: "rounded-xl img-fade";
 	}
 	if (Array.isArray(node.children)) {
 		for (const child of node.children) walk(child);

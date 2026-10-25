@@ -28,6 +28,7 @@ import { Icon } from "astro-icon/components";
 
 <script>
 import {
+	ANIMATION_CHANGE_EVENT,
 	isAnimationsEnabled,
 	isRoundedEnabled,
 	setAnimationsEnabled,
@@ -63,6 +64,10 @@ for (const { id, read, write } of toggles) {
 	checkbox.addEventListener("change", () => {
 		// The panel stays open so the user can switch back right away
 		write(checkbox.checked);
+	});
+	// Keep the checkbox in sync with programmatic preference changes.
+	document.addEventListener(ANIMATION_CHANGE_EVENT, () => {
+		checkbox.checked = read();
 	});
 }
 

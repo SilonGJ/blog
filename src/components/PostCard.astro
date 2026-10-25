@@ -19,7 +19,6 @@ interface Props {
 	category: string | null;
 	image: string;
 	description: string;
-	style?: string;
 }
 const {
 	entry,
@@ -31,7 +30,6 @@ const {
 	category,
 	image,
 	description,
-	style,
 } = Astro.props;
 const className = Astro.props.class;
 
@@ -41,7 +39,7 @@ const coverWidth = "28%";
 
 const { remarkPluginFrontmatter } = await render(entry);
 ---
-<div class:list={["card-base flex flex-col-reverse md:flex-col w-full rounded-[var(--radius-large)] overflow-hidden relative", className]} style={style}>
+<div class:list={["card-base flex flex-col-reverse md:flex-col w-full relative", className]} style={`--coverWidth: ${coverWidth}`}>
     <div class:list={["pl-6 md:pl-9 pr-6 md:pr-2 pt-6 md:pt-7 pb-6 relative", {"w-full md:w-[calc(100%_-_52px_-_12px)]": !hasCover, "w-full md:w-[calc(100%_-_var(--coverWidth)_-_12px)]": hasCover}]}>
         <a href={url}
            class="transition group w-full block font-bold mb-3 text-3xl text-90
@@ -64,7 +62,7 @@ const { remarkPluginFrontmatter } = await render(entry);
         </div>
 
         <!-- word count and read time  -->
-        <div class="text-sm text-black/30 dark:text-white/30 flex gap-4 transition">
+        <div class="text-sm text-30 flex gap-4 transition">
             <div>
                 {remarkPluginFrontmatter.words} 字
             </div>
@@ -102,8 +100,7 @@ const { remarkPluginFrontmatter } = await render(entry);
 
     {!hasCover &&
         <a href={url} aria-label={title} class="!hidden md:!flex btn-regular w-[3.25rem]
-         absolute right-3 top-3 bottom-3 rounded-xl bg-[var(--enter-btn-bg)]
-         hover:bg-[var(--enter-btn-bg-hover)] active:bg-[var(--enter-btn-bg-active)] active:scale-95
+         absolute right-3 top-3 bottom-3 rounded-xl active:scale-95
         ">
             <Icon name="material-symbols:chevron-right-rounded"
                   class="transition text-[var(--primary)] text-4xl mx-auto">
@@ -112,6 +109,3 @@ const { remarkPluginFrontmatter } = await render(entry);
     }
 </div>
 <div class="transition border-t-[1px] border-dashed mx-6 border-black/10 dark:border-white/[0.15] last:border-t-0 md:hidden"></div>
-
-<style define:vars={{coverWidth}}>
-</style>

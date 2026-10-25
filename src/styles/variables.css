@@ -17,10 +17,6 @@
   --btn-card-bg-hover: oklch(0.98 0.005 var(--hue));
   --btn-card-bg-active: oklch(0.9 0.03 var(--hue));
 
-  --enter-btn-bg: var(--btn-regular-bg);
-  --enter-btn-bg-hover: var(--btn-regular-bg-hover);
-  --enter-btn-bg-active: var(--btn-regular-bg-active);
-
   --deep-text: oklch(0.25 0.02 var(--hue));
 
   --title-active: oklch(0.6 0.1 var(--hue));
@@ -40,27 +36,19 @@
   --license-block-bg: rgba(0, 0, 0, 0.03);
 
   --link-underline: oklch(0.93 0.04 var(--hue));
-  --link-hover: oklch(0.95 0.025 var(--hue));
-  --link-active: oklch(0.90 0.05 var(--hue));
 
   --float-panel-bg: white;
 
   --scrollbar-bg-light: rgba(0, 0, 0, 0.4);
   --scrollbar-bg-hover-light: rgba(0, 0, 0, 0.5);
-  --scrollbar-bg-active-light: rgba(0, 0, 0, 0.6);
 
   --scrollbar-bg-dark: rgba(255, 255, 255, 0.4);
   --scrollbar-bg-hover-dark: rgba(255, 255, 255, 0.5);
-  --scrollbar-bg-active-dark: rgba(255, 255, 255, 0.6);
 
   --scrollbar-bg: var(--scrollbar-bg-light);
   --scrollbar-bg-hover: var(--scrollbar-bg-hover-light);
-  --scrollbar-bg-active: var(--scrollbar-bg-active-light);
 
   --color-selection-bar: linear-gradient(to right, oklch(0.80 0.10 0), oklch(0.80 0.10 30), oklch(0.80 0.10 60), oklch(0.80 0.10 90), oklch(0.80 0.10 120), oklch(0.80 0.10 150), oklch(0.80 0.10 180), oklch(0.80 0.10 210), oklch(0.80 0.10 240), oklch(0.80 0.10 270), oklch(0.80 0.10 300), oklch(0.80 0.10 330), oklch(0.80 0.10 360));
-
-  --display-light-icon: 1;
-  --display-dark-icon: 0;
 
   --admonitions-color-tip: oklch(0.7 0.14 180);
   --admonitions-color-note: oklch(0.7 0.14 250);
@@ -72,7 +60,6 @@
   --toc-btn-hover: oklch(0.926 0.015 var(--hue));
   --toc-btn-active: oklch(0.90 0.015 var(--hue));
   --toc-width: calc((100vw - var(--page-width)) / 2 - 1rem);
-  --toc-item-active: oklch(0.70 0.13 var(--hue));
 }
 
 :root.dark {
@@ -103,19 +90,13 @@
   --license-block-bg: var(--codeblock-bg);
 
   --link-underline: oklch(0.40 0.08 var(--hue));
-  --link-hover: oklch(0.40 0.08 var(--hue));
-  --link-active: oklch(0.35 0.07 var(--hue));
 
   --float-panel-bg: oklch(0.19 0.015 var(--hue));
 
   --scrollbar-bg: var(--scrollbar-bg-dark);
   --scrollbar-bg-hover: var(--scrollbar-bg-hover-dark);
-  --scrollbar-bg-active: var(--scrollbar-bg-active-dark);
 
   --color-selection-bar: linear-gradient(to right, oklch(0.70 0.10 0), oklch(0.70 0.10 30), oklch(0.70 0.10 60), oklch(0.70 0.10 90), oklch(0.70 0.10 120), oklch(0.70 0.10 150), oklch(0.70 0.10 180), oklch(0.70 0.10 210), oklch(0.70 0.10 240), oklch(0.70 0.10 270), oklch(0.70 0.10 300), oklch(0.70 0.10 330), oklch(0.70 0.10 360));
-
-  --display-light-icon: 0;
-  --display-dark-icon: 1;
 
   --admonitions-color-tip: oklch(0.75 0.14 180);
   --admonitions-color-note: oklch(0.75 0.14 250);
@@ -126,5 +107,4 @@
   --toc-badge-bg: var(--btn-regular-bg);
   --toc-btn-hover: oklch(0.22 0.02 var(--hue));
   --toc-btn-active: oklch(0.25 0.02 var(--hue));
-  --toc-item-active: oklch(0.35 0.07 var(--hue));
 }

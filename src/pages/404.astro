@@ -9,9 +9,9 @@ const notFoundDesc = "你访问的页面不存在或已被移动。";
 ---
 
 <MainGridLayout title={notFoundTitle} description={notFoundDesc} noindex={true}>
-    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+    <div class="flex w-full relative min-h-32">
         <div class="card-base z-10 px-9 py-6 relative w-full">
-            <div class="onload-animation flex flex-col items-center justify-center py-10 text-center">
+            <div class="flex flex-col items-center justify-center py-10 text-center">
                 <div class="text-7xl font-bold select-none text-90">404</div>
                 <h1 class="mt-4 text-xl font-bold text-90">{notFoundTitle}</h1>
                 <p class="mt-2 text-sm text-black/60 dark:text-white/60">{notFoundDesc}</p>

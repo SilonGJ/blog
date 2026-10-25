@@ -5,10 +5,9 @@ import "../styles/main.css";
 import "../styles/markdown-extend.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
-import { profileConfig, siteConfig } from "@/config";
+import { codeFontFamily, profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
-	BANNER_HEIGHT,
 	BANNER_HEIGHT_EXTEND,
 	BANNER_HEIGHT_HOME,
 	DARK_MODE,
@@ -75,7 +74,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!DOCTYPE html>
-<html lang={siteLang} class="bg-[var(--page-bg)] transition text-[14px] md:text-[16px]">
+<html lang={siteLang} class="is-first-load bg-[var(--page-bg)] transition text-[14px] md:text-[16px]">
 	<head>
 
 		<title>{pageTitle}</title>
@@ -117,7 +116,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 		))}
 
 		<!-- Set the theme before the page is rendered to avoid a flash -->
-		<script is:inline define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue, configFixed}}>
+		<script is:inline data-swup-ignore-script define:vars={{DEFAULT_THEME, LIGHT_MODE, DARK_MODE, AUTO_MODE, BANNER_HEIGHT_EXTEND, PAGE_WIDTH, configHue, configFixed}}>
 			// Load the theme from local storage
 			const theme = localStorage.getItem('theme') || DEFAULT_THEME;
 			switch (theme) {
@@ -142,7 +141,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 			document.documentElement.style.setProperty('--hue', hue);
 
 			// Apply stored preferences before the first paint to avoid flashing
-			// (keys must match the ones in setting-utils.ts)
+			// (keys must match the ones in setting-utils.ts; animations only
+			// follow the explicit switch and default to enabled)
 			if (localStorage.getItem('animations') === 'off') {
 				document.documentElement.classList.add('no-animations');
 			}
@@ -156,11 +156,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 			document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
 		</script>
 		<style define:vars={{
-			configHue,
 			'page-width': `${PAGE_WIDTH}rem`,
 			bannerOffset,
 			'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
-			'banner-height': `${BANNER_HEIGHT}vh`,
+			'code-font-family': codeFontFamily,
 		}}></style>
 
 
@@ -169,7 +168,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 		<link rel="manifest" href="/site.webmanifest" />
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 
-		<noscript><style>.img-fade { opacity: 1 !important; animation: none !important; }</style></noscript>
+		<noscript><style>.img-fade { opacity: 1 !important; }</style></noscript>
 
 	</head>
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}>
@@ -307,6 +306,10 @@ const setup = () => {
 		}
 	})
 	window.swup.hooks.on('visit:start', (visit: {to: {url: string}, animation: {animate: boolean}}) => {
+		// The entrance animation is only for the first full page load;
+		// swup navigations are covered by transition-swup-fade.
+		document.documentElement.classList.remove('is-first-load');
+
 		// Keep swup fully functional but skip the page transition when the
 		// user turned animations off (containers/head/scroll still update)
 		if (!isAnimationsEnabled()) {

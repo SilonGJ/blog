@@ -44,7 +44,7 @@ export default defineConfig({
 			smoothScrolling: true,
 			cache: true,
 			preload: true,
-			accessibility: true,
+			accessibility: { respectReducedMotion: false },
 			updateHead: true,
 			updateBodyClass: false,
 			globalInstance: true,
@@ -173,7 +173,7 @@ export default defineConfig({
 	vite: {
 		plugins: [tailwindcss()],
 		server: {
-			// 本地把 /api 转发给 blog-api（wrangler dev）
+			// /api 转发
 			proxy: {
 				"/api": "http://localhost:8787",
 			},

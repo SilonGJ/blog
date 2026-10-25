@@ -66,28 +66,35 @@ export function getStoredTheme(): LIGHT_DARK_MODE {
 }
 
 /* ===== Boolean UI preferences (animations / rounded corners) =====
- * Default: the feature is enabled, i.e. there is no entry in localStorage
- * at all. The key is only written when the user turns the feature off, and
- * removed when they turn it back on, so nothing is stored needlessly. */
+ * Explicit choices are stored as "on" / "off". When no choice has been made,
+ * both default to enabled; animations do not follow the OS
+ * `prefers-reduced-motion` setting. */
+const PREFERENCE_ON_VALUE = "on";
 const PREFERENCE_OFF_VALUE = "off";
 
+function getStoredPreference(key: string): "on" | "off" | null {
+	const value = localStorage.getItem(key);
+	return value === PREFERENCE_ON_VALUE || value === PREFERENCE_OFF_VALUE
+		? value
+		: null;
+}
+
 function isPreferenceEnabled(key: string): boolean {
-	return localStorage.getItem(key) !== PREFERENCE_OFF_VALUE;
+	return getStoredPreference(key) !== PREFERENCE_OFF_VALUE;
 }
 
 function storePreference(key: string, enabled: boolean): void {
-	if (enabled) {
-		// Release the local storage slot instead of storing "on"
-		localStorage.removeItem(key);
-	} else {
-		localStorage.setItem(key, PREFERENCE_OFF_VALUE);
-	}
+	localStorage.setItem(
+		key,
+		enabled ? PREFERENCE_ON_VALUE : PREFERENCE_OFF_VALUE,
+	);
 }
 
 /* ===== Animation preference ===== */
 const ANIMATION_KEY = "animations";
 export const ANIMATION_CHANGE_EVENT = "animation-preference-changed";
 
+/* Only an explicit "off" disables animations; no stored value means enabled. */
 export function isAnimationsEnabled(): boolean {
 	return isPreferenceEnabled(ANIMATION_KEY);
 }

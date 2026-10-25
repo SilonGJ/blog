@@ -117,10 +117,13 @@ class TableOfContents extends HTMLElement {
         if (min > max) {
             this.activeIndicator?.setAttribute("style", `opacity: 0`);
         } else {
-            let parentOffset = this.tocEl?.getBoundingClientRect().top || 0;
-            let scrollOffset = this.tocEl?.scrollTop || 0;
-            let top = this.tocEntries[min].getBoundingClientRect().top - parentOffset + scrollOffset;
-            let bottom = this.tocEntries[max].getBoundingClientRect().bottom - parentOffset + scrollOffset;
+            // Use layout offsets instead of viewport rects: #toc is translated
+            // during swup transitions while this.tocEl is not, so mixing their
+            // rects would offset the indicator.
+            const first = this.tocEntries[min];
+            const last = this.tocEntries[max];
+            const top = first.offsetTop;
+            const bottom = last.offsetTop + last.offsetHeight;
             this.activeIndicator?.setAttribute("style", `top: ${top}px; height: ${bottom - top}px`);
         }
     };
@@ -203,24 +206,51 @@ class TableOfContents extends HTMLElement {
     };
 
     connectedCallback() {
-        // wait for the onload animation to finish, which makes the `getBoundingClientRect` return correct values
-        const element = document.querySelector('.prose');
-        if (!isAnimationsEnabled()) {
-            // with animations disabled the onload animation ends before this
-            // script runs, so animationend would never fire here
-            requestAnimationFrame(() => this.init());
+        // Wait for the entrance animation before measuring positions, but do
+        // not depend on any particular animated element: on swup navigations
+        // the animation is skipped entirely.
+        const wrapper = document.getElementById("content-wrapper");
+        const willAnimate =
+            isAnimationsEnabled() &&
+            document.documentElement.classList.contains("is-first-load") &&
+            wrapper !== null;
+
+        if (willAnimate) {
+            // The animation is 300ms; the timeout is a safety net in case
+            // animationend never fires (e.g. the tab was hidden meanwhile).
+            setTimeout(() => this.init(), 400);
             return;
         }
-        if (element) {
-            element.addEventListener('animationend', () => {
-                this.init();
-            }, { once: true });
-        } else {
-            console.debug('Animation element not found');
+
+        let started = false;
+        const run = () => {
+            if (started) return;
+            started = true;
+            requestAnimationFrame(() => this.init());
+        };
+
+        // #toc is still translated during the swup page-in transition, so
+        // measuring before it ends offsets the active indicator. TOC lives
+        // outside the replaced content, thus visit:end is the point where
+        // layout is stable again (it fires after animation:in:end).
+        const swup = window.swup as unknown as {
+            hooks?: { once: (name: string, fn: () => void) => () => void };
+        };
+        if (swup?.hooks) {
+            const fallback = setTimeout(run, 600);
+            swup.hooks.once("visit:end", () => {
+                clearTimeout(fallback);
+                run();
+            });
+            return;
         }
+
+        run();
     };
 
     init() {
+        if (!this.isConnected) return;
+
         this.tocEl = document.getElementById(
             "toc-inner-wrapper"
         );
@@ -266,7 +296,7 @@ class TableOfContents extends HTMLElement {
             this.observer.unobserve(section)
         );
         this.observer.disconnect();
-        this.tocEl?.removeEventListener("click", this.handleAnchorClick);
+        this.tocEl?.removeEventListener("click", this.handleAnchorClick, true);
     };
 }
 

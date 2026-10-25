@@ -62,7 +62,7 @@ export function FriendLinksComponent(_properties, _children) {
 											loading: "lazy",
 											referrerpolicy: "no-referrer",
 											class:
-												"absolute inset-0 w-full h-full object-cover !m-0 !rounded-[0px] img-fade",
+												"absolute inset-0 w-full h-full object-cover !m-0 img-fade",
 										}),
 									]
 								: []),

@@ -55,7 +55,7 @@ function formatTag(tagList: string[]) {
 }
 ---
 
-<div class="card-base px-8 py-6 onload-animation" id="archive-panel"
+<div class="card-base px-8 py-6" id="archive-panel"
      data-i18n-singular="篇文章"
      data-i18n-plural="篇文章"
 >
@@ -164,12 +164,18 @@ function formatTag(tagList: string[]) {
 
     filterArchive();
 
-    if (window.swup) {
-        window.swup.hooks.on("page:view", filterArchive);
-    } else {
-        document.addEventListener("swup:enable", function() {
+    // Only register the swup hook once; filterArchive() above still runs on
+    // every page view, so the current DOM is always filtered.
+    if (!window.__archiveFilterHooked) {
+        window.__archiveFilterHooked = true;
+
+        if (window.swup) {
             window.swup.hooks.on("page:view", filterArchive);
-        });
+        } else {
+            document.addEventListener("swup:enable", function() {
+                window.swup.hooks.on("page:view", filterArchive);
+            });
+        }
     }
 })();
 </script>
