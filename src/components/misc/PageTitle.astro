@@ -1,0 +1,20 @@
+---
+interface Props {
+	title: string;
+	class?: string;
+}
+
+const { title } = Astro.props;
+const className = Astro.props.class;
+---
+
+<h1 class="relative">
+    <div
+        class:list={[
+            "transition w-full block font-bold mb-3 text-3xl md:text-[2.25rem]/[2.75rem] text-90 md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)] before:absolute before:top-[0.5rem] md:before:top-[0.75rem] before:left-[-1.125rem]",
+            className,
+        ]}
+    >
+        {title}
+    </div>
+</h1>

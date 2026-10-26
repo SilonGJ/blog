@@ -2,8 +2,10 @@
 import { getEntry, render } from "astro:content";
 import Giscus from "@components/Giscus.astro";
 import Markdown from "@components/misc/Markdown.astro";
+import PageTitle from "@components/misc/PageTitle.astro";
 import MainGridLayout from "../../layouts/MainGridLayout.astro";
 
+const pageTitle = "友链";
 const linksPost = await getEntry("spec", "links");
 
 if (!linksPost) {
@@ -14,12 +16,12 @@ const { Content } = await render(linksPost);
 ---
 
 <MainGridLayout
-    title="友链"
+    title={pageTitle}
     description="SilonGJ 的友情链接，收录朋友们的站点。"
 >
-    <h1 class="sr-only">友链</h1>
     <div class="flex w-full relative min-h-32">
         <div class="card-base z-10 px-9 py-6 relative w-full">
+            <PageTitle title={pageTitle} />
             <Markdown class="mt-2">
                 <Content />
             </Markdown>

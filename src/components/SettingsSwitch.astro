@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<!-- Same behavior as LightDarkSwitch: hover opens, leaving the container closes -->
+<!-- Mouse: hover opens and leaving closes. Touch/pen: tap the button to toggle. -->
 <div class="relative z-50" id="settings-switch-container">
     <button aria-label="Settings" aria-haspopup="true" class="relative btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="settings-switch">
         <Icon name="material-symbols:settings-outline-rounded" class="text-[1.25rem]"></Icon>
@@ -56,6 +56,10 @@ function hidePanel() {
 	settingsPanel?.classList.add("float-panel-closed");
 }
 
+function togglePanel() {
+	settingsPanel?.classList.toggle("float-panel-closed");
+}
+
 // Initialize every checkbox from the stored preference (checked by default)
 for (const { id, read, write } of toggles) {
 	const checkbox = document.getElementById(id) as HTMLInputElement | null;
@@ -71,10 +75,26 @@ for (const { id, read, write } of toggles) {
 	});
 }
 
-// Hover to open, leave the container to close, exactly like the light/dark menu
-settingsSwitch?.addEventListener("mouseenter", showPanel);
-container?.addEventListener("mouseleave", hidePanel);
-// Click also opens it (touch devices don't hover). It never closes via the
-// button: a tap fires mouseenter before click and would toggle it right shut.
-settingsSwitch?.addEventListener("click", showPanel);
+// Track the last pointer type so touch/pen taps can toggle the panel while a
+// mouse still uses hover to open it. A touch tap also fires synthetic pointer
+// events, so opening on `pointerenter` must be limited to actual mice.
+let lastPointerType: PointerEvent["pointerType"] = "mouse";
+settingsSwitch?.addEventListener("pointerdown", (event) => {
+	lastPointerType = event.pointerType;
+});
+
+settingsSwitch?.addEventListener("pointerenter", (event) => {
+	if (event.pointerType === "mouse") showPanel();
+});
+container?.addEventListener("pointerleave", (event) => {
+	if (event.pointerType === "mouse") hidePanel();
+});
+
+settingsSwitch?.addEventListener("click", () => {
+	if (lastPointerType === "touch" || lastPointerType === "pen") {
+		togglePanel();
+	} else {
+		showPanel();
+	}
+});
 </script>

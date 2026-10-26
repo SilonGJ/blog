@@ -1,5 +1,6 @@
 ---
 import { siteUrl } from "@/config";
+
 const GISCUS_THEME_BASE = new URL("giscus", siteUrl).href;
 
 // All visual rules live in the CSS files below; this map only selects which
@@ -56,10 +57,10 @@ const {
     <h2 class="relative mb-4">
         <div
             class="transition w-full block font-bold
-            text-xl md:text-2xl
+            text-3xl md:text-[2.25rem]/[2.75rem]
             text-90
-            before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
-            before:absolute before:top-[0.5rem] before:left-[-1.125rem]"
+            before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)]
+            before:absolute before:top-[0.5rem] md:before:top-[0.75rem] before:left-[-1.125rem]"
         >
             评论
         </div>

@@ -422,6 +422,13 @@ html.is-first-load .onload-animation {
 
 }
 
+/* Touch devices have no hover, so keep the code-block copy button visible. */
+@media (hover: none) {
+    .custom-md .copy-btn {
+        opacity: 1;
+    }
+}
+
 /* back-to-top */
 .back-to-top-wrapper {
     @apply w-[3.75rem] h-[3.75rem] absolute right-0 top-0 pointer-events-none;

@@ -32,9 +32,6 @@ export function pluginLanguageBadge(): ExpressiveCodePlugin {
             opacity: 1;
             margin-right: 3rem;
           }
-          & [data-language]:active::before {
-            opacity: 0;
-          }
         }
         @media (hover: hover) {
           & [data-language]::before {
