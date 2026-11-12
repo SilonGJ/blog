@@ -22,7 +22,7 @@ GPU: NVIDIA GeForce GTX 1050 Ti
 
 # 方法
 
-在 Steam 的 **启动选项** 中，设置以下参数
+在 Steam 的 **启动选项** 中，设置以下环境变量
 
 ```bash
 DXVK_NVAPI_VKREFLEX=1 %command%
@@ -35,6 +35,8 @@ DXVK_NVAPI_VKREFLEX=1 %command%
 DXVK_NVAPI_VKREFLEX=1 mangohud %command%
 
 重新启动游戏即可
+
+![设置环境变量后出现的 Nvidia Reflex 选项](/images/archive/image-6.png)
 
 # 另外
 
