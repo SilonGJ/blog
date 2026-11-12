@@ -29,10 +29,9 @@ DXVK_NVAPI_VKREFLEX=1 %command%
 ```
 
 - 如果原先有多个参数，请将变量并排放置，例如:  
-
   DXVK_NVAPI_VKREFLEX=1 SECOND_VER=x %command%
 - 如果需要附加其它应用程序，例如 MangoHud，请使用类似组合:  
-DXVK_NVAPI_VKREFLEX=1 mangohud %command%
+  DXVK_NVAPI_VKREFLEX=1 mangohud %command%
 
 重新启动游戏即可
 
@@ -42,15 +41,16 @@ DXVK_NVAPI_VKREFLEX=1 mangohud %command%
 
 加入以下选项还可以伪装显卡，以达到解锁某些选项的目的:
 
-```bash
-LOW_LATENCY_LAYER=1
-LOW_LATENCY_LAYER_SPOOF_NVIDIA=1
-```
-
 :::warning
 DXVK_NVAPI_VKREFLEX=1 似乎无法与 LOW_LATENCY_LAYER 并存，会使其中一个失效
 :::
 
+```bash
+LOW_LATENCY_LAYER=1
+LOW_LATENCY_LAYER_SPOOF_NVIDIA=1
+```
+:::info
 LOW_LATENCY_LAYER_SPOOF_NVIDIA 原本是给 **AMD** 显卡伪装成 **Nvidia** 显卡用的，不过我发现可以解锁某些选项的极高画质
 
 low latency layer 貌似还能设置 LOW_LATENCY_LAYER_REFLEX=1 来实现开启 Reflex，不过在我的环境下无效
+:::
