@@ -23,7 +23,7 @@ GPU: NVIDIA GeForce GTX 1050 Ti
 
 启动器: Steam
 
-游戏名: 明日方舟终末地 (使用默认 Vulkan 运行)
+图形 API: Vulkan
 
 # 方法
 
