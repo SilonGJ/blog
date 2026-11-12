@@ -49,6 +49,7 @@ DXVK_NVAPI_VKREFLEX=1 似乎无法与 LOW_LATENCY_LAYER 并存，会使其中一
 LOW_LATENCY_LAYER=1
 LOW_LATENCY_LAYER_SPOOF_NVIDIA=1
 ```
+
 :::info
 LOW_LATENCY_LAYER_SPOOF_NVIDIA 原本是给 **AMD** 显卡伪装成 **Nvidia** 显卡用的，不过我发现可以解锁某些选项的极高画质
 
