@@ -38,9 +38,9 @@ DXVK_NVAPI_VKREFLEX=1 mangohud %command%
 
 ![设置环境变量后出现的 Nvidia Reflex 选项](/images/archive/image-6.png)
 
-# 另外
+# 杂谈
 
-另外，加入以下选项可以将显卡伪装成更高的型号，以达到解锁某些选项的目的:
+加入以下选项还可以伪装显卡，以达到解锁某些选项的目的:
 
 ```bash
 LOW_LATENCY_LAYER=1
@@ -50,3 +50,7 @@ LOW_LATENCY_LAYER_SPOOF_NVIDIA=1
 :::warning
 DXVK_NVAPI_VKREFLEX=1 似乎无法与 LOW_LATENCY_LAYER 并存，会使其中一个失效
 :::
+
+LOW_LATENCY_LAYER_SPOOF_NVIDIA 原本是给 **AMD** 显卡伪装成 **Nvidia** 显卡用的，不过我发现可以解锁某些选项的极高画质
+
+low latency layer 貌似还能设置 LOW_LATENCY_LAYER_REFLEX=1 来实现开启 Reflex，不过在我的环境下无效
