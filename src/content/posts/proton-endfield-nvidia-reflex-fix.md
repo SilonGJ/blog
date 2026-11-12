@@ -1,7 +1,7 @@
 ---
-title: 修复 Proton 环境下 明日方舟:终末地 无 Nvidia-Reflex 选项的问题
+title: 修复 Proton 环境下 明日方舟:终末地 无 Nvidia Reflex 选项的问题
 published: 2026-11-12
-description: 记录在 Steam + DWProton 环境下，明日方舟:终末地 无 Nvidia-Reflex 设置项的修复方法
+description: 记录在 Steam + DWProton 环境下，明日方舟:终末地 无 Nvidia Reflex 设置项的修复方法
 tags:
   - 技术
   - 杂谈
@@ -50,6 +50,6 @@ LOW_LATENCY_LAYER_SPOOF_NVIDIA=1
 DXVK_NVAPI_VKREFLEX 似乎无法与 LOW_LATENCY_LAYER 并存，会使其中一个失效
 :::
 :::note
-LOW_LATENCY_LAYER_SPOOF_NVIDIA 原本是给 **AMD** 显卡伪装成 **Nvidia** 显卡用的，不过我发现可以解锁某些选项的极高画质
+LOW_LATENCY_LAYER_SPOOF_NVIDIA 原本是给 **AMD** 显卡伪装成 **Nvidia** 显卡用的，不过我发现可以解锁某些选项的极高画质  
 low latency layer 貌似通过 LOW_LATENCY_LAYER_REFLEX=1 也能开启 Reflex，不过在我的环境下无效
 :::
