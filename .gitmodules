@@ -1,0 +1,3 @@
+[submodule "public/giscus"]
+	path = public/giscus
+	url = git@github.com:SilonGJ/fuwari-giscus-theme.git

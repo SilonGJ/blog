@@ -32,6 +32,15 @@
   --codeblock-selection: oklch(0.40 0.08 var(--hue));
   --codeblock-bg: oklch(0.17 0.015 var(--hue));
   --codeblock-topbar-bg: oklch(0.3 0.02 var(--hue));
+  /* 右上角控件（语言勋章 / 复制按钮）的统一尺寸、偏移与间距 */
+  --codeblock-widget-size: 2rem;
+  --codeblock-widget-inset: 0.5rem;
+  --codeblock-widget-gap: 0.25rem;
+  /* 右上角控件配色：代码块恒为深色背景，两种页面主题下取同一组值 */
+  --codeblock-widget-bg: oklch(0.33 0.035 var(--hue));
+  --codeblock-widget-bg-hover: oklch(0.38 0.035 var(--hue));
+  --codeblock-widget-bg-active: oklch(0.43 0.035 var(--hue));
+  --codeblock-widget-content: oklch(0.75 0.1 var(--hue));
 
   --license-block-bg: rgba(0, 0, 0, 0.03);
 

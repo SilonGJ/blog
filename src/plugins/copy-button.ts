@@ -1,9 +1,9 @@
 import { definePlugin, type ExpressiveCodePlugin } from "@expressive-code/core";
 import type { Element } from "hast";
 
-export function pluginCustomCopyButton(): ExpressiveCodePlugin {
+export function pluginCopyButton(): ExpressiveCodePlugin {
 	return definePlugin({
-		name: "Custom Copy Button",
+		name: "Copy Button",
 		hooks: {
 			postprocessRenderedBlock: (context) => {
 				function traverse(node: Element) {
